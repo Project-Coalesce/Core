@@ -25,7 +25,11 @@ class CommandLoader {
     public static HashMap<String, Method> completionMethods = new HashMap<>();
     public static HashMap<String, Class<?>> completionClasses = new HashMap<>();
     
-    public static CommandMap getMap() {
+    /**
+     * Gets the bukkit CommandMap
+     * @return Returns the CommandMap
+     */
+    private static CommandMap getMap() {
         CommandMap map = null;
         Field field;
         try {
@@ -47,10 +51,7 @@ class CommandLoader {
         try {
             new CommandRegister(cls.newInstance());
         }
-        catch (InstantiationException e) {
-            e.printStackTrace();
-        }
-        catch (IllegalAccessException e) {
+        catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
         for (CommandInfo command : CommandRegister.commands.values()) {

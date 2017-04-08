@@ -45,7 +45,7 @@ public class CommandInfo {
     /**
      * Gets the object the command is contained in.
      *
-     * @return
+     * @return Gets the class this command is contained in.
      */
     public Object getContained() {
         return contained;

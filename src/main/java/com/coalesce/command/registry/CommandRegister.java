@@ -27,7 +27,7 @@ class CommandRegister {
     /**
      * Gets the command object that was created.
      *
-     * @return
+     * @return Gets the Object that stores the command.
      */
     public Object getCommand() {
         return object;

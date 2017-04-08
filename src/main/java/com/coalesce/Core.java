@@ -5,7 +5,8 @@ import com.coalesce.plugin.CoPlugin;
 import org.jetbrains.annotations.Nullable;
 
 public final class Core extends CoPlugin {
-
+    
+    //The core instance.
 	private static Core instance;
 
 
@@ -33,9 +34,13 @@ public final class Core extends CoPlugin {
 	public @Nullable PlayerModule getPlayerModule() {
 		return playerModule;
 	}
-
-
-	public static @Nullable Core getInstance() {
+    
+    
+    /**
+     * Grabs the instance of the core.
+     * @return The core instance.
+     */
+    public static @Nullable Core getInstance() {
 		return instance;
 	}
 
