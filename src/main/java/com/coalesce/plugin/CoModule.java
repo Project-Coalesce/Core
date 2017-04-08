@@ -4,6 +4,7 @@ import com.coalesce.type.Logging;
 import com.coalesce.type.ServerEssentials;
 import com.coalesce.type.Switch;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.NotNull;
 
 import static org.bukkit.ChatColor.DARK_RED;
 
@@ -23,7 +24,7 @@ public abstract class CoModule implements Logging, ServerEssentials, Switch, Lis
 	 * @param plugin The plugin that's creating this module
 	 * @param name The name of this module
 	 */
-	public CoModule(CoPlugin plugin, String name) {
+	public CoModule(@NotNull CoPlugin plugin, @NotNull String name) {
 		this.plugin = plugin;
 		this.name = name;
 	}
@@ -34,7 +35,7 @@ public abstract class CoModule implements Logging, ServerEssentials, Switch, Lis
 	 * @return The {@link CoPlugin}
 	 */
 	@Override
-	public CoPlugin getPlugin() {
+	public @NotNull CoPlugin getPlugin() {
 		return plugin;
 	}
 
@@ -44,7 +45,7 @@ public abstract class CoModule implements Logging, ServerEssentials, Switch, Lis
 	}
 
 	@Override
-	public String getName() {
+	public @NotNull String getName() {
 		return name;
 	}
 

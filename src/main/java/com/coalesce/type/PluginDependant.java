@@ -1,6 +1,7 @@
 package com.coalesce.type;
 
 import com.coalesce.plugin.CoPlugin;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an object that requires an instance of {@link CoPlugin}
@@ -12,6 +13,6 @@ public interface PluginDependant {
 	 *
 	 * @return The plugin
 	 */
-	CoPlugin getPlugin();
+	@NotNull CoPlugin getPlugin();
 
 }

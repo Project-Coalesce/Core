@@ -7,11 +7,14 @@ import com.google.common.collect.ImmutableList;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+
+import static org.bukkit.ChatColor.DARK_RED;
 
 public abstract class CoPlugin extends JavaPlugin implements Logging, ServerEssentials, Listener {
 
@@ -29,37 +32,49 @@ public abstract class CoPlugin extends JavaPlugin implements Logging, ServerEsse
 	public final void onEnable() {
 		if (!doEnable) return;
 
-		onPluginEnable();
-		enableModules();
+		try {
+			onPluginEnable();
+		} catch (Exception e) {
+			error(DARK_RED + "Failed to enable module " + getName());
+			e.printStackTrace();
+			return;
+		}
 
+		enableModules();
 	}
 
 	@Override
 	public final void onDisable() {
 		disableModules();
-		onPluginDisable();
+		try {
+			onPluginDisable();
+		} catch (Exception e) {
+			warn(DARK_RED + "Failed to disable module " + getName());
+			e.printStackTrace();
+		}
 	}
 
 	@Override
-	public final CoPlugin getPlugin() {
+	public @NotNull CoPlugin getPlugin() {
 		return this;
 	}
-
 
 	public boolean onPreEnable() {
 		return true;
 	}
 
-	public abstract void onPluginEnable();
 
-	public abstract void onPluginDisable();
+	public abstract void onPluginEnable() throws Exception;
+
+	public abstract void onPluginDisable() throws Exception;
 
 
 	protected final void addModules(CoModule... modules) {
 		Collections.addAll(this.modules, modules);
 	}
 
-	public final List<CoModule> getModules() {
+
+	public final @NotNull List<CoModule> getModules() {
 		return ImmutableList.copyOf(modules);
 	}
 
@@ -77,11 +92,11 @@ public abstract class CoPlugin extends JavaPlugin implements Logging, ServerEsse
 	}
 
 
-	public final void register(Listener listener) {
+	public final void register(@NotNull Listener listener) {
 		getServer().getPluginManager().registerEvents(listener, this);
 	}
 
-	public final void unregister(Listener listener) {
+	public final void unregister(@NotNull Listener listener) {
 		HandlerList.unregisterAll(listener);
 	}
 

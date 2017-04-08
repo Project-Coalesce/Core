@@ -1,5 +1,7 @@
 package com.coalesce.type;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Represents an object that has a name
  */
@@ -10,6 +12,6 @@ public interface Named {
 	 *
 	 * @return The name
 	 */
-	String getName();
+	@NotNull String getName();
 
 }

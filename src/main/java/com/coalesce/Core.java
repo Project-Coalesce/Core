@@ -2,6 +2,7 @@ package com.coalesce;
 
 import com.coalesce.player.PlayerModule;
 import com.coalesce.plugin.CoPlugin;
+import org.jetbrains.annotations.Nullable;
 
 public final class Core extends CoPlugin {
 
@@ -29,12 +30,12 @@ public final class Core extends CoPlugin {
 	}
 
 
-	public PlayerModule getPlayerModule() {
+	public @Nullable PlayerModule getPlayerModule() {
 		return playerModule;
 	}
 
 
-	public static Core getInstance() {
+	public static @Nullable Core getInstance() {
 		return instance;
 	}
 

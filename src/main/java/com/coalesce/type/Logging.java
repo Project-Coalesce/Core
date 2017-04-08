@@ -1,7 +1,9 @@
 package com.coalesce.type;
 
 import org.bukkit.command.ConsoleCommandSender;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.logging.Logger;
 
 import static org.bukkit.ChatColor.*;
@@ -16,7 +18,7 @@ public interface Logging extends Named, PluginDependant {
 	 *
 	 * @return The plugin's logger
 	 */
-	default Logger getLogger() {
+	default @NotNull Logger getLogger() {
 		return getPlugin().getLogger();
 	}
 
@@ -25,21 +27,21 @@ public interface Logging extends Named, PluginDependant {
 	 *
 	 * @return Bukkit's ConsoleCommandSender
 	 */
-	default ConsoleCommandSender getConsole() {
+	default @NotNull ConsoleCommandSender getConsole() {
 		return getPlugin().getServer().getConsoleSender();
 	}
 
 
 	default void info(Object message) {
-		getConsole().sendMessage(LogLevel.INFO + " " +  message.toString());
+		getConsole().sendMessage(LogLevel.INFO + " " + Objects.toString(message));
 	}
 
 	default void warn(Object message) {
-		getConsole().sendMessage(LogLevel.WARN + " " +  message.toString());
+		getConsole().sendMessage(LogLevel.WARN + " " + Objects.toString(message));
 	}
 
 	default void error(Object message) {
-		getConsole().sendMessage(LogLevel.ERROR + " " +  message.toString());
+		getConsole().sendMessage(LogLevel.ERROR + " " + Objects.toString(message));
 	}
 
 
@@ -52,9 +54,9 @@ public interface Logging extends Named, PluginDependant {
 		WARN(GOLD + "Warn"),
 		ERROR(RED + "Error");
 
-		private final String prefix;
+		@NotNull private final String prefix;
 
-		LogLevel(String prefix) {
+		LogLevel(@NotNull String prefix) {
 			this.prefix = DARK_GRAY + "[" + prefix + DARK_GRAY + "]" + RESET;
 		}
 
@@ -63,7 +65,7 @@ public interface Logging extends Named, PluginDependant {
 		 *
 		 * @return The prefix
 		 */
-		public String getPrefix() {
+		public @NotNull String getPrefix() {
 			return prefix;
 		}
 
