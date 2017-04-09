@@ -1,5 +1,6 @@
 package com.coalesce.type;
 
+import com.coalesce.Core;
 import com.coalesce.plugin.CoPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,6 +14,11 @@ public interface PluginDependant {
 	 *
 	 * @return The plugin
 	 */
-	@NotNull CoPlugin getPlugin();
+	default @NotNull CoPlugin getPlugin() {
+		Core plugin = Core.getInstance();
+		if (plugin == null) throw new IllegalStateException("Core instance is null, cannot be retrieved");
+
+		return plugin;
+	}
 
 }

@@ -13,72 +13,71 @@ import static org.bukkit.ChatColor.*;
  */
 public interface Logging extends Named, PluginDependant {
 
-    /**
-     * Get the logger from this Plugin
-     *
-     * @return The plugin's logger
-     */
-    default @NotNull Logger getLogger() {
-        return getPlugin().getLogger();
-    }
+	/**
+	 * Get the logger from this Plugin
+	 *
+	 * @return The plugin's logger
+	 */
+	default @NotNull Logger getLogger() {
+		return getPlugin().getLogger();
+	}
 
-    /**
-     * Get the server's Console
-     *
-     * @return Bukkit's ConsoleCommandSender
-     */
-    default @NotNull ConsoleCommandSender getConsole() {
-        return getPlugin().getServer().getConsoleSender();
-    }
+	/**
+	 * Get the server's Console
+	 *
+	 * @return Bukkit's ConsoleCommandSender
+	 */
+	default @NotNull ConsoleCommandSender getConsole() {
+		return getPlugin().getServer().getConsoleSender();
+	}
 
 
-    default void info(Object message) {
-        getConsole().sendMessage(LogLevel.INFO + " " + Objects.toString(message));
-    }
+	default void info(Object message) {
+		LogLevel.INFO.log(getConsole(), message);
+	}
 
-    default void warn(Object message) {
-        getConsole().sendMessage(LogLevel.WARN + " " + Objects.toString(message));
-    }
+	default void warn(Object message) {
+		LogLevel.WARN.log(getConsole(), message);
+	}
 
-    default void error(Object message) {
-        getConsole().sendMessage(LogLevel.ERROR + " " + Objects.toString(message));
-    }
+	default void error(Object message) {
+		LogLevel.ERROR.log(getConsole(), message);
+	}
 
-    default void debug(Object message) {
-        getConsole().sendMessage(LogLevel.DEBUG + " " + Objects.toString(message));
-    }
+	default void debug(Object message) {
+		LogLevel.DEBUG.log(getConsole(), message);
+	}
 
-    /**
-     * Represents log levels for colored console output
-     */
-    enum LogLevel {
+	/**
+	 * Represents log levels for colored console output
+	 */
+	enum LogLevel {
 
-        INFO(WHITE + "Info"),
-        DEBUG(AQUA + "Debug"),
-        WARN(GOLD + "Warn"),
-        ERROR(RED + "Error");
+		INFO(WHITE + "Info"),
+		DEBUG(AQUA + "Debug"),
+		WARN(GOLD + "Warn"),
+		ERROR(RED + "Error");
 
-        @NotNull
-        private final String prefix;
+		@NotNull
+		private final String logPrefix;
 
-        LogLevel(@NotNull String prefix) {
-            this.prefix = DARK_GRAY + "[" + prefix + DARK_GRAY + "]" + RESET;
-        }
+		LogLevel(@NotNull String logPrefix) {
+			this.logPrefix = DARK_GRAY + "[" + logPrefix + DARK_GRAY + "]" + RESET;
+		}
 
-        /**
-         * Get the prefix for this log level
-         *
-         * @return The prefix
-         */
-        public @NotNull String getPrefix() {
-            return prefix;
-        }
+		public @NotNull String getLogPrefix() {
+			return logPrefix;
+		}
 
-        @Override
-        public String toString() {
-            return getPrefix();
-        }
+		protected void log(ConsoleCommandSender console, Object message) {
+			console.sendMessage(this + " " + Objects.toString(message));
+		}
 
-    }
+		@Override
+		public String toString() {
+			return getLogPrefix();
+		}
+
+	}
 
 }
