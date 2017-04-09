@@ -16,8 +16,9 @@ public class CommandRegister {
     public CommandRegister(Object object) {
         this.object = object;
         for (Method mthds : object.getClass().getMethods()) {
-            if (mthds.isAnnotationPresent(Cmd.class)) {
-                this.commandInfo = new CommandInfo(mthds.getAnnotation(Cmd.class), mthds, object);
+            Cmd annotation = mthds.getAnnotation(Cmd.class);
+            if (annotation != null) {
+                this.commandInfo = new CommandInfo(annotation, mthds, object);
                 commands.put(commandInfo.getName(), commandInfo);
             }
         }

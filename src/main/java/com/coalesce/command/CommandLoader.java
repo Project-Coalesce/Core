@@ -64,8 +64,9 @@ public class CommandLoader {
      */
     public static void addCompletion(Class<?> cls) {
         for (Method method : cls.getMethods()) {
-            if (method.isAnnotationPresent(Complete.class)) {
-                String command =  method.getAnnotation(Complete.class).value();
+            Complete annotation = method.getAnnotation(Complete.class);
+            if (annotation != null) {
+                String command = annotation.value();
                 completionClasses.put(command, cls);
                 completionMethods.put(command, method);
             }

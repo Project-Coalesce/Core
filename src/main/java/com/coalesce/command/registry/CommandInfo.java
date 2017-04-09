@@ -88,7 +88,7 @@ public class CommandInfo {
     }
     
     /**
-     * Get the allowed executors of the command.
+     * Get the allowed {@link Executor} of the command.
      *
      * @return The allowed executors.
      */
