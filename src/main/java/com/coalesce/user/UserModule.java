@@ -1,4 +1,4 @@
-package com.coalesce.player;
+package com.coalesce.user;
 
 import com.coalesce.plugin.CoModule;
 import com.coalesce.plugin.CoPlugin;
@@ -11,9 +11,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 /**
  * Handles players and their user accounts
  */
-public final class PlayerModule extends CoModule {
+public final class UserModule extends CoModule {
 
-	public PlayerModule(CoPlugin plugin) {
+	public UserModule(CoPlugin plugin) {
 		super(plugin, "Players");
 	}
 
