@@ -7,10 +7,7 @@ import java.util.Objects;
 import java.lang.StringBuilder;
 import java.util.logging.Logger;
 
-import static org.bukkit.ChatColor.WHITE;
-import static org.bukkit.ChatColor.AQUA;
-import static org.bukkit.ChatColor.GOLD;
-import static org.bukkit.ChatColor.RED;
+import static org.bukkit.ChatColor.*;
 
 /**
  * Represents an object that will log to console
@@ -109,14 +106,14 @@ public interface Logging extends Named, PluginDependant {
 				case 0:
 					return;
 				case 1:
-					console.sendMessage(this + ' ' + Objects.toString(message[0]));
+					console.sendMessage(logPrefix + ' ' + Objects.toString(message[0]));
 					break;
 				default:
 					StringBuilder builder = new StringBuilder();
 					for (Object obj : message) {
 						builder.append(Objects.toString(obj));
 					}
-					console.sendMessage(this + ' ' + builder.toString());
+					console.sendMessage(logPrefix + ' ' + builder.toString());
 					break;
 			}
 		}
