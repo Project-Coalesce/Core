@@ -37,20 +37,20 @@ public @interface Cmd {
     /**
      * The command description. Default is ""
      */
-    String desc();
+    String desc() default "";
     
     /**
      * The usage of the command. Default is ""
      */
-    String usage();
+    String usage() default "";
     
     /**
-     * The command aliases. Default is ""
+     * The command aliases. Default is new String[]{}
      */
     String[] aliases() default {};
     
     /**
-     * Permission needed to use this command.
+     * Permission needed to use this command. Default is none.
      */
     String[] permissions() default {};
     
