@@ -9,10 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.bukkit.ChatColor.DARK_RED;
 
@@ -21,10 +18,12 @@ public abstract class CoPlugin extends JavaPlugin implements Logging, ServerEsse
 	private final List<CoModule> modules = new LinkedList<>();
 
 	private boolean doEnable = true;
+	private CoConfig coConfig;
 
 
 	@Override
 	public final void onLoad() {
+		coConfig = CoConfig.load(this);
 		doEnable = onPreEnable();
 	}
 
@@ -78,8 +77,9 @@ public abstract class CoPlugin extends JavaPlugin implements Logging, ServerEsse
 		return ImmutableList.copyOf(modules);
 	}
 
-	public final <M extends CoModule> Optional<M> getModule(Class<M> clazz) {
-		return getModules().stream().filter(coModule -> coModule.getClass().equals(clazz)).map(coModule -> ((M) coModule)).findAny();
+	public final <M extends CoModule> @NotNull Optional<M> getModule(Class<M> clazz) {
+		Iterator<M> iterator = getModules().stream().filter(coModule -> coModule.getClass().equals(clazz)).map(coModule -> ((M) coModule)).iterator();
+		return Optional.ofNullable(iterator.hasNext() ? iterator.next() : null);
 	}
 
 
