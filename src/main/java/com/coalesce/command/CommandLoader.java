@@ -15,8 +15,7 @@ import java.util.HashMap;
 /**
  * Contains the methods to load a command class onto the server.
  */
-public
-class CommandLoader {
+public class CommandLoader {
     
     /*
      * The string in both of these hashmaps is the name of the command so it can

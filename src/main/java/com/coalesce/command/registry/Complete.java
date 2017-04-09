@@ -1,10 +1,9 @@
 package com.coalesce.command.registry;
 
 /**
- * Created by Noah on 4/8/2017.
+ * This declares a method a tab completion.
  */
-public
-@interface Complete {
+public @interface Complete {
     
     /**
      * The name of the command this completer completes.

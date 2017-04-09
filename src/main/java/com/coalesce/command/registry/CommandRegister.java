@@ -7,8 +7,7 @@ import java.util.HashMap;
 /**
  * This puts the command info and command in a hashmap for later use.
  */
-public
-class CommandRegister {
+public class CommandRegister {
     
     private Object object;
     private CommandInfo commandInfo;

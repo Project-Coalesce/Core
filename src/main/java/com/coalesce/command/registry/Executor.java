@@ -1,10 +1,9 @@
 package com.coalesce.command.registry;
 
 /**
- * Created by Noah on 4/8/2017.
+ * A set of command executors that can execute commands.
  */
-public
-enum Executor {
+public enum Executor {
     
     /**
      * Represents the console
