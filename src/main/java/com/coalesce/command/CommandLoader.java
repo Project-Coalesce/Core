@@ -25,7 +25,7 @@ public class CommandLoader {
     public static HashMap<String, Class<?>> completionClasses = new HashMap<>();
     
     /**
-     * Gets the bukkit CommandMap
+     * Gets the Bukkit CommandMap
      * @return Returns the CommandMap
      */
     private static CommandMap getMap() {
