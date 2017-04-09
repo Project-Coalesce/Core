@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -85,7 +86,12 @@ public class Icon {
     }
 
     public List<String> getLore() {
-        return itemStack.getItemMeta().getLore() == null ? new ArrayList<>() : itemStack.getItemMeta().getLore();
+        List<String> lore = itemStack.getItemMeta().getLore();
+        if (lore == null) {
+            lore = new ArrayList<>();
+            setLore(lore);
+        }
+        return lore;
     }
 
     public void setLore(List<String> lore) {
@@ -100,7 +106,7 @@ public class Icon {
         itemStack.setItemMeta(meta);
     }
 
-    public String getDisplayName() {
+    public @Nullable String getDisplayName() {
         return itemStack.getItemMeta().getDisplayName();
     }
 
