@@ -2,9 +2,11 @@ package com.coalesce.gui;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,140 +14,107 @@ import java.util.List;
 
 public class Icon {
 	
-	protected ItemStack item;
-	
-	public Icon(ItemStack item) {
+	protected ItemStack itemStack;
 
-		this.item = item;
+	public Icon(ItemStack itemStack) {
+
+		this.itemStack = itemStack;
 
 	}
 	
-	public Icon(ItemStack item, String name){
+	public Icon(ItemStack itemStack, String name){
 		
-		this.item = item;
+		this.itemStack = itemStack;
 		
 		setDisplayName(name);
 	}
 	
 	public Icon(Material material){
-        this.item = new ItemStack(material);
+        this.itemStack = new ItemStack(material);
 	}
 
 	public Icon(Material material, int amount){
-        this.item = new ItemStack(material, amount);
+        this.itemStack = new ItemStack(material, amount);
 	}
 
     public Icon(Material material, int amount, int damage){
-        this.item = new ItemStack(material, amount, (short) damage);
+        this.itemStack = new ItemStack(material, amount, (short) damage);
     }
 
     public Icon(Material material, int amount, int damage, String name){
-        this.item = new ItemStack(material, amount, (short) damage);
+        this.itemStack = new ItemStack(material, amount, (short) damage);
 
         setDisplayName(name);
     }
 	
 	public Icon(Icon that){
 		
-		this.item = that.item;
-		item.setType(that.getMaterial());
-		item.setAmount(that.getAmount());
-		setDisplayName(that.getDisplayName());
-		setLore(that.getLore());
+		this.itemStack = that.itemStack;
 		
 	}
 
 	//Click Methods
 	//These are all empty because they are meant to be overridden
-	public void onClick(Player player){
-		
-	}
-	
-	public void onRightClick(Player player){
-		
-	}
-	
-	public void onLeftClick(Player player){
-		
-	}
-	
-	public void onShiftRightClick(Player player){
-		
-	}
-	
-	public void onShiftLeftClick(Player player){
-		
-	}
-	
-	public void onMiddleMouseClick(Player player){
+	public void onClick(Player whoClicked, ClickType clickType){
 		
 	}
 	
 	//Getters and Setters
-	public ItemStack getItem() {
-		if (item != null){
-			return item;
-		}
-		return null;
-	}
-	
-	public boolean hasItem(){
-		if (item != null){
-			return true;
-		}
-		return false;
+	@NotNull
+	public ItemStack getItemStack() {
+		return itemStack;
 	}
 
-	public void setItem(ItemStack item) {
-		this.item = item;
+	public void setItemStack(ItemStack itemStack) {
+		this.itemStack = itemStack;
 	}
 
 	public Material getMaterial() {
-		return item.getType();
+		return itemStack.getType();
 	}
 
 	public void setMaterial(Material material) {
-		item.setType(material);
+		itemStack.setType(material);
 	}
 
 	public int getAmount() {
-		return item.getAmount();
+		return itemStack.getAmount();
 	}
 
 	public void setAmount(int amount) {
-		item.setAmount(amount);
+		itemStack.setAmount(amount);
 	}
 
 	public List<String> getLore() {
-		return item.getItemMeta().getLore() == null ? new ArrayList<>() : item.getItemMeta().getLore();
+		return itemStack.getItemMeta().getLore() == null ? new ArrayList<>() : itemStack.getItemMeta().getLore();
 	}
 
 	public void setLore(List<String> lore) {
-		ItemMeta meta = item.getItemMeta();
+		ItemMeta meta = itemStack.getItemMeta();
 		meta.setLore(lore);
-		item.setItemMeta(meta);
+		itemStack.setItemMeta(meta);
 	}
 
     public void setLore(String... lore){
-        ItemMeta meta = item.getItemMeta();
+        ItemMeta meta = itemStack.getItemMeta();
         meta.setLore(Arrays.asList(lore));
-        item.setItemMeta(meta);
+        itemStack.setItemMeta(meta);
     }
 
 	public String getDisplayName() {
-		return item.getItemMeta().getDisplayName();
+		return itemStack.getItemMeta().getDisplayName();
 	}
 
 	public void setDisplayName(String displayName) {
-		ItemMeta meta = item.getItemMeta();
+		ItemMeta meta = itemStack.getItemMeta();
 		meta.setDisplayName(displayName);
-		item.setItemMeta(meta);
+		itemStack.setItemMeta(meta);
 	}
 
     public void addItemFlag(ItemFlag itemFlag){
-        ItemMeta meta = item.getItemMeta();
+        ItemMeta meta = itemStack.getItemMeta();
         meta.addItemFlags(itemFlag);
-        item.setItemMeta(meta);
+        itemStack.setItemMeta(meta);
 
     }
 	

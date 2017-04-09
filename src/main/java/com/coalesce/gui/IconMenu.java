@@ -12,11 +12,11 @@ import java.util.ArrayList;
 
 public class IconMenu implements InventoryHolder, Cloneable{
 
-	protected Icon[][] icons;
-	String title;
-	int rows;
+	private Icon[][] icons;
+	private String title;
+	private int rows;
 
-	protected Inventory inventory;
+	private Inventory inventory;
 
 	// Some settings for when the plugin is clicked outside of, or something
 	// like that
@@ -63,11 +63,11 @@ public class IconMenu implements InventoryHolder, Cloneable{
 
 	//Overrideable meathods
 	//These meathods are ment to be overridden
-	public void onClose(Player player){
+	public void onClose(Player whoClosed){
 		
 	}
 	
-	public void onOpen(Player player){
+	public void onOpen(Player whoOpened){
 		
 	}
 	
@@ -82,7 +82,6 @@ public class IconMenu implements InventoryHolder, Cloneable{
 
 			}
 		}
-
 	}
 
 	public void fillRow(Icon icon, int row) {
@@ -143,27 +142,7 @@ public class IconMenu implements InventoryHolder, Cloneable{
 		Icon clickedIcon = icons[x][y];
 		ClickType click = event.getClick();
 
-		switch (click) {
-		case RIGHT:
-			clickedIcon.onRightClick(player);
-			break;
-		case LEFT:
-			clickedIcon.onLeftClick(player);
-			break;
-		case SHIFT_RIGHT:
-			clickedIcon.onShiftRightClick(player);
-			break;
-		case SHIFT_LEFT:
-			clickedIcon.onShiftLeftClick(player);
-			break;
-		case MIDDLE:
-			clickedIcon.onMiddleMouseClick(player);
-			break;
-		default:
-			break;
-		}
-
-		clickedIcon.onClick(player);
+		clickedIcon.onClick((Player) event.getWhoClicked(), event.getClick());
 	}
 
 	// Numbering starts at the bottom, left to right
@@ -192,7 +171,7 @@ public class IconMenu implements InventoryHolder, Cloneable{
 
 	public void setIcon(Icon icon, int x, int y) {
 		icons[x][y] = icon;
-		inventory.setItem((y * 9) + x, (icon == null) ? null : icon.getItem());
+		inventory.setItem((y * 9) + x, (icon == null) ? null : icon.getItemStack());
 	}
 
 	public String getTitle() {
@@ -225,6 +204,7 @@ public class IconMenu implements InventoryHolder, Cloneable{
 		this.inventory = inventory;
 	}
 
+	@Override
 	public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
