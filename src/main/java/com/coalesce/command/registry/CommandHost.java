@@ -29,8 +29,7 @@ public class CommandHost extends Command {
     }
     
     @Override
-    public
-    boolean execute(CommandSender sender, String alias, String[] args) {
+    public boolean execute(CommandSender sender, String alias, String[] args) {
         if (checkLength(sender, args) || checkExecutor(sender) || !permissionCheck(sender, command.getPermissions())) {
             return true;
         }
@@ -132,12 +131,13 @@ public class CommandHost extends Command {
     
     /**
      * Checks if the sender of the command has the correct permissions. (the permissions are provided in the @{@link Cmd} annotation)
-     * @param sender
-     * @param permissions
-     * @return
-     */
++     * 
++     * @param sender The command sender who're being checked.
++     * @param permissions The permissions which are being checked.
++     * @return Whether or not the sender has all the specified permissions.
+      */
     private boolean permissionCheck(CommandSender sender, String... permissions) {
-        return Stream.of(permissions).allMatch(sender::hasPermission);
+        return sender instanceof ConsoleCommandSender || Stream.of(permissions).allMatch(sender::hasPermission);
     }
     
 }
