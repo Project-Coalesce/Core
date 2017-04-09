@@ -42,6 +42,8 @@ public final class Core extends CoPlugin {
     
     /**
      * Grabs the instance of the core.
+     * Make sure you don't call this before {@link #onPreEnable()} nor after {@link #onPluginDisable()}.
+     *
      * @return The core instance.
      */
     public static @Nullable Core getInstance() {
