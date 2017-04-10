@@ -2,7 +2,6 @@ package com.coalesce.gui;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -137,9 +136,10 @@ public class IconMenu implements InventoryHolder, Cloneable {
         int x = (slot - ((y * 9)));
 
         Icon clickedIcon = icons[x][y];
-        ClickType click = event.getClick();
 
-        clickedIcon.getPlayerClickCallback().accept((Player) event.getWhoClicked(), event.getClick());
+        if (clickedIcon.getPlayerClickCallback() != null){
+            clickedIcon.getPlayerClickCallback().accept((Player) event.getWhoClicked(), event.getClick());
+        }
     }
 
     // Numbering starts at the bottom, left to right
