@@ -139,7 +139,7 @@ public class IconMenu implements InventoryHolder, Cloneable {
         Icon clickedIcon = icons[x][y];
         ClickType click = event.getClick();
 
-        clickedIcon.onClick((Player) event.getWhoClicked(), event.getClick());
+        clickedIcon.getPlayerClickCallback().accept((Player) event.getWhoClicked(), event.getClick());
     }
 
     // Numbering starts at the bottom, left to right

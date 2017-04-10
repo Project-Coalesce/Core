@@ -11,10 +11,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 public class Icon {
 
     protected ItemStack itemStack;
+    protected BiConsumer<Player, ClickType> playerClickCallback;
 
     public Icon(ItemStack itemStack) {
 
@@ -46,17 +48,25 @@ public class Icon {
         setDisplayName(name);
     }
 
+	public Icon(Material material, int amount, int damage, String name, BiConsumer<Player, ClickType> playerClickCallback) {
+		this.itemStack = new ItemStack(material, amount, (short) damage);
+		this.playerClickCallback = playerClickCallback;
+
+		setDisplayName(name);
+	}
+
     public Icon(Icon that) {
 
         this.itemStack = that.itemStack;
 
     }
 
-    //Click Methods
-    //These are all empty because they are meant to be overridden
-    public void onClick(Player whoClicked, ClickType clickType) {
+	public Icon(Icon that, BiConsumer<Player, ClickType> playerClickCallback) {
 
-    }
+		this.itemStack = that.itemStack;
+		this.playerClickCallback = playerClickCallback;
+
+	}
 
     //Getters and Setters
     @NotNull
@@ -117,4 +127,11 @@ public class Icon {
 
     }
 
+	public BiConsumer<Player, ClickType> getPlayerClickCallback() {
+		return playerClickCallback;
+	}
+
+	public void setPlayerClickCallback(BiConsumer<Player, ClickType> playerClickCallback) {
+		this.playerClickCallback = playerClickCallback;
+	}
 }
