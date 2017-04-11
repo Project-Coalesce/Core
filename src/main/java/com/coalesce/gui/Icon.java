@@ -38,18 +38,18 @@ public class Icon {
         this.itemStack = new ItemStack(material, amount);
     }
 
-    public Icon(Material material, int amount, int damage) {
-        this.itemStack = new ItemStack(material, amount, (short) damage);
+    public Icon(Material material, int amount, short damage) {
+        this.itemStack = new ItemStack(material, amount, damage);
     }
 
-    public Icon(Material material, int amount, int damage, String name) {
-        this.itemStack = new ItemStack(material, amount, (short) damage);
+    public Icon(Material material, int amount, short damage, String name) {
+        this.itemStack = new ItemStack(material, amount, damage);
 
         setDisplayName(name);
     }
 
-	public Icon(Material material, int amount, int damage, String name, BiConsumer<Player, ClickType> playerClickCallback) {
-		this.itemStack = new ItemStack(material, amount, (short) damage);
+	public Icon(Material material, int amount, short damage, String name, BiConsumer<Player, ClickType> playerClickCallback) {
+		this.itemStack = new ItemStack(material, amount, damage);
 		this.playerClickCallback = playerClickCallback;
 
 		setDisplayName(name);
@@ -93,6 +93,14 @@ public class Icon {
     public void setAmount(int amount) {
         itemStack.setAmount(amount);
     }
+
+	public short getDurability(){
+		return itemStack.getDurability();
+	}
+
+	public void setDurability(short durability){
+		itemStack.setDurability(durability);
+	}
 
     public List<String> getLore() {
         return itemStack.getItemMeta().getLore() == null ? new ArrayList<>() : itemStack.getItemMeta().getLore();
