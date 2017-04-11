@@ -96,13 +96,13 @@ public final class Command implements CmdExecutor, Named {
 	}
 
 
-	public Command onlyConsole(boolean onlyConsole) {
-		this.onlyConsole = onlyConsole;
+	public Command onlyConsole() {
+		this.onlyConsole = true;
 		return this;
 	}
 
-	public Command OnlyPlayer(boolean onlyPlayer) {
-		this.onlyPlayer = onlyPlayer;
+	public Command onlyPlayer() {
+		this.onlyPlayer = true;
 		return this;
 	}
 
