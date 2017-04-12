@@ -68,7 +68,7 @@ public abstract class CoModule implements Logging, ServerEssentials, Switch, Lis
 
 	@Override
 	public void disable() {
-		if (!isEnabled) throw new IllegalStateException("Module " + getName() + " is'nt enabled");
+		if (!isEnabled) throw new IllegalStateException("Module " + getName() + " isn't enabled");
 
 		isEnabled = false;
 		try {
