@@ -2,12 +2,15 @@ package com.coalesce.gui;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class IconMenu implements InventoryHolder, Cloneable {
 
@@ -16,6 +19,9 @@ public class IconMenu implements InventoryHolder, Cloneable {
     private int rows;
 
     private Inventory inventory;
+
+	private boolean listenForOpen;
+	private boolean listenForClose;
 
     // Some settings for when the plugin is clicked outside of, or something
     // like that
@@ -60,14 +66,50 @@ public class IconMenu implements InventoryHolder, Cloneable {
         icons = original.icons;
     }
 
-    //Overrideable meathods
-    //These meathods are ment to be overridden
+	//Consider faster way of doing this
     public void onClose(Player whoClosed) {
 
+		if (listenForClose){
+
+			for (int i = 0; i < icons.length; i++) {
+				for (int k = 0; k < icons[i].length; k++) {
+
+					Icon icon = icons[i][k];
+
+					if (icon != null){
+
+						Consumer<Player> onClose = icon.getOnClose();
+
+						if (onClose != null){
+							onClose.accept(whoClosed);
+						}
+					}
+				}
+			}
+		}
     }
 
+	//Consider faster way of doing this
     public void onOpen(Player whoOpened) {
 
+		if (listenForOpen){
+
+			for (int i = 0; i < icons.length; i++) {
+				for (int k = 0; k < icons[i].length; k++) {
+
+					Icon icon = icons[i][k];
+
+					if (icon != null){
+
+						Consumer<Player> onOpen = icon.getOnOpen();
+
+						if (onOpen != null){
+							onOpen.accept(whoOpened);
+						}
+					}
+				}
+			}
+		}
     }
 
     // Pretty-ness meathods
@@ -137,8 +179,9 @@ public class IconMenu implements InventoryHolder, Cloneable {
 
         Icon clickedIcon = icons[x][y];
 
-        if (clickedIcon.getPlayerClickCallback() != null){
-            clickedIcon.getPlayerClickCallback().accept((Player) event.getWhoClicked(), event.getClick());
+		BiConsumer<Player, ClickType> onClick = clickedIcon.getOnClick();
+        if (onClick != null){
+			onClick.accept((Player) event.getWhoClicked(), event.getClick());
         }
     }
 
@@ -201,7 +244,23 @@ public class IconMenu implements InventoryHolder, Cloneable {
         this.inventory = inventory;
     }
 
-    @Override
+	public boolean isListenForClose() {
+		return listenForClose;
+	}
+
+	public void setListenForClose(boolean listenForClose) {
+		this.listenForClose = listenForClose;
+	}
+
+	public boolean isListenForOpen() {
+		return listenForOpen;
+	}
+
+	public void setListenForOpen(boolean listenForOpen) {
+		this.listenForOpen = listenForOpen;
+	}
+
+	@Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }

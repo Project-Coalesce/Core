@@ -12,11 +12,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class Icon {
 
     protected ItemStack itemStack;
-    protected BiConsumer<Player, ClickType> playerClickCallback;
+    protected BiConsumer<Player, ClickType> onClick;
+	protected Consumer<Player> onOpen;
+	protected Consumer<Player> onClose;
 
     public Icon(ItemStack itemStack) {
 
@@ -48,13 +51,6 @@ public class Icon {
         setDisplayName(name);
     }
 
-	public Icon(Material material, int amount, short damage, String name, BiConsumer<Player, ClickType> playerClickCallback) {
-		this.itemStack = new ItemStack(material, amount, damage);
-		this.playerClickCallback = playerClickCallback;
-
-		setDisplayName(name);
-	}
-
     public Icon(Icon that) {
 
         this.itemStack = that.itemStack;
@@ -64,7 +60,7 @@ public class Icon {
 	public Icon(Icon that, BiConsumer<Player, ClickType> playerClickCallback) {
 
 		this.itemStack = that.itemStack;
-		this.playerClickCallback = playerClickCallback;
+		this.onClick = playerClickCallback;
 
 	}
 
@@ -135,11 +131,27 @@ public class Icon {
 
     }
 
-	public BiConsumer<Player, ClickType> getPlayerClickCallback() {
-		return playerClickCallback;
+	public BiConsumer<Player, ClickType> getOnClick() {
+		return onClick;
 	}
 
-	public void setPlayerClickCallback(BiConsumer<Player, ClickType> playerClickCallback) {
-		this.playerClickCallback = playerClickCallback;
+	public void setOnClick(BiConsumer<Player, ClickType> onClick) {
+		this.onClick = onClick;
+	}
+
+	public Consumer<Player> getOnOpen() {
+		return onOpen;
+	}
+
+	public void setOnOpen(Consumer<Player> onOpen) {
+		this.onOpen = onOpen;
+	}
+
+	public Consumer<Player> getOnClose() {
+		return onClose;
+	}
+
+	public void setOnClose(Consumer<Player> onClose) {
+		this.onClose = onClose;
 	}
 }

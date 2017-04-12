@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemFlag;
 
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public final class IconBuilder {
 
@@ -18,48 +19,58 @@ public final class IconBuilder {
 		icon = new Icon(material);
 	}
 
-	public IconBuilder withAmount(int amount){
+	public IconBuilder amount(int amount){
 		icon.setAmount(amount);
 		return this;
 	}
 
-	public IconBuilder withDurability(short durability){
+	public IconBuilder durability(short durability){
 		icon.setDurability(durability);
 		return this;
 	}
 
-	public IconBuilder withDurability(int durability){
+	public IconBuilder durability(int durability){
 		icon.setDurability((short)durability);
 		return this;
 	}
 
-	public IconBuilder withName(String displayName){
+	public IconBuilder name(String displayName){
 		icon.setDisplayName(displayName);
 		return this;
 	}
 
-	public IconBuilder withLore(String... lore){
+	public IconBuilder lore(String... lore){
 		icon.setLore(lore);
 		return this;
 	}
 
-	public IconBuilder withLore(List<String> lore){
+	public IconBuilder lore(List<String> lore){
 		icon.setLore(lore);
 		return this;
 	}
 
-	public IconBuilder withItemFlag(ItemFlag itemFlag){
+	public IconBuilder itemFlag(ItemFlag itemFlag){
 		icon.addItemFlag(itemFlag);
 		return this;
 	}
 
-	public IconBuilder withEnchantment(Enchantment enchantment, int level){
+	public IconBuilder enchantment(Enchantment enchantment, int level){
 		icon.getItemStack().addEnchantment(enchantment, level);
 		return this;
 	}
 
-	public IconBuilder withClickCallback(BiConsumer<Player, ClickType> clickCallback){
-		icon.setPlayerClickCallback(clickCallback);
+	public IconBuilder onClick(BiConsumer<Player, ClickType> clickCallback){
+		icon.setOnClick(clickCallback);
+		return this;
+	}
+
+	public IconBuilder onOpen(Consumer<Player> onOpen){
+		icon.setOnOpen(onOpen);
+		return this;
+	}
+
+	public IconBuilder onClose(Consumer<Player> onClose){
+		icon.setOnClose(onClose);
 		return this;
 	}
 
