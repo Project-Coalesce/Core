@@ -12,14 +12,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class Icon {
 
     protected ItemStack itemStack;
     protected BiConsumer<Player, ClickType> onClick;
-	protected Consumer<Player> onOpen;
-	protected Consumer<Player> onClose;
 
     public Icon(ItemStack itemStack) {
 
@@ -139,19 +136,4 @@ public class Icon {
 		this.onClick = onClick;
 	}
 
-	public Consumer<Player> getOnOpen() {
-		return onOpen;
-	}
-
-	public void setOnOpen(Consumer<Player> onOpen) {
-		this.onOpen = onOpen;
-	}
-
-	public Consumer<Player> getOnClose() {
-		return onClose;
-	}
-
-	public void setOnClose(Consumer<Player> onClose) {
-		this.onClose = onClose;
-	}
 }
