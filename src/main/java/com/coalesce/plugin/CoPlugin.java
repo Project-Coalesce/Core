@@ -1,8 +1,5 @@
 package com.coalesce.plugin;
 
-import com.coalesce.type.Logging;
-import com.coalesce.type.ServerEssentials;
-import com.coalesce.type.Switch;
 import com.google.common.collect.ImmutableList;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -13,28 +10,22 @@ import java.util.*;
 
 import static org.bukkit.ChatColor.DARK_RED;
 
-public abstract class CoPlugin extends JavaPlugin implements Logging, ServerEssentials, Listener {
+public abstract class CoPlugin extends JavaPlugin implements Listener {
 
 	private final List<CoModule> modules = new LinkedList<>();
-
-	private boolean doEnable = true;
-	private CoConfig coConfig;
-
-
-	@Override
-	public final void onLoad() {
-		coConfig = CoConfig.load(this);
-		doEnable = onPreEnable();
-	}
+	private CoLogger logger;
 
 	@Override
 	public final void onEnable() {
-		if (!doEnable) return;
 
+		//Setup basic things
+		logger = new CoLogger(this);
+
+		//Try to call the onEnable
 		try {
 			onPluginEnable();
 		} catch (Exception e) {
-			error(DARK_RED + "Failed to enable module " + getName());
+			logger.error(DARK_RED + "Failed to enable module " + getName());
 			e.printStackTrace();
 			return;
 		}
@@ -48,18 +39,9 @@ public abstract class CoPlugin extends JavaPlugin implements Logging, ServerEsse
 		try {
 			onPluginDisable();
 		} catch (Exception e) {
-			warn(DARK_RED + "Failed to disable module " + getName());
+			logger.warn(DARK_RED + "Failed to disable module " + getName());
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public @NotNull CoPlugin getPlugin() {
-		return this;
-	}
-
-	public boolean onPreEnable() {
-		return true;
 	}
 
 
@@ -84,13 +66,12 @@ public abstract class CoPlugin extends JavaPlugin implements Logging, ServerEsse
 
 
 	public final void enableModules() {
-		getModules().forEach(Switch::enable);
+		getModules().forEach(CoModule::enable);
 	}
 
 	public final void disableModules() {
-		getModules().forEach(Switch::disable);
+		getModules().forEach(CoModule::disable);
 	}
-
 
 	public final void register(@NotNull Listener listener) {
 		getServer().getPluginManager().registerEvents(listener, this);
@@ -100,5 +81,8 @@ public abstract class CoPlugin extends JavaPlugin implements Logging, ServerEsse
 		HandlerList.unregisterAll(listener);
 	}
 
+	public final CoLogger getCoLogger(){
+		return logger;
+	}
 
 }
