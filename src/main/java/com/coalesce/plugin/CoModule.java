@@ -4,6 +4,7 @@ import com.coalesce.type.Logging;
 import com.coalesce.type.ServerEssentials;
 import com.coalesce.type.Switch;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import static org.bukkit.ChatColor.DARK_RED;
@@ -11,7 +12,7 @@ import static org.bukkit.ChatColor.DARK_RED;
 /**
  * Base class for sub "plugins", allows for modular servers
  */
-public abstract class CoModule implements Logging, ServerEssentials, Switch, Listener {
+public abstract class CoModule extends JavaPlugin {
 
 	private final CoPlugin plugin;
 
