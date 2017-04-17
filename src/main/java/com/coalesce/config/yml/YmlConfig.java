@@ -85,7 +85,9 @@ public final class YmlConfig implements IConfig {
 	
 	@Override
 	public void addEntry(IEntry entry) {
-		setValue(entry.getPath(), entry.getValue());
+		if (getBase().get(entry.getPath()) == null) {
+			setValue(entry.getPath(), entry.getValue());
+		}
 	}
 	
 	@Override
