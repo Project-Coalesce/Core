@@ -2,11 +2,45 @@ package com.coalesce.config.yml;
 
 import com.coalesce.config.IConfig;
 import com.coalesce.config.IEntry;
+import com.coalesce.plugin.CoPlugin;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 
-public class YmlConfig implements IConfig {
+public final class YmlConfig implements IConfig {
+	
+	private Collection<IEntry> collection = new ArrayList<>();
+	private YamlConfiguration config;
+	private final File dir, file;
+	private final String name;
+	
+	public YmlConfig(String name, CoPlugin plugin) {
+		this.name = name;
+		this.dir = new File("plugins" + File.separator + plugin.getName());
+		this.file = new File(dir + name + ".yml");
+		if (!dir.exists()) {
+			dir.mkdir();
+			try {
+				file.createNewFile();
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if (!file.exists()) {
+			try {
+				file.createNewFile();
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		this.config = YamlConfiguration.loadConfiguration(file);
+	}
+	
 	@Override
 	public IEntry getEntry(String path) {
 		return null;
@@ -54,11 +88,11 @@ public class YmlConfig implements IConfig {
 	
 	@Override
 	public String getName() {
-		return null;
+		return name;
 	}
 	
 	@Override
 	public File getFile() {
-		return null;
+		return file;
 	}
 }
