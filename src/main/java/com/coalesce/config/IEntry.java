@@ -37,7 +37,7 @@ public interface IEntry {
 	 *
 	 * @return The entry's database.
 	 */
-	IConfig getDatabase();
+	IConfig getConfig();
 	
 	/**
 	 * Removes the entry.

@@ -15,7 +15,7 @@ import static org.bukkit.ChatColor.DARK_RED;
 public abstract class CoPlugin extends JavaPlugin implements Listener {
 
 	private final List<CoModule> modules = new LinkedList<>();
-	private Map<CoPlugin, List<IConfig>> configs = new HashMap<>();
+	private Collection<IConfig> configs = new ArrayList<>();
 	private CoLogger logger;
 
 	@Override
@@ -93,7 +93,7 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 	 * @return A configuration file list.
 	 */
 	public final Collection<IConfig> getConfigurations() {
-		return configs.get(this);
+		return configs;
 	}
 	
 	/**
@@ -102,7 +102,7 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 	 * @return The config.
 	 */
 	public final IConfig getConfig(String name) {
-		for (IConfig config : configs.get(this)) {
+		for (IConfig config : configs) {
 			if (config.getName().equals(name)) {
 				return config;
 			}
