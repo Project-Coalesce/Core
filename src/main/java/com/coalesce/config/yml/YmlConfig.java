@@ -1,5 +1,6 @@
 package com.coalesce.config.yml;
 
+import com.coalesce.config.ConfigFormat;
 import com.coalesce.config.IConfig;
 import com.coalesce.config.IEntry;
 import com.coalesce.plugin.CoPlugin;
@@ -16,11 +17,15 @@ public final class YmlConfig implements IConfig {
 	private YamlConfiguration config;
 	private final File dir, file;
 	private final String name;
+	private final ConfigFormat format;
+	private final CoPlugin plugin;
 	
 	public YmlConfig(String name, CoPlugin plugin) {
 		this.name = name;
 		this.dir = new File("plugins" + File.separator + plugin.getName());
 		this.file = new File(dir + name + ".yml");
+		this.format = ConfigFormat.YAML;
+		this.plugin = plugin;
 		if (!dir.exists()) {
 			dir.mkdir();
 			try {
@@ -83,7 +88,7 @@ public final class YmlConfig implements IConfig {
 	
 	@Override
 	public void delete() {
-		
+		file.delete();
 	}
 	
 	@Override
@@ -94,5 +99,15 @@ public final class YmlConfig implements IConfig {
 	@Override
 	public File getFile() {
 		return file;
+	}
+	
+	@Override
+	public ConfigFormat getFormat() {
+		return format;
+	}
+	
+	@Override
+	public <E extends CoPlugin> E getPlugin() {
+		return (E) plugin;
 	}
 }

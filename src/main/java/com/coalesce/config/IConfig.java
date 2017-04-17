@@ -1,5 +1,7 @@
 package com.coalesce.config;
 
+import com.coalesce.plugin.CoPlugin;
+
 import java.io.File;
 import java.util.Collection;
 
@@ -71,4 +73,16 @@ public interface IConfig {
 	 * @return The file of this config.
 	 */
 	File getFile();
+	
+	/**
+	 * Identifies the format of this configuration.
+	 * @return YAML or GSON
+	 */
+	ConfigFormat getFormat();
+	
+	/**
+	 * Returns the plugin this configuration is for.
+	 * @return The host plugin.
+	 */
+	<E extends CoPlugin> E getPlugin();
 }
