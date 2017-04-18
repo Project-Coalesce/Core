@@ -1,7 +1,8 @@
 package com.coalesce.plugin;
 
-import com.coalesce.config.IConfig;
-import com.coalesce.config.yml.YmlConfig;
+import com.coalesce.type.Logging;
+import com.coalesce.type.ServerEssentials;
+import com.coalesce.type.Switch;
 import com.google.common.collect.ImmutableList;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -12,23 +13,28 @@ import java.util.*;
 
 import static org.bukkit.ChatColor.DARK_RED;
 
-public abstract class CoPlugin extends JavaPlugin implements Listener {
+public abstract class CoPlugin extends JavaPlugin implements Logging, ServerEssentials, Listener {
 
 	private final List<CoModule> modules = new LinkedList<>();
-	private Collection<IConfig> configs = new ArrayList<>();
-	private CoLogger logger;
+
+	private boolean doEnable = true;
+	private CoConfig coConfig;
+
+
+	@Override
+	public final void onLoad() {
+		coConfig = CoConfig.load(this);
+		doEnable = onPreEnable();
+	}
 
 	@Override
 	public final void onEnable() {
+		if (!doEnable) return;
 
-		//Setup basic things
-		logger = new CoLogger(this);
-
-		//Try to call the onEnable
 		try {
 			onPluginEnable();
 		} catch (Exception e) {
-			logger.error(DARK_RED + "Failed to enable module " + getName());
+			error(DARK_RED + "Failed to enable module " + getName());
 			e.printStackTrace();
 			return;
 		}
@@ -42,9 +48,18 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 		try {
 			onPluginDisable();
 		} catch (Exception e) {
-			logger.warn(DARK_RED + "Failed to disable module " + getName());
+			warn(DARK_RED + "Failed to disable module " + getName());
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public @NotNull CoPlugin getPlugin() {
+		return this;
+	}
+
+	public boolean onPreEnable() {
+		return true;
 	}
 
 
@@ -69,12 +84,13 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 
 
 	public final void enableModules() {
-		getModules().forEach(CoModule::enable);
+		getModules().forEach(Switch::enable);
 	}
 
 	public final void disableModules() {
-		getModules().forEach(CoModule::disable);
+		getModules().forEach(Switch::disable);
 	}
+
 
 	public final void register(@NotNull Listener listener) {
 		getServer().getPluginManager().registerEvents(listener, this);
@@ -84,29 +100,5 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 		HandlerList.unregisterAll(listener);
 	}
 
-	public final CoLogger getCoLogger() {
-		return logger;
-	}
-	
-	/**
-	 * A collection of all the current configurations of a plugin.
-	 * @return A configuration file list.
-	 */
-	public final Collection<IConfig> getConfigurations() {
-		return configs;
-	}
-	
-	/**
-	 * Looks for a config of any type. (If the config being looked up does not exist, it defaults to creating it in yml)
-	 * @param name The name of the config you're looking for.
-	 * @return The config.
-	 */
-	public final IConfig getConfig(String name) {
-		for (IConfig config : configs) {
-			if (config.getName().equals(name)) {
-				return config;
-			}
-		}
-		return new YmlConfig(name, this);
-	}
+
 }
