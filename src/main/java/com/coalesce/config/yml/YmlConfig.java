@@ -27,7 +27,7 @@ public final class YmlConfig implements IConfig {
 	public <E extends CoPlugin> YmlConfig(String name, E plugin) {
 		this.name = name;
 		this.dir = new File("plugins" + File.separator + plugin.getName());
-		this.file = new File(dir + name + ".yml");
+		this.file = new File(dir + File.separator +name + ".yml");
 		this.format = ConfigFormat.YAML;
 		this.plugin = plugin;
 		if (!dir.exists()) {
