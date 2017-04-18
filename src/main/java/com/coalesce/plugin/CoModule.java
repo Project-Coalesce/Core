@@ -1,8 +1,5 @@
 package com.coalesce.plugin;
 
-import com.coalesce.type.Logging;
-import com.coalesce.type.ServerEssentials;
-import com.coalesce.type.Switch;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +8,7 @@ import static org.bukkit.ChatColor.DARK_RED;
 /**
  * Base class for sub "plugins", allows for modular servers
  */
-public abstract class CoModule implements Logging, ServerEssentials, Switch, Listener {
+public abstract class CoModule implements Listener {
 
 	private final CoPlugin plugin;
 
@@ -34,22 +31,18 @@ public abstract class CoModule implements Logging, ServerEssentials, Switch, Lis
 	 *
 	 * @return The {@link CoPlugin}
 	 */
-	@Override
 	public @NotNull CoPlugin getPlugin() {
 		return plugin;
 	}
 
-	@Override
 	public boolean isEnabled() {
 		return isEnabled;
 	}
 
-	@Override
 	public @NotNull String getName() {
 		return name;
 	}
 
-	@Override
 	public void enable() {
 		if (isEnabled) throw new IllegalStateException("Module " + getName() + " is already enabled");
 
@@ -58,7 +51,7 @@ public abstract class CoModule implements Logging, ServerEssentials, Switch, Lis
 			getPlugin().register(this);
 		}
 		catch (Exception e) {
-			error(DARK_RED + "Failed to enable module " + getName());
+			plugin.getCoLogger().error(DARK_RED + "Failed to enable module " + getName());
 			e.printStackTrace();
 			return;
 		}
@@ -66,7 +59,6 @@ public abstract class CoModule implements Logging, ServerEssentials, Switch, Lis
 		isEnabled = true;
 	}
 
-	@Override
 	public void disable() {
 		if (!isEnabled) throw new IllegalStateException("Module " + getName() + " isn't enabled");
 
@@ -76,7 +68,7 @@ public abstract class CoModule implements Logging, ServerEssentials, Switch, Lis
 			getPlugin().unregister(this);
 		}
 		catch (Exception e) {
-			warn(DARK_RED + "Failed to disable module " + getName());
+			plugin.getCoLogger().warn(DARK_RED + "Failed to disable module " + getName());
 			e.printStackTrace();
 		}
 	}

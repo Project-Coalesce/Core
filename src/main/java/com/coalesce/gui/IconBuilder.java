@@ -8,7 +8,6 @@ import org.bukkit.inventory.ItemFlag;
 
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public final class IconBuilder {
 
@@ -61,16 +60,6 @@ public final class IconBuilder {
 
 	public IconBuilder onClick(BiConsumer<Player, ClickType> clickCallback){
 		icon.setOnClick(clickCallback);
-		return this;
-	}
-
-	public IconBuilder onOpen(Consumer<Player> onOpen){
-		icon.setOnOpen(onOpen);
-		return this;
-	}
-
-	public IconBuilder onClose(Consumer<Player> onClose){
-		icon.setOnClose(onClose);
 		return this;
 	}
 
