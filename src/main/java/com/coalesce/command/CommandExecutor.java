@@ -1,9 +1,7 @@
 package com.coalesce.command;
 
-import java.util.function.Consumer;
+public interface CommandExecutor {
 
-interface CommandExecutor {
-
-	void execute(Consumer<CommandContext> commandMethod);
+	void execute(CommandContext commandMethod);
 
 }
