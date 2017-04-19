@@ -57,13 +57,13 @@ public final class CommandBuilder {
 		return this;
 	}
 
-	public CommandBuilder subCommands(CoCommand... subCommands){
-		command.setSubCommands(Stream.of(subCommands).collect(Collectors.toSet()));
+	public CommandBuilder children(CoCommand... subCommands){
+		command.setChildren(Stream.of(subCommands).collect(Collectors.toSet()));
 		return this;
 	}
 
-	public CommandBuilder subCommands(Set<CoCommand> subCommands){
-		command.setSubCommands(subCommands);
+	public CommandBuilder children(Set<CoCommand> subCommands){
+		command.setChildren(subCommands);
 		return this;
 	}
 
