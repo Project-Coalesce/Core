@@ -14,7 +14,8 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <versionSpigot>1.11.2-R0.1-SNAPSHOT</versionSpigot>
+		<versionSpigotApi>1.11-R0.1-SNAPSHOT</versionSpigotApi>
+        <versionSpigot>1.11-R0.1-SNAPSHOT</versionSpigot>
         <versionAnnotations>15.0</versionAnnotations>
 
         <versionMavenClean>3.0.0</versionMavenClean>
@@ -39,9 +40,16 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>${versionSpigot}</version>
+            <version>${versionSpigotApi}</version>
             <scope>provided</scope>
         </dependency>
+        
+        <dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot</artifactId>
+			<version>${versionSpigot}</version>
+			<scope>provided</scope>
+		</dependency>
 
         <!--JUnit-->
         <dependency>
