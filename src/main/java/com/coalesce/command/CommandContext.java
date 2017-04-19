@@ -28,6 +28,10 @@ public final class CommandContext {
 		return sender instanceof ConsoleCommandSender;
 	}
 
+	public ConsoleCommandSender asConsole(){
+		return (ConsoleCommandSender)sender;
+	}
+
 	public CommandSender getSender() {
 		return sender;
 	}
@@ -55,5 +59,9 @@ public final class CommandContext {
 
 	public String joinArgs() {
 		return joinArgs(0);
+	}
+
+	public void send(String message){
+		sender.sendMessage(message);
 	}
 }

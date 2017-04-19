@@ -14,15 +14,22 @@ import static org.bukkit.ChatColor.DARK_RED;
 
 public abstract class CoPlugin extends JavaPlugin implements Listener {
 
+	private String displayName;
 	private final List<CoModule> modules = new LinkedList<>();
 	private Collection<IConfig> configs = new ArrayList<>();
 	private CoLogger logger;
+	private CoFormatter formatter;
 
+	public CoPlugin(String displayName){
+		this.displayName = displayName;
+	}
+	
 	@Override
 	public final void onEnable() {
 
 		//Setup basic things
 		logger = new CoLogger(this);
+		formatter = new CoFormatter(this);
 
 		//Try to call the onEnable
 		try {
@@ -53,10 +60,13 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 	public abstract void onPluginDisable() throws Exception;
 
 
+	public String getDisplayName(){
+		return displayName;
+	}
+
 	protected final void addModules(CoModule... modules) {
 		Collections.addAll(this.modules, modules);
 	}
-
 
 	public final @NotNull List<CoModule> getModules() {
 		return ImmutableList.copyOf(modules);
@@ -87,6 +97,11 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 	public final CoLogger getCoLogger() {
 		return logger;
 	}
+
+	public final CoFormatter getFormatter(){
+		return formatter;
+	}
+
 	
 	/**
 	 * A collection of all the current configurations of a plugin.

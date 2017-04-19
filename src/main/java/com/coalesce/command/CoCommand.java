@@ -1,5 +1,8 @@
 package com.coalesce.command;
 
+import com.coalesce.plugin.CoPlugin;
+import org.bukkit.ChatColor;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -7,6 +10,7 @@ import java.util.stream.Stream;
 
 public final class CoCommand {
 
+	private CoPlugin plugin;
 	private CommandExecutor commandExecutor;
 	private String name;
 	private Set<String> aliases;
@@ -15,10 +19,10 @@ public final class CoCommand {
 	private String permission;
 	private int minArgs = -1;
 	private int maxArgs = -1;
-	private boolean playerOnly;
+	private boolean playerOnly = false;
 	private Set<CoCommand> children;
 
-	public CoCommand(String name){
+	public CoCommand(CoPlugin plugin, String name){
 		this.name = name;
 
 		//Defaults
@@ -30,6 +34,13 @@ public final class CoCommand {
 
 		//If there were no child commands that matched the context
 		if (!checkChildren(context)){
+
+			if (context.isConsole() && playerOnly){
+				context.send(plugin.getFormatter().format(ChatColor.RED + "This command can only be used by players!"));
+				return;
+			}
+
+		} else {
 
 		}
 
@@ -66,6 +77,10 @@ public final class CoCommand {
 	public boolean matchesCommand(String input){
 		input = input.toLowerCase();
 		return (input.equals(name) || aliases.contains(input));
+	}
+
+	public CoPlugin getPlugin(){
+		return plugin;
 	}
 
 	public String getName() {
