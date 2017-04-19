@@ -16,18 +16,37 @@ public final class CoCommand {
 	private int minArgs = -1;
 	private int maxArgs = -1;
 	private boolean playerOnly;
-	private Set<CoCommand> subCommands;
+	private Set<CoCommand> children;
 
 	public CoCommand(String name){
 		this.name = name;
 
 		//Defaults
 		aliases = new HashSet<>();
-		subCommands = new HashSet<>();
+		children = new HashSet<>();
 	}
 
 	public void execute(CommandContext context){
-		//TODO: Finish this. This is the where most of the logic will happen
+
+		//If there were no child commands that matched the context
+		if (!checkChildren(context)){
+
+		}
+
+	}
+
+	private boolean checkChildren(CommandContext context){
+		if (children.isEmpty()) return false;
+		if (!context.hasArgs()) return false;
+		for (CoCommand childCommand : children){
+			//This is safe because we know that there is at least one argument
+			if (childCommand.matchesCommand(context.argAt(0))){
+
+				childCommand.execute(context);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public CommandExecutor getCommandExecutor() {
@@ -36,6 +55,17 @@ public final class CoCommand {
 
 	public void setCommandExecutor(CommandExecutor commandExecutor) {
 		this.commandExecutor = commandExecutor;
+	}
+
+	/**
+	 * Checks if the String matches this commands name, or aliases
+	 *
+	 * @param input The string to compare it to
+	 * @return if the string matches
+	 */
+	public boolean matchesCommand(String input){
+		input = input.toLowerCase();
+		return (input.equals(name) || aliases.contains(input));
 	}
 
 	public String getName() {
@@ -106,20 +136,15 @@ public final class CoCommand {
 		return playerOnly;
 	}
 
-	public void setPlayerOnly(boolean playerOnly) {
+	public void setPlayerOnly(boolean playerOnly){
 		this.playerOnly = playerOnly;
 	}
 
-	public void addSubCommand(CoCommand subCommand){
-		subCommands.add(subCommand);
+	public Set<CoCommand> getChildren() {
+		return children;
 	}
 
-	public void setSubCommands(Set<CoCommand> subCommands){
-		this.subCommands = subCommands;
+	public void setChildren(Set<CoCommand> children) {
+		this.children = children;
 	}
-
-	public boolean hasSubCommands(){
-		return subCommands.size() > 0;
-	}
-
 }

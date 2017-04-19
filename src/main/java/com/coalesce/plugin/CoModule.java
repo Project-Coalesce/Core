@@ -1,8 +1,5 @@
 package com.coalesce.plugin;
 
-import com.coalesce.type.Logging;
-import com.coalesce.type.ServerEssentials;
-import com.coalesce.type.Switch;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
