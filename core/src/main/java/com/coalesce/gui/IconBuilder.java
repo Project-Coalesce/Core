@@ -1,13 +1,14 @@
 package com.coalesce.gui;
 
+import java.util.List;
+import java.util.function.BiConsumer;
+
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemFlag;
-
-import java.util.List;
-import java.util.function.BiConsumer;
+import org.bukkit.inventory.ItemStack;
 
 public final class IconBuilder {
 
@@ -16,6 +17,11 @@ public final class IconBuilder {
 	public IconBuilder(Material material){
 
 		icon = new Icon(material);
+	}
+	
+	public IconBuilder(ItemStack stack)
+	{
+	    icon = new Icon(stack);
 	}
 
 	public IconBuilder amount(int amount){
