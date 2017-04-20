@@ -29,8 +29,10 @@ public class CommandRegister extends Command implements PluginIdentifiableComman
 	@Override
 	public boolean execute(CommandSender sender, String commandLabel, String[] args) {
 		for (CoCommand command : plugin.getCommands()){
-			command.execute(new CommandContext(sender, Arrays.asList(args)));
-			return true;
+			if (command.matchesCommand(commandLabel)) {
+				command.execute(new CommandContext(sender, Arrays.asList(args)));
+				return true;
+			}
 		}
 		return false;
 	}
