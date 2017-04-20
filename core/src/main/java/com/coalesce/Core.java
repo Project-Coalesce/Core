@@ -5,30 +5,20 @@ import org.jetbrains.annotations.Nullable;
 
 import static org.bukkit.plugin.ServicePriority.Normal;
 
-public final class Core extends CoPlugin{
+public class Core extends CoPlugin {
 	
 	
 	
 	private static Core instance;
 	
-	public Core(String displayName) {
-		super("CoalesceCore");
-	}
-	
 	
 	//private UserModule userModule;
 	//private CommandModule commandModule;
 
-
-	/*//@Override
-	public boolean onPreEnable() {
-		instance = this;
-		//return super.onPreEnable();
-	}*/
-	
 	@Override
 	public void onPluginEnable() {
 		getServer().getServicesManager().register(Core.class, this, this, Normal);
+		this.displayName = "CoalesceCore";
 		
 		//addModules(userModule = new UserModule(this), commandModule = new CommandModule(this));
 	}

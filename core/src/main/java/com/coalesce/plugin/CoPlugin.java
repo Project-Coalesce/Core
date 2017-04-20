@@ -20,17 +20,14 @@ import static org.bukkit.ChatColor.DARK_RED;
 
 public abstract class CoPlugin extends JavaPlugin implements Listener {
 
-	private String displayName;
+	public String displayName;
 	private final List<CoModule> modules = new LinkedList<>();
 	private Collection<IConfig> configs = new ArrayList<>();
+	private Set<CoCommand> commands = new HashSet<>();
 
 	private CommandRegistry commandRegistery;
 	private CoLogger logger;
 	private CoFormatter formatter;
-
-	public CoPlugin(String displayName){
-		this.displayName = displayName;
-	}
 	
 	@Override
 	public final void onEnable() {
@@ -150,6 +147,11 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 		catch (NoSuchFieldException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		map.register(getDisplayName(), new CommandRegister(command));
+		commands.add(command);
+		map.register(getDisplayName(), new CommandRegister(command, this));
+	}
+	
+	public final Set<CoCommand> getCommands() {
+		return commands;
 	}
 }
