@@ -48,7 +48,7 @@ public abstract class CoModule implements Listener {
 
 		try {
 			onEnable();
-			getPlugin().register(this);
+			getPlugin().registerListener(this);
 		}
 		catch (Exception e) {
 			plugin.getCoLogger().error(DARK_RED + "Failed to enable module " + getName());
@@ -65,7 +65,7 @@ public abstract class CoModule implements Listener {
 		isEnabled = false;
 		try {
 			onDisable();
-			getPlugin().unregister(this);
+			getPlugin().unregisterListener(this);
 		}
 		catch (Exception e) {
 			plugin.getCoLogger().warn(DARK_RED + "Failed to disable module " + getName());

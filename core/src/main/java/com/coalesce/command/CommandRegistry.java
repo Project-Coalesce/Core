@@ -1,17 +1,18 @@
 package com.coalesce.command;
 
-import com.coalesce.plugin.CoPlugin;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import com.coalesce.plugin.CoPlugin;
 
 public class CommandRegistry implements Listener {
 
@@ -21,7 +22,7 @@ public class CommandRegistry implements Listener {
 	public CommandRegistry(CoPlugin plugin){
 		this.plugin = plugin;
 
-		plugin.register(this);
+		plugin.registerListener(this);
 
 		commands = new HashSet<>();
 	}
