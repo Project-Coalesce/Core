@@ -1,15 +1,19 @@
 package com.coalesce.plugin;
 
 import com.coalesce.command.CoCommand;
+import com.coalesce.command.CommandRegister;
 import com.coalesce.command.CommandRegistry;
 import com.coalesce.config.IConfig;
 import com.coalesce.config.yml.YmlConfig;
 import com.google.common.collect.ImmutableList;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandMap;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 import static org.bukkit.ChatColor.DARK_RED;
@@ -132,5 +136,20 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 			}
 		}
 		return new YmlConfig(name, this);
+	}
+	
+	public final void addCommand(CoCommand command) {
+		CommandMap map = null;
+		Field field;
+		
+		try {
+			field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+			field.setAccessible(true);
+			map = (CommandMap)field.get(Bukkit.getServer());
+		}
+		catch (NoSuchFieldException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		map.register(getDisplayName(), new CommandRegister(command));
 	}
 }
