@@ -1,5 +1,7 @@
 package com.coalesce.plugin;
 
+import com.coalesce.command.CoCommand;
+import com.coalesce.command.CommandRegistry;
 import com.coalesce.config.IConfig;
 import com.coalesce.config.yml.YmlConfig;
 import com.google.common.collect.ImmutableList;
@@ -14,15 +16,25 @@ import static org.bukkit.ChatColor.DARK_RED;
 
 public abstract class CoPlugin extends JavaPlugin implements Listener {
 
+	private String displayName;
 	private final List<CoModule> modules = new LinkedList<>();
 	private Collection<IConfig> configs = new ArrayList<>();
-	private CoLogger logger;
 
+	private CommandRegistry commandRegistery;
+	private CoLogger logger;
+	private CoFormatter formatter;
+
+	public CoPlugin(String displayName){
+		this.displayName = displayName;
+	}
+	
 	@Override
 	public final void onEnable() {
 
 		//Setup basic things
+		commandRegistery = new CommandRegistry(this);
 		logger = new CoLogger(this);
+		formatter = new CoFormatter(this);
 
 		//Try to call the onEnable
 		try {
@@ -53,10 +65,13 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 	public abstract void onPluginDisable() throws Exception;
 
 
+	public String getDisplayName(){
+		return displayName;
+	}
+
 	protected final void addModules(CoModule... modules) {
 		Collections.addAll(this.modules, modules);
 	}
-
 
 	public final @NotNull List<CoModule> getModules() {
 		return ImmutableList.copyOf(modules);
@@ -76,17 +91,26 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 		getModules().forEach(CoModule::disable);
 	}
 
-	public final void register(@NotNull Listener listener) {
+	public final void registerListener(@NotNull Listener listener) {
 		getServer().getPluginManager().registerEvents(listener, this);
 	}
 
-	public final void unregister(@NotNull Listener listener) {
+	public final void unregisterListener(@NotNull Listener listener) {
 		HandlerList.unregisterAll(listener);
+	}
+
+	public final void registerCommand(CoCommand command){
+		commandRegistery.registerCommand(command);
 	}
 
 	public final CoLogger getCoLogger() {
 		return logger;
 	}
+
+	public final CoFormatter getFormatter(){
+		return formatter;
+	}
+
 	
 	/**
 	 * A collection of all the current configurations of a plugin.
