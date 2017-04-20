@@ -1,5 +1,7 @@
 package com.coalesce.command;
 
+import com.coalesce.plugin.CoPlugin;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -8,8 +10,8 @@ public final class CommandBuilder {
 
 	private CoCommand command;
 
-	public CommandBuilder(String name){
-		command = new CoCommand(name);
+	public CommandBuilder(CoPlugin plugin, String name){
+		command = new CoCommand(plugin, name);
 	}
 
 	public CommandBuilder executor(CommandExecutor executor){

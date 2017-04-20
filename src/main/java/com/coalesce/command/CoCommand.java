@@ -23,6 +23,7 @@ public final class CoCommand {
 	private Set<CoCommand> children;
 
 	public CoCommand(CoPlugin plugin, String name){
+		this.plugin = plugin;
 		this.name = name;
 
 		//Defaults
@@ -35,17 +36,42 @@ public final class CoCommand {
 		//If there were no child commands that matched the context
 		if (!checkChildren(context)){
 
+			//Check for too many args
+			if (context.getArgs().size() > maxArgs){
+				context.send(plugin.getFormatter().format(ChatColor.RED + "Incorrect usage!"));
+				return;
+			}
+
+			//Check for not enough args
+			if (context.getArgs().size() < minArgs){
+				context.send(plugin.getFormatter().format(ChatColor.RED + "Incorrect usage!"));
+				return;
+			}
+
+			//Check if the sender has perms
+			if (permission != null && !context.getSender().hasPermission(permission)){
+				context.send(plugin.getFormatter().format(ChatColor.RED + "You do not have permission for this command!"));
+				return;
+			}
+
+			//Check if console is trying to use a player only command
 			if (context.isConsole() && playerOnly){
 				context.send(plugin.getFormatter().format(ChatColor.RED + "This command can only be used by players!"));
 				return;
 			}
 
-		} else {
-
+			//Everything seems okay, so lets execute the command
+			commandExecutor.execute(context);
 		}
-
 	}
 
+	/**
+	 * This method checks if any children match the command context.
+	 * If one is found, the child is executed.
+	 *
+	 * @param context The command context
+	 * @return True if a child was found, false otherwise
+	 */
 	private boolean checkChildren(CommandContext context){
 		if (children.isEmpty()) return false;
 		if (!context.hasArgs()) return false;
@@ -53,6 +79,7 @@ public final class CoCommand {
 			//This is safe because we know that there is at least one argument
 			if (childCommand.matchesCommand(context.argAt(0))){
 
+				context.getArgs().remove(0);
 				childCommand.execute(context);
 				return true;
 			}
