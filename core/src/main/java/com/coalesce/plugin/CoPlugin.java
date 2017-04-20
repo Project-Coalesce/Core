@@ -2,7 +2,6 @@ package com.coalesce.plugin;
 
 import com.coalesce.command.CoCommand;
 import com.coalesce.command.CommandRegister;
-import com.coalesce.command.CommandRegistry;
 import com.coalesce.config.IConfig;
 import com.coalesce.config.yml.YmlConfig;
 import com.google.common.collect.ImmutableList;
@@ -24,8 +23,7 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 	private final List<CoModule> modules = new LinkedList<>();
 	private Collection<IConfig> configs = new ArrayList<>();
 	private Set<CoCommand> commands = new HashSet<>();
-
-	private CommandRegistry commandRegistery;
+	
 	private CoLogger logger;
 	private CoFormatter formatter;
 	
@@ -33,7 +31,6 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 	public final void onEnable() {
 
 		//Setup basic things
-		commandRegistery = new CommandRegistry(this);
 		logger = new CoLogger(this);
 		formatter = new CoFormatter(this);
 
@@ -98,10 +95,6 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 
 	public final void unregisterListener(@NotNull Listener listener) {
 		HandlerList.unregisterAll(listener);
-	}
-
-	public final void registerCommand(CoCommand command){
-		commandRegistery.registerCommand(command);
 	}
 
 	public final CoLogger getCoLogger() {
