@@ -1,7 +1,7 @@
 package com.coalesce.gui;
 
+import com.coalesce.plugin.CoPlugin;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * A contrived example to display the usage of {@link PlayerGui}.
@@ -10,7 +10,7 @@ public class ExampleGui extends PlayerGui {
 
     private static final int SIZE = 9;
     
-    public ExampleGui(JavaPlugin plugin) {
+    public ExampleGui(CoPlugin plugin) {
         super(plugin, SIZE, "Shop"); 
         
         ItemStack[] items = new ItemStack[0]; // some series of item stacks to display 
