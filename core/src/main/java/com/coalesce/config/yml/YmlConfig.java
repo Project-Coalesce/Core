@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-public final class YmlConfig implements IConfig {
+public abstract class YmlConfig implements IConfig {
 	
 	private Collection<IEntry> entries = new ArrayList<>();
 	private YamlConfiguration config;
@@ -24,7 +24,7 @@ public final class YmlConfig implements IConfig {
 	private final ConfigFormat format;
 	private final CoPlugin plugin;
 	
-	public <E extends CoPlugin> YmlConfig(String name, E plugin) {
+	protected YmlConfig(String name, CoPlugin plugin) {
 		this.name = name;
 		this.dir = new File("plugins" + File.separator + plugin.getName());
 		this.file = new File(dir + File.separator +name + ".yml");
@@ -88,6 +88,7 @@ public final class YmlConfig implements IConfig {
 		if (getBase().get(entry.getPath()) == null) {
 			setValue(entry.getPath(), entry.getValue());
 		}
+		entries.add(entry);
 	}
 	
 	@Override
