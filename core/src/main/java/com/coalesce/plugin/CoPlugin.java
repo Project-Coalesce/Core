@@ -1,5 +1,6 @@
 package com.coalesce.plugin;
 
+import com.coalesce.chat.CoFormatter;
 import com.coalesce.command.CoCommand;
 import com.coalesce.command.CommandRegister;
 import com.coalesce.config.IConfig;
