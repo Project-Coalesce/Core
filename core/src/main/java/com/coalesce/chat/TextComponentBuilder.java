@@ -3,14 +3,14 @@ package com.coalesce.chat;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public class TextComponent {
+public final class TextComponentBuilder {
 
     private String text = "";
     private ChatAction clickAction = ChatAction.NONE;
     private String clickActionValue = "";
     private String hoverValue = "";
 
-    public TextComponent(String string) {
+    public TextComponentBuilder(String string) {
         setText(string);
     }
 
