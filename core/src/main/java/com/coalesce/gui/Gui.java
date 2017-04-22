@@ -1,8 +1,9 @@
 package com.coalesce.gui;
 
-import java.util.function.Consumer;
-
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
+
+import java.util.function.BiConsumer;
 
 /**
  * Provides a general contract for a graphical user interface based around icons arrayed on a menu.
@@ -21,7 +22,7 @@ public interface Gui<F, T>
      * 
      * @return this, for chaining
      */
-    T addItem(F item, Consumer<Player> onClick);
+    T addItem(F item, BiConsumer<Player, ClickType> onClick);
 
     /**
      * Set an item in the given slot, and set the method to run when the item is clicked
@@ -32,7 +33,7 @@ public interface Gui<F, T>
      * 
      * @return this, for chaining
      */
-    T setItem(int index, F item, Consumer<Player> onClick);
+    T setItem(int index, F item, BiConsumer<Player, ClickType> onClick);
 
     /**
      * Open the inventory
