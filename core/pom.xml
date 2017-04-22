@@ -8,10 +8,9 @@
         <groupId>com.coalesce</groupId>
         <version>1.0</version>
     </parent>
-    
 
     <artifactId>core</artifactId>
     <version>1.0</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
 </project>
