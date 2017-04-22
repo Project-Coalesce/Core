@@ -3,6 +3,9 @@ package com.coalesce.chat;
 import com.coalesce.plugin.CoPlugin;
 import org.bukkit.ChatColor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.bukkit.ChatColor.*;
 
 public final class CoFormatter {
@@ -62,6 +65,30 @@ public final class CoFormatter {
             }
         }
         return messagePxSize;
+    }
+
+    /**
+     * Alternate color codes in a string, if the chars variable is null then it will use a rainbow effect.
+     * If string already contains color codes, they will be stripped.
+     *
+     * @param str   String to add color to.
+     * @param chars Colors that will be alternated in the string, if null then its rainbow.
+     * @return Changed String
+     */
+    public String rainbowifyString(String str, char... chars) {
+        str = ChatColor.stripColor(str);
+        if (chars == null || chars.length == 0)
+            chars = new char[]{'c', '6', 'e', 'a', 'b', '3', 'd'};
+        int index = 0;
+        String returnValue = "";
+        for (char c : str.toCharArray()) {
+            returnValue += "&" + chars[index] + c;
+            index++;
+            if (index == chars.length) {
+                index = 0;
+            }
+        }
+        return ChatColor.translateAlternateColorCodes('&', returnValue);
     }
 
 }
