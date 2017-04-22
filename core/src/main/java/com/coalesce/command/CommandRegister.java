@@ -9,6 +9,8 @@ import org.bukkit.plugin.Plugin;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CommandRegister extends Command implements PluginIdentifiableCommand {
 	
@@ -29,8 +31,10 @@ public class CommandRegister extends Command implements PluginIdentifiableComman
 	@Override
 	public boolean execute(CommandSender sender, String commandLabel, String[] args) {
 		for (CoCommand command : plugin.getCommands()){
-			command.execute(new CommandContext(sender, Arrays.asList(args)));
-			return true;
+			if (command.matchesCommand(commandLabel)) {
+				command.execute(new CommandContext(sender, args));
+				return true;
+			}
 		}
 		return false;
 	}

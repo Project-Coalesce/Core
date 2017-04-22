@@ -1,11 +1,6 @@
 package com.coalesce.gui;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-import java.util.function.Consumer;
-import java.util.function.Function;
-
+import com.coalesce.plugin.CoPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Result;
@@ -18,6 +13,12 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 /**
  * Represents an inventory that can change between players.
  */
@@ -26,7 +27,7 @@ public class PlayerGui implements Gui<Function<Player, ItemStack>, PlayerGui>, L
     /**
      * The plugin
      */
-    protected final JavaPlugin plugin;
+    protected final CoPlugin plugin;
     
     /**
      * The size of the inventory
@@ -52,7 +53,7 @@ public class PlayerGui implements Gui<Function<Player, ItemStack>, PlayerGui>, L
     protected final Map<UUID, Inventory> inventories;
     
     @SuppressWarnings("unchecked")
-    public PlayerGui(JavaPlugin plugin, int size, Function<Player, String> title) {
+    public PlayerGui(CoPlugin plugin, int size, Function<Player, String> title) {
         this.plugin = plugin;
         this.size = size;
         this.title = title;
@@ -63,7 +64,7 @@ public class PlayerGui implements Gui<Function<Player, ItemStack>, PlayerGui>, L
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
     
-    public PlayerGui(JavaPlugin plugin, int size, String title)
+    public PlayerGui(CoPlugin plugin, int size, String title)
     {
         this(plugin, size, p -> title);
     }

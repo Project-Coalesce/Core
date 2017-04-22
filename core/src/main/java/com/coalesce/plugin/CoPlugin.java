@@ -126,7 +126,7 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 				return config;
 			}
 		}
-		return new YmlConfig(name, this);
+		return null;
 	}
 	
 	public final void addCommand(CoCommand command) {

@@ -4,16 +4,20 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public final class CommandContext {
 
 	private CommandSender sender;
 	private List<String> args;
 
-	public CommandContext(CommandSender sender, List<String> args){
+	public CommandContext(CommandSender sender, String[] args){
 		this.sender = sender;
-		this.args = args;
+		List<String> list = new ArrayList<>();
+		Stream.of(args).forEach(arg -> list.add(arg));
+		this.args = list;
 	}
 
 	public boolean isPlayer(){
