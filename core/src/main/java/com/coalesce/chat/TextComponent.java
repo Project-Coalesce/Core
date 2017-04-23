@@ -7,11 +7,11 @@ public final class TextComponent{
     private final String hoverValue;
     private final String text;
 
-	private TextComponent(String text, String hoverValue, ClickAction clickAction, String clickActionValue){
-		this.text = text;
-		this.hoverValue = hoverValue;
-		this.clickAction = clickAction;
-		this.clickActionValue = clickActionValue;
+	private TextComponent(Builder builder){
+		this.text 				= builder.text;
+		this.hoverValue 		= builder.hoverValue;
+		this.clickAction 		= builder.clickAction;
+		this.clickActionValue 	= builder.clickActionValue;
 	}
 
 	public String getRawText(){
@@ -41,8 +41,7 @@ public final class TextComponent{
 		}
 
 		if (hoverValue != null && hoverValue != "") {
-			sb.append(",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
-					+ hoverValue + "\"}]}}");
+			sb.append(",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"" + hoverValue + "\"}]}}");
 		}
 
 		sb.append("}");
@@ -77,7 +76,7 @@ public final class TextComponent{
 		}
 
 		public TextComponent build(){
-			return new TextComponent(text, hoverValue, clickAction, clickActionValue);
+			return new TextComponent(this);
 		}
 
 	}
