@@ -48,7 +48,7 @@ public final class CoFormatter {
         boolean previousCode = false;
         boolean isBold = false;
 
-        for (char c : message.toCharArray()) {
+        message.toCharArray().forEach(c -> {
             if (c == '\u00A7') {
                 previousCode = true;
                 continue;
@@ -63,7 +63,7 @@ public final class CoFormatter {
                 messagePxSize += isBold ? dFI.getBoldLength() : dFI.getLength();
                 messagePxSize++;
             }
-        }
+        });
         return messagePxSize;
     }
 
@@ -77,17 +77,18 @@ public final class CoFormatter {
      */
     public String rainbowifyString(String str, char... chars) {
         str = ChatColor.stripColor(str);
-        if (chars == null || chars.length == 0)
-            chars = new char[]{'c', '6', 'e', 'a', 'b', '3', 'd'};
+        if (chars == null || chars.length == 0) chars = new char[]{'c', '6', 'e', 'a', 'b', '3', 'd'};
+        
         int index = 0;
         String returnValue = "";
-        for (char c : str.toCharArray()) {
+        returnValue.toCharArray().forEach(c -> {
             returnValue += "&" + chars[index] + c;
             index++;
             if (index == chars.length) {
                 index = 0;
             }
-        }
+        });
+        
         return ChatColor.translateAlternateColorCodes('&', returnValue);
     }
 
