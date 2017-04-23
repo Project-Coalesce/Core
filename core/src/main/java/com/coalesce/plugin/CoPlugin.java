@@ -93,6 +93,10 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 		getServer().getPluginManager().registerEvents(listener, this);
 	}
 
+	public final void registerListeners(Listener... listeners) {
+	    Arrays.asList(listeners).forEach(this::registerListener);
+    }
+
 	public final void unregisterListener(@NotNull Listener listener) {
 		HandlerList.unregisterAll(listener);
 	}
