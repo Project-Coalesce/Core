@@ -59,7 +59,7 @@ public final class TextComponent{
         sb.append("{\"text\":\"" + text + "\"");
         if (clickAction != ChatAction.NONE) {
             sb.append(",\"clickEvent\":{\"action\":\"");
-            sb.append(clickAction.toString().toLowerCase());
+            sb.append(clickAction.getAction());
             sb.append("\",\"value\":\"" + clickActionValue + "\"}");
         }
 
