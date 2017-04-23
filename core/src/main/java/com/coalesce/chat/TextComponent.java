@@ -1,5 +1,7 @@
 package com.coalesce.chat;
 
+import org.bukkit.entity.Player;
+
 public final class TextComponent{
 
     private final ClickAction clickAction;
@@ -12,6 +14,10 @@ public final class TextComponent{
 		this.hoverValue 		= builder.hoverValue;
 		this.clickAction 		= builder.clickAction;
 		this.clickActionValue 	= builder.clickActionValue;
+	}
+
+	public void sendMessage(Player player){
+		player.sendRawMessage(toString());
 	}
 
 	public String getRawText(){
