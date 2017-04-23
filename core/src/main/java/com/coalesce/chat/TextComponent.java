@@ -8,6 +8,7 @@ public final class TextComponent{
     private String clickActionValue = "";
     private String hoverValue = "";
     private String text = "";
+    private CoFormatter formatter = new CoFormatter();
 
     public TextComponent(String string) {
         withText(string);
@@ -34,12 +35,25 @@ public final class TextComponent{
         return this;
     }
 
+    public TextComponent center() {
+        text = formatter.centerString(text);
+
+        return this;
+    }
+
+    public TextComponent rainbow(char... chars) {
+        text = formatter.rainbowifyString(text, chars);
+
+        return this;
+    }
+
     public TextComponent withSending(Player player) {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + player.getName() + " " + build());
 
         return this;
     }
 
+    //TODO Use some random json library, please
     public String build() {
         StringBuilder sb = new StringBuilder();
         sb.append("{\"text\":\"" + text + "\"");

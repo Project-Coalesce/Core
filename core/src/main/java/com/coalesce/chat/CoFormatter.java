@@ -9,16 +9,17 @@ import java.util.List;
 import static org.bukkit.ChatColor.*;
 
 public final class CoFormatter {
-
-    private CoPlugin plugin;
     private String prefix;
 
     //Constants
     private final static int CENTER_PX = 154;
 
+    public CoFormatter() {
+        this.prefix = GRAY + "[" + AQUA + "CoalesceCore" + GRAY + "]" + RESET;
+    }
+
     public CoFormatter(CoPlugin plugin) {
-        this.plugin = plugin;
-        this.prefix = GRAY + "[" + plugin.getDisplayName() + GRAY + "]" + RESET;
+        this.prefix = GRAY + "[" + WHITE + plugin.getDisplayName() + GRAY + "]" + RESET;
     }
 
     public String format(String message) {
@@ -48,7 +49,7 @@ public final class CoFormatter {
         boolean previousCode = false;
         boolean isBold = false;
 
-        message.toCharArray().forEach(c -> {
+        for (char c : message.toCharArray()) {
             if (c == '\u00A7') {
                 previousCode = true;
                 continue;
@@ -63,7 +64,7 @@ public final class CoFormatter {
                 messagePxSize += isBold ? dFI.getBoldLength() : dFI.getLength();
                 messagePxSize++;
             }
-        });
+        }
         return messagePxSize;
     }
 
@@ -81,15 +82,14 @@ public final class CoFormatter {
         
         int index = 0;
         String returnValue = "";
-        str.toCharArray().forEach(c -> {
+        for (char c : str.toCharArray()) {
             returnValue += "&" + chars[index] + c;
             index++;
             if (index == chars.length) {
                 index = 0;
             }
-        });
+        }
         
         return ChatColor.translateAlternateColorCodes('&', returnValue);
     }
-
 }
