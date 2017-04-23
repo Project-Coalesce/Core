@@ -2,9 +2,12 @@ package com.coalesce.command;
 
 import com.coalesce.plugin.CoPlugin;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -17,6 +20,8 @@ public final class CoCommand {
 	private String description;
 	private String usage;
 	private String permission;
+	private Predicate<CommandSender> permissionCheck;
+	private boolean requiresOperator = false;
 	private int minArgs = -1;
 	private int maxArgs = -1;
 	private boolean playerOnly = false;
@@ -53,6 +58,14 @@ public final class CoCommand {
 				context.send(plugin.getFormatter().format(ChatColor.RED + "You do not have permission for this command!"));
 				return;
 			}
+            if (requiresOperator && !context.getSender().isOp()) {
+                context.send(plugin.getFormatter().format(ChatColor.RED + "You do not have permission for this command!"));
+                return;
+            }
+            if (permissionCheck != null && !permissionCheck.test(context.getSender())) {
+                context.send(plugin.getFormatter().format(ChatColor.RED + "You do not have permission for this command!"));
+                return;
+            }
 
 			//Check if console is trying to use a player only command
 			if (context.isConsole() && playerOnly){
@@ -157,6 +170,10 @@ public final class CoCommand {
 	public void setPermission(String permission) {
 		this.permission = permission;
 	}
+
+	public void setRequiresOperator(boolean requiresOperator) { this.requiresOperator = requiresOperator; }
+
+	public void setPermissionCheck(Predicate<CommandSender> permissionCheck) { this.permissionCheck = permissionCheck; }
 
 	public int getMinArgs() {
 		return minArgs;

@@ -1,8 +1,12 @@
 package com.coalesce.command;
 
+import com.coalesce.gui.PlayerGui;
 import com.coalesce.plugin.CoPlugin;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -39,10 +43,25 @@ public final class CommandBuilder {
 		return this;
 	}
 
-	public CommandBuilder permission(String permission){
-		command.setPermission(permission);
-		return this;
-	}
+    public CommandBuilder permission(String permission){
+        command.setPermission(permission);
+        return this;
+    }
+
+    public CommandBuilder requireOp(){
+        command.setRequiresOperator(true);
+        return this;
+    }
+
+    public CommandBuilder requiresOp(boolean requires){
+        command.setRequiresOperator(requires);
+        return this;
+    }
+
+    public CommandBuilder permissionCheck(Predicate<CommandSender> predicate) {
+        command.setPermissionCheck(predicate);
+        return this;
+    }
 
 	public CommandBuilder minArgs(int minArgs){
 		command.setMinArgs(minArgs);
