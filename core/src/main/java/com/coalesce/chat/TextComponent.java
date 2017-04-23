@@ -89,7 +89,7 @@ public final class TextComponent{
 		CHANGE_PAGE("change_page"),
 		NONE("none");
 
-		private String action;
+		private final String action;
 
 		ClickAction(String action) {
 			this.action = action;

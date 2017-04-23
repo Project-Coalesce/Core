@@ -3,9 +3,6 @@ package com.coalesce.chat;
 import com.coalesce.plugin.CoPlugin;
 import org.bukkit.ChatColor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.bukkit.ChatColor.*;
 
 public final class CoFormatter {
@@ -34,7 +31,7 @@ public final class CoFormatter {
 
         int halvedMessageSize = messagePxSize / 2;
         int toCompensate = CENTER_PX - halvedMessageSize;
-        int spaceLength = DefaultFontInfo.SPACE.getLength() + 1;
+        int spaceLength = FontInfo.getCharSize(' ');
         int compensated = 0;
         StringBuilder sb = new StringBuilder();
         while (compensated < toCompensate) {
@@ -60,9 +57,7 @@ public final class CoFormatter {
                     continue;
                 } else isBold = false;
             } else {
-                DefaultFontInfo dFI = DefaultFontInfo.getDefaultFontInfo(c);
-                messagePxSize += isBold ? dFI.getBoldLength() : dFI.getLength();
-                messagePxSize++;
+                messagePxSize += FontInfo.getCharSize(c, isBold);
             }
         }
         return messagePxSize;
