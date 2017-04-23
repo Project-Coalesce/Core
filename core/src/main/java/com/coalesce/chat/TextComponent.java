@@ -1,82 +1,102 @@
 package com.coalesce.chat;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
 public final class TextComponent{
-    private ChatAction clickAction = ChatAction.NONE;
-    private String clickActionValue = "";
-    private String hoverValue = "";
-    private String text = "";
-    private CoFormatter formatter = new CoFormatter();
 
-    public TextComponent(String string) {
-        withText(string);
-    }
+    private final ClickAction clickAction;
+    private final String clickActionValue;
+    private final String hoverValue;
+    private final String text;
 
-    public TextComponent() {}
+	private TextComponent(String text, String hoverValue, ClickAction clickAction, String clickActionValue){
+		this.text = text;
+		this.hoverValue = hoverValue;
+		this.clickAction = clickAction;
+		this.clickActionValue = clickActionValue;
+	}
 
-    public TextComponent withClickEvent(ChatAction action, String value) {
-        clickAction = action;
-        clickActionValue = value;
+	public String getRawText(){
+		return text;
+	}
 
-        return this;
-    }
+	public String getHoverValue() {
+		return hoverValue;
+	}
 
-    public TextComponent withText(String text) {
-        this.text = text;
+	public String getClickActionValue() {
+		return clickActionValue;
+	}
 
-        return this;
-    }
+	public ClickAction getClickAction() {
+		return clickAction;
+	}
 
-    public TextComponent withHover(String str) {
-        hoverValue = str;
+	@Override
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		sb.append("{\"text\":\"" + text + "\"");
+		if (clickAction != ClickAction.NONE) {
+			sb.append(",\"clickEvent\":{\"action\":\"");
+			sb.append(clickAction.getAction());
+			sb.append("\",\"value\":\"" + clickActionValue + "\"}");
+		}
 
-        return this;
-    }
+		if (hoverValue != null && hoverValue != "") {
+			sb.append(",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
+					+ hoverValue + "\"}]}}");
+		}
 
-    public TextComponent center() {
-        text = formatter.centerString(text);
+		sb.append("}");
+		return sb.toString();
+	}
 
-        return this;
-    }
+	public static class Builder {
 
-    public TextComponent rainbow(char... chars) {
-        text = formatter.rainbowifyString(text, chars);
+		private ClickAction clickAction = ClickAction.NONE;
+		private String clickActionValue = "";
+		private String hoverValue = "";
+		private String text = "";
 
-        return this;
-    }
+		public Builder text(String text){
+			this.text = text;
+			return this;
+		}
 
-    public TextComponent withSending(Player player) {
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + player.getName() + " " + build());
+		public Builder hover(String hoverValue){
+			this.hoverValue = hoverValue;
+			return this;
+		}
 
-        return this;
-    }
+		public Builder clickActionValue(String clickActionValue){
+			this.clickActionValue = clickActionValue;
+			return this;
+		}
 
-    //TODO Use some random json library, please
-    public String build() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("{\"text\":\"" + text + "\"");
-        if (clickAction != ChatAction.NONE) {
-            sb.append(",\"clickEvent\":{\"action\":\"");
-            sb.append(clickAction.getAction());
-            sb.append("\",\"value\":\"" + clickActionValue + "\"}");
-        }
+		public Builder clickAction(ClickAction clickAction){
+			this.clickAction = clickAction;
+			return this;
+		}
 
-        if (hoverValue != null && hoverValue != "") {
-            sb.append(",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\""
-                    + hoverValue + "\"}]}}");
-        }
+		public TextComponent build(){
+			return new TextComponent(text, hoverValue, clickAction, clickActionValue);
+		}
 
-        sb.append("}");
-        return sb.toString();
-    }
+	}
 
-    public String getText() {
-        return text;
-    }
+	public enum ClickAction {
+		OPEN_URL("open_url"),
+		OPEN_FILE("open_file"),
+		RUN_COMMAND("run_command"),
+		SUGGEST_COMMAND("suggest_command"),
+		CHANGE_PAGE("change_page"),
+		NONE("none");
 
-    public String getHover() {
-        return hoverValue;
-    }
+		private String action;
+
+		ClickAction(String action) {
+			this.action = action;
+		}
+
+		public String getAction() { return action; }
+	}
+
 }
