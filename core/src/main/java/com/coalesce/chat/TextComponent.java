@@ -3,36 +3,41 @@ package com.coalesce.chat;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public final class TextComponentBuilder {
-
-    private String text = "";
+public final class TextComponent{
     private ChatAction clickAction = ChatAction.NONE;
     private String clickActionValue = "";
     private String hoverValue = "";
+    private String text = "";
 
-    public TextComponentBuilder(String string) {
-        setText(string);
+    public TextComponent(String string) {
+        withText(string);
     }
 
-    public void setClickEvent(ChatAction action, String value) {
+    public TextComponent() {}
+
+    public TextComponent withClickEvent(ChatAction action, String value) {
         clickAction = action;
         clickActionValue = value;
+
+        return this;
     }
 
-    public String getText() {
-        return text;
+    public TextComponent withText(String text) {
+        this.text = text;
+
+        return this;
     }
 
-    public void setText(String str) {
-        text = str;
-    }
-
-    public String getHover() {
-        return hoverValue;
-    }
-
-    public void setHover(String str) {
+    public TextComponent withHover(String str) {
         hoverValue = str;
+
+        return this;
+    }
+
+    public TextComponent withSending(Player player) {
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + player.getName() + " " + build());
+
+        return this;
     }
 
     public String build() {
@@ -69,7 +74,11 @@ public final class TextComponentBuilder {
         return sb.toString();
     }
 
-    public void sendToPlayer(Player player) {
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + player.getName() + " " + build());
+    public String getText() {
+        return text;
+    }
+
+    public String getHover() {
+        return hoverValue;
     }
 }
