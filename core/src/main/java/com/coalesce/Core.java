@@ -1,6 +1,7 @@
 package com.coalesce;
 
 import com.coalesce.api.NMSCore;
+import com.coalesce.nms.reflection.NMSReflection;
 import com.coalesce.nms.v1_11_2_r0_1.NMS1_11_2_R0_1;
 import com.coalesce.plugin.CoPlugin;
 import org.bukkit.Bukkit;
@@ -27,7 +28,7 @@ public class Core extends CoPlugin {
 		if (version.matches(".+1_11(_2)?_R0_1.+")) {
 			NMSCore.set(new NMS1_11_2_R0_1());
 		} else {
-			// NMSCore.set(new NMSReflection());
+			NMSCore.set(new NMSReflection());
 		}
 
 		//addModules(userModule = new UserModule(this), commandModule = new CommandModule(this));
