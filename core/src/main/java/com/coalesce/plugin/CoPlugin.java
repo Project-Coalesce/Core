@@ -59,9 +59,8 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 	}
 
 
-	public abstract void onPluginEnable() throws Exception;
-
-	public abstract void onPluginDisable() throws Exception;
+	public void onPluginEnable() throws Exception {}
+	public void onPluginDisable() throws Exception {}
 
 
 	public String getDisplayName(){
