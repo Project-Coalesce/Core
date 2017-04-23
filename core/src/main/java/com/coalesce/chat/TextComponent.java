@@ -59,23 +59,8 @@ public final class TextComponent{
         sb.append("{\"text\":\"" + text + "\"");
         if (clickAction != ChatAction.NONE) {
             sb.append(",\"clickEvent\":{\"action\":\"");
-            switch (clickAction) {
-                case OPEN_URL:
-                    sb.append("open_url");
-                    break;
-                case OPEN_FILE:
-                    sb.append("open_file");
-                    break;
-                case CHANGE_PAGE:
-                    sb.append("change_page");
-                    break;
-                case RUN_COMMAND:
-                    sb.append("run_command");
-                    break;
-                case SUGGEST_COMMAND:
-                    sb.append("suggest_command");
-                    break;
-            }
+            sb.append(clickAction.getAction());
+            
             sb.append("\",\"value\":\"" + clickActionValue + "\"}");
         }
 
