@@ -25,6 +25,8 @@
 
     <modules>
         <module>core</module>
+        <module>nms1_11_2_r0_1</module>
+        <module>API</module>
     </modules>
     
     <dependencies>
