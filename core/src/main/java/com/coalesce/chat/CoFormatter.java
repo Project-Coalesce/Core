@@ -81,7 +81,7 @@ public final class CoFormatter {
         
         int index = 0;
         String returnValue = "";
-        returnValue.toCharArray().forEach(c -> {
+        str.toCharArray().forEach(c -> {
             returnValue += "&" + chars[index] + c;
             index++;
             if (index == chars.length) {
