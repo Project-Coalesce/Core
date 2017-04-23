@@ -6,7 +6,7 @@ public enum ChatAction {
     RUN_COMMAND("run_command"),
     SUGGEST_COMMAND("suggest_command"),
     CHANGE_PAGE("change_page"),
-    NONE;
+    NONE("none");
     
     private String action;
     
