@@ -19,11 +19,11 @@ public class ExampleGui extends PlayerGui {
             setItem(0, player -> {
                 // can do per-player things here, like displaying their currency or some such
                 int money = 42; // someCurrencyApi.getBalance(someCurrency, player);
-                return new IconBuilder(stack)
-                        .name("Balance: " + money)
+                return new ItemBuilder(stack.getType())
+                        .displayName("Balance: " + money)
                         .lore(" ", "Click to buy", " ", "Costs x", " ", "You have $" + money)
-                        .build().getItemStack();
-            }, p -> {
+                        .build();
+            }, (p, c) -> {
                 // on click
                 // update user's balance, add item to inventory, etc.
             });

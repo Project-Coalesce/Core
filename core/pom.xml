@@ -8,30 +8,26 @@
         <groupId>com.coalesce</groupId>
         <version>1.0</version>
     </parent>
-    
 
     <artifactId>core</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
     <dependencies>
+        <!--Annotations-->
         <dependency>
-            <groupId>com.coalesce</groupId>
-            <artifactId>api</artifactId>
-            <version>1.0</version>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>15.0</version>
             <scope>compile</scope>
         </dependency>
+
         <dependency>
-            <groupId>com.coalesce</groupId>
-            <artifactId>nms1_11_2_r0_1</artifactId>
-            <version>1.0</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.16</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>com.coalesce</groupId>
-            <artifactId>reflection</artifactId>
-            <version>1.0</version>
-            <scope>compile</scope>
-        </dependency>
+
     </dependencies>
 </project>

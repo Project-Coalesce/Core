@@ -31,13 +31,6 @@
     </modules>
     
     <dependencies>
-        <!--Annotations-->
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>${versionAnnotations}</version>
-        </dependency>
-
         <!--Spigot Dependency-->
         <dependency>
             <groupId>org.spigotmc</groupId>
