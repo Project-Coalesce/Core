@@ -4,7 +4,6 @@ import com.coalesce.chat.CoFormatter;
 import com.coalesce.command.CoCommand;
 import com.coalesce.command.CommandRegister;
 import com.coalesce.config.IConfig;
-import com.coalesce.config.yml.YmlConfig;
 import com.google.common.collect.ImmutableList;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;

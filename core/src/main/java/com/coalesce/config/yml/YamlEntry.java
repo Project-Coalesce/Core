@@ -5,18 +5,18 @@ import com.coalesce.config.IEntry;
 
 import java.io.IOException;
 
-public final class Entry implements IEntry {
+public final class YamlEntry implements IEntry {
 	
 	private String key;
 	private Object value;
 	private final IConfig config;
 	
-	public Entry(IConfig config, String key) {
+	public YamlEntry(IConfig config, String key) {
 		this.config = config;
 		this.key = key;
 	}
 	
-	public Entry(IConfig config, String key, Object value) {
+	public YamlEntry(IConfig config, String key, Object value) {
 		this.config = config;
 		this.key = key;
 		this.value = value;
@@ -56,7 +56,7 @@ public final class Entry implements IEntry {
 	}
 	
 	private void setValue(String key, Object value) {
-		YmlConfig cfg = ((YmlConfig)config);
+		YamlConfig cfg = ((YamlConfig)config);
 		cfg.getBase().set(key, value);
 		try {
 			cfg.getBase().save(cfg.getFile());
