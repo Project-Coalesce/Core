@@ -7,8 +7,6 @@ import static org.bukkit.plugin.ServicePriority.Normal;
 
 public class Core extends CoPlugin {
 	
-	
-	
 	private static Core instance;
 	
 	

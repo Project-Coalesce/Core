@@ -58,10 +58,22 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 		}
 	}
 
+	@Override
+    public final void onLoad() {
+
+	    try {
+            onPluginLoad();
+        } catch (Exception e) {
+            logger.error(DARK_RED + "Failed to load module " + getName());
+            e.printStackTrace();
+            return;
+        }
+
+    }
 
 	public void onPluginEnable() throws Exception {}
 	public void onPluginDisable() throws Exception {}
-
+    public void onPluginLoad() throws Exception {}
 
 	public String getDisplayName(){
 		return displayName;
