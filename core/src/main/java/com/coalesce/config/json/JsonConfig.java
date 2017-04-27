@@ -18,6 +18,7 @@ import java.util.*;
 
 public abstract class JsonConfig implements IConfig {
 
+	private Collection<IEntry> entries;
 	private final File dir, file;
 	private final String name;
 	private final ConfigFormat format;
@@ -65,54 +66,52 @@ public abstract class JsonConfig implements IConfig {
 	
 	@Override
 	public IEntry getEntry(String path) {
-
-	    if(!json.containsKey(path)) return null;
-	    return new JsonEntry(this, path, json.get(path));
-
-	}
-	
-	@Override
-	public IEntry getEntryFromValue(Object value) {
-//TODO This
-
+		for (IEntry entry : entries) {
+			if (entry.getPath().matches(path)) {
+				return entry;
+			}
+		}
 	    return null;
 	}
 	
 	@Override
+	public Collection<IEntry> getEntryFromValue(Object value) {
+		Collection<IEntry> found = new ArrayList<>();
+		entries.forEach(entry -> {
+			if (entry.getValue().equals(value)) {
+				found.add(entry);
+			}
+		});
+	    return found;
+	}
+	
+	@Override
 	public Collection<IEntry> getEntries() {
-
-	    List<IEntry> entries = new ArrayList<>();
 	    json.forEach((k, v) -> entries.add(new JsonEntry(this, (String) k, v)));
-
 		return entries;
 	}
 	
 	@Override
 	public void addEntry(IEntry entry) {
-
-		json.put(entry.getPath(), entry.getValue());
-
+		if (json.get(entry.getPath()) == null) {
+			json.put(entry.getPath(), entry.getValue());
+		}
+		entries.add(entry);
 	}
 	
 	@Override
 	public void removeEntry(IEntry entry) {
-
 	    entry.remove();
-
 	}
 	
 	@Override
 	public IConfig getConfig() {
-
 		return this;
-
 	}
 	
 	@Override
 	public void clear() {
-
 	    json.clear();
-
 	}
 	
 	@Override

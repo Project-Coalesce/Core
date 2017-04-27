@@ -64,13 +64,14 @@ public abstract class YamlConfig implements IConfig {
 	}
 	
 	@Override
-	public IEntry getEntryFromValue(Object value) {
-		for (IEntry entry : entries) {
-			if (entry.getValue() == value) {
-				return entry;
+	public Collection<IEntry> getEntryFromValue(Object value) {
+		Collection<IEntry> found = new ArrayList<>();
+		entries.forEach(entry -> {
+			if (entry.getValue().equals(value)) {
+				found.add(entry);
 			}
-		}
-		return null;
+		});
+		return found;
 	}
 	
 	@Override
@@ -103,7 +104,7 @@ public abstract class YamlConfig implements IConfig {
 	
 	@Override
 	public void clear() {
-		entries.forEach(entry -> entry.remove());
+		entries.forEach(e -> e.remove());
 	}
 	
 	@Override
