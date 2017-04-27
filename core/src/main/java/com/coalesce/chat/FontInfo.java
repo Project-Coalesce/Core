@@ -6,11 +6,22 @@ import java.util.Map;
 public class FontInfo {
 
 	private static Map<Character, Integer> charSizes;
-
+	
+	/**
+	 * Gets the size of a char and ignores if its bolded or not.
+	 * @param c The char to get the size of.
+	 * @return The char size.
+	 */
 	public static int getCharSize(char c){
 		return getCharSize(c, false);
 	}
-
+	
+	/**
+	 * Returns the size of a character according to our character sizes hashmap.
+	 * @param c The character to get the size of.
+	 * @param bold If this character is bolded or not.
+	 * @return The size of this character.
+	 */
 	public static int getCharSize(char c, boolean bold){
 
 		if (charSizes == null){
