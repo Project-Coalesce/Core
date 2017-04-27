@@ -4,7 +4,6 @@ import com.coalesce.chat.CoFormatter;
 import com.coalesce.command.CoCommand;
 import com.coalesce.command.CommandRegister;
 import com.coalesce.config.IConfig;
-import com.coalesce.config.yml.YmlConfig;
 import com.google.common.collect.ImmutableList;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
@@ -58,10 +57,22 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 		}
 	}
 
+	@Override
+    public final void onLoad() {
+
+	    try {
+            onPluginLoad();
+        } catch (Exception e) {
+            logger.error(DARK_RED + "Failed to load module " + getName());
+            e.printStackTrace();
+            return;
+        }
+
+    }
 
 	public void onPluginEnable() throws Exception {}
 	public void onPluginDisable() throws Exception {}
-
+    public void onPluginLoad() throws Exception {}
 
 	public String getDisplayName(){
 		return displayName;
