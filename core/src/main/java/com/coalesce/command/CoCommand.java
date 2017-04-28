@@ -3,7 +3,6 @@ package com.coalesce.command;
 import com.coalesce.plugin.CoPlugin;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -46,13 +45,13 @@ public final class CoCommand {
 		if (!checkChildren(context)){
 
 			//Check for too many args
-			if (context.getArgs().size() > maxArgs){
+			if (maxArgs > -1 && context.getArgs().size() > maxArgs){
 				context.send(plugin.getFormatter().format(ChatColor.RED + "Incorrect usage!"));
 				return;
 			}
 
 			//Check for not enough args
-			if (context.getArgs().size() < minArgs){
+			if (minArgs > -1 && context.getArgs().size() < minArgs){
 				context.send(plugin.getFormatter().format(ChatColor.RED + "Incorrect usage!"));
 				return;
 			}
