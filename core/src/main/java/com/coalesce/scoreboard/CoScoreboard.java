@@ -80,7 +80,7 @@ public class CoScoreboard {
 		for (Map.Entry<String, Integer> text : this.scores.entrySet()) {
 			Map.Entry<Team, String> team = this.createTeam(text.getKey());
 			Integer score = text.getValue() != null ? text.getValue() : index;
-			String player = (String) team.getValue();
+			String player = team.getValue();
 			if (team.getKey() != null) {
 				team.getKey().addEntry(player);
 			}
