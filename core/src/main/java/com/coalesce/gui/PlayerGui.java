@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -15,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 /**
@@ -44,7 +45,7 @@ public class PlayerGui implements Gui<Function<Player, ItemStack>, PlayerGui>, L
     /**
      * The consumers to run when each item is clicked
      */
-    private final Consumer<InventoryClickEvent>[] listeners;
+    private final BiConsumer<Player, ClickType>[] listeners;
     
     /**
      * Map of current inventories, entries are removed on close
@@ -57,7 +58,7 @@ public class PlayerGui implements Gui<Function<Player, ItemStack>, PlayerGui>, L
         this.size = size;
         this.title = title;
         this.items = new Function[size];
-        this.listeners = new Consumer[size];
+        this.listeners = new BiConsumer[size];
         this.inventories = new HashMap<>();
         
         Bukkit.getPluginManager().registerEvents(this, plugin);
@@ -68,7 +69,7 @@ public class PlayerGui implements Gui<Function<Player, ItemStack>, PlayerGui>, L
         this(plugin, size, p -> title);
     }
  
-    public PlayerGui addItem(int size, Function<Player, ItemStack> item, Consumer<InventoryClickEvent> onClick) {
+    public PlayerGui addItem(int size, Function<Player, ItemStack> item, BiConsumer<Player, ClickType> onClick) {
         for (int i = 0; i < items.length; i++) {
             if (items[i] == null) {
                 this.items[i] = item;
@@ -80,18 +81,18 @@ public class PlayerGui implements Gui<Function<Player, ItemStack>, PlayerGui>, L
     }
     
     @Override
-    public PlayerGui addItem(Function<Player, ItemStack> item, Consumer<InventoryClickEvent> onClick) {
+    public PlayerGui addItem(Function<Player, ItemStack> item, BiConsumer<Player, ClickType> onClick) {
         return addItem(1, item, onClick);
     }
 
-    public PlayerGui setItem(int index, int size, Function<Player, ItemStack> item, Consumer<InventoryClickEvent> onClick) {
+    public PlayerGui setItem(int index, int size, Function<Player, ItemStack> item, BiConsumer<Player, ClickType> onClick) {
         this.items[index] = item;
         this.listeners[index] = onClick;
         return this;
     }
     
     @Override
-    public PlayerGui setItem(int index, Function<Player, ItemStack> item, Consumer<InventoryClickEvent> onClick) {
+    public PlayerGui setItem(int index, Function<Player, ItemStack> item, BiConsumer<Player, ClickType> onClick) {
         return setItem(index, 1, item, onClick);
     }
     
@@ -144,10 +145,10 @@ public class PlayerGui implements Gui<Function<Player, ItemStack>, PlayerGui>, L
         
         if (inventory.equals(event.getClickedInventory())) {
             event.setCancelled(true);
-			Consumer<InventoryClickEvent> onClick = listeners[event.getSlot()];
+			BiConsumer<Player, ClickType> onClick = listeners[event.getSlot()];
             if (onClick != null) {
                 try { 
-                    onClick.accept(event);
+                    onClick.accept(player, event.getClick());
                 } catch (Exception e) {
                     throw new RuntimeException("Failed to handle inventory click event", e);
                 }
