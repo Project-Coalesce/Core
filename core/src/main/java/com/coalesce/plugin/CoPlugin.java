@@ -4,7 +4,6 @@ import com.coalesce.chat.CoFormatter;
 import com.coalesce.command.CoCommand;
 import com.coalesce.command.CommandRegister;
 import com.coalesce.config.IConfig;
-import com.coalesce.config.yml.YmlConfig;
 import com.google.common.collect.ImmutableList;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
@@ -58,10 +57,22 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 		}
 	}
 
+	@Override
+    public final void onLoad() {
+
+	    try {
+            onPluginLoad();
+        } catch (Exception e) {
+            logger.error(DARK_RED + "Failed to load module " + getName());
+            e.printStackTrace();
+            return;
+        }
+
+    }
 
 	public void onPluginEnable() throws Exception {}
 	public void onPluginDisable() throws Exception {}
-
+    public void onPluginLoad() throws Exception {}
 
 	public String getDisplayName(){
 		return displayName;
@@ -71,11 +82,11 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 		Collections.addAll(this.modules, modules);
 	}
 
-	public final @NotNull List<CoModule> getModules() {
+	public final List<CoModule> getModules() {
 		return ImmutableList.copyOf(modules);
 	}
 
-	public final <M extends CoModule> @NotNull Optional<M> getModule(Class<M> clazz) {
+	public final <M extends CoModule> Optional<M> getModule(Class<M> clazz) {
 		Iterator<M> iterator = getModules().stream().filter(coModule -> coModule.getClass().equals(clazz)).map(coModule -> ((M) coModule)).iterator();
 		return Optional.ofNullable(iterator.hasNext() ? iterator.next() : null);
 	}
@@ -89,7 +100,7 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 		getModules().forEach(CoModule::disable);
 	}
 
-	public final void registerListener(@NotNull Listener listener) {
+	public final void registerListener(Listener listener) {
 		getServer().getPluginManager().registerEvents(listener, this);
 	}
 
@@ -97,7 +108,7 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 	    Arrays.asList(listeners).forEach(this::registerListener);
     }
 
-	public final void unregisterListener(@NotNull Listener listener) {
+	public final void unregisterListener(Listener listener) {
 		HandlerList.unregisterAll(listener);
 	}
 
@@ -132,7 +143,11 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 		return null;
 	}
 	
-	public final void addCommand(CoCommand command) {
+	/**
+	 * Adds a command to the plugin.
+	 * @param commands The list of commands to add.
+	 */
+	public final void addCommand(CoCommand... commands) {
 		CommandMap map = null;
 		Field field;
 		
@@ -144,8 +159,12 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 		catch (NoSuchFieldException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		commands.add(command);
-		map.register(getDisplayName(), new CommandRegister(command, this));
+		for (CoCommand command : commands) {
+			if (map.getCommand(command.getName()) == null) {
+				this.commands.add(command);
+				map.register(getDisplayName(), new CommandRegister(command, this));
+			}
+		}
 	}
 	
 	public final Set<CoCommand> getCommands() {

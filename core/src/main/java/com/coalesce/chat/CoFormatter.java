@@ -22,8 +22,13 @@ public final class CoFormatter {
     public String format(String message) {
         return prefix + " " + message;
     }
-
-    public String centerString(String message) {
+	
+	/**
+	 * Centers a string for chat.
+	 * @param message The message to center in chat.
+	 * @return A centered string.
+	 */
+	public String centerString(String message) {
         if (message == null || message.equals("")) return "";
         message = ChatColor.translateAlternateColorCodes('&', message);
 
@@ -40,8 +45,13 @@ public final class CoFormatter {
         }
         return sb.toString() + message;
     }
-
-    public int getWidth(String message) {
+	
+	/**
+	 * Gets the width of the string message.
+	 * @param message The message to get the width of.
+	 * @return The width (in pixels) of the string in minecraft.
+	 */
+	public int getWidth(String message) {
         int messagePxSize = 0;
         boolean previousCode = false;
         boolean isBold = false;

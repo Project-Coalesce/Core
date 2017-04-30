@@ -17,6 +17,11 @@ public class CommandRegister extends Command implements PluginIdentifiableComman
 	private final CoCommand command;
 	private final CoPlugin plugin;
 	
+	/**
+	 * Registers a command for the given plugin.
+	 * @param command The CoCommand to register.
+	 * @param plugin The plugin to register the command for.
+	 */
 	public CommandRegister(CoCommand command, CoPlugin plugin) {
 		super(command.getName());
 		this.plugin = plugin;

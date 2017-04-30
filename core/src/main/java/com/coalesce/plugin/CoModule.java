@@ -1,7 +1,6 @@
 package com.coalesce.plugin;
 
 import org.bukkit.event.Listener;
-import org.jetbrains.annotations.NotNull;
 
 import static org.bukkit.ChatColor.DARK_RED;
 
@@ -21,7 +20,7 @@ public abstract class CoModule implements Listener {
 	 * @param plugin The plugin that's creating this module
 	 * @param name The name of this module
 	 */
-	public CoModule(@NotNull CoPlugin plugin, @NotNull String name) {
+	public CoModule(CoPlugin plugin, String name) {
 		this.plugin = plugin;
 		this.name = name;
 	}
@@ -31,7 +30,7 @@ public abstract class CoModule implements Listener {
 	 *
 	 * @return The {@link CoPlugin}
 	 */
-	public @NotNull CoPlugin getPlugin() {
+	public CoPlugin getPlugin() {
 		return plugin;
 	}
 
@@ -39,7 +38,7 @@ public abstract class CoModule implements Listener {
 		return isEnabled;
 	}
 
-	public @NotNull String getName() {
+	public String getName() {
 		return name;
 	}
 

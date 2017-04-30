@@ -21,7 +21,7 @@ public interface IConfig {
 	 *
 	 * NOTE: This will likely change into an array of entries.
 	 */
-	IEntry getEntryFromValue(Object value);
+	Collection<IEntry> getEntryFromValue(Object value);
 	
 	/**
 	 * Gets all the entries in a config.
