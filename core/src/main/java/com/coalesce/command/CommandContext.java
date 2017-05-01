@@ -1,5 +1,6 @@
 package com.coalesce.command;
 
+import com.coalesce.plugin.CoPlugin;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -12,12 +13,33 @@ public final class CommandContext {
 
 	private CommandSender sender;
 	private List<String> args;
+	private CoPlugin plugin;
 
-	public CommandContext(CommandSender sender, String[] args){
+	public CommandContext(CommandSender sender, String[] args, CoPlugin plugin){
 		this.sender = sender;
+		this.plugin = plugin;
 		List<String> list = new ArrayList<>();
 		Stream.of(args).forEach(arg -> list.add(arg));
 		this.args = list;
+	}
+	
+	/**
+	 * The current plugin.
+	 * @return The current plugin being used.
+	 */
+	public CoPlugin getPlugin() {
+		return plugin;
+	}
+	
+	/**
+	 * Sends a formatted plguin message.
+	 *
+	 * <p>Ex. [PlguinName] MESSAGE FROM THE PARAMETER</p>
+	 *
+	 * @param message The message to send with the plugin name before it.
+	 */
+	public void pluginMessage(String message) {
+		send(plugin.getFormatter().format(message));
 	}
 	
 	/**
