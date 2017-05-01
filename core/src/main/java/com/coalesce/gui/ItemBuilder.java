@@ -1,5 +1,6 @@
 package com.coalesce.gui;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -37,7 +38,7 @@ public class ItemBuilder {
 
 	public ItemBuilder lore(String... lore){
 		ItemMeta meta = itemStack.getItemMeta();
-		meta.setLore(Stream.of(lore).collect(Collectors.toList()));
+		meta.setLore(Stream.of(lore).map(s -> ChatColor.WHITE + s).collect(Collectors.toList()));
 		itemStack.setItemMeta(meta);
 		return this;
 	}

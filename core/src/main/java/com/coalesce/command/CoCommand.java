@@ -3,7 +3,6 @@ package com.coalesce.command;
 import com.coalesce.plugin.CoPlugin;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -48,6 +47,7 @@ public final class CoCommand {
 			//Check if console is trying to use a player only command
 			if (context.isConsole() && playerOnly){
 				context.pluginMessage(ChatColor.RED + "This command can only be used by players!");
+
 				return;
 			}
 
