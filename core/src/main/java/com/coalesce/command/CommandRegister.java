@@ -37,7 +37,7 @@ public class CommandRegister extends Command implements PluginIdentifiableComman
 	public boolean execute(CommandSender sender, String commandLabel, String[] args) {
 		for (CoCommand command : plugin.getCommands()){
 			if (command.matchesCommand(commandLabel)) {
-				command.execute(new CommandContext(sender, args));
+				command.execute(new CommandContext(sender, args, plugin));
 				return true;
 			}
 		}
