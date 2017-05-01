@@ -167,6 +167,28 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 		}
 	}
 	
+	/**
+	 * Adds a command to the plugin.
+	 * @param command The command to add.
+	 */
+	public final void addCommand(CoCommand command) {
+		CommandMap map = null;
+		Field field;
+		
+		try {
+			field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+			field.setAccessible(true);
+			map = (CommandMap)field.get(Bukkit.getServer());
+		}
+		catch (NoSuchFieldException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		if (map.getCommand(command.getName()) == null) {
+			this.commands.add(command);
+			map.register(getDisplayName(), new CommandRegister(command, this));
+		}
+	}
+	
 	public final Set<CoCommand> getCommands() {
 		return commands;
 	}
