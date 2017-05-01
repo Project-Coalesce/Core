@@ -46,14 +46,14 @@ public final class CoCommand {
 		if (!checkChildren(context)){
 
 			//Check for too many args
-			if (context.getArgs().size() > maxArgs){
-				context.send(plugin.getFormatter().format(ChatColor.RED + "Incorrect usage!"));
+			if (context.getArgs().size() > maxArgs && maxArgs > -1){
+				context.send(plugin.getFormatter().format(ChatColor.RED + "Incorrect usage! Too many arguments!"));
 				return;
 			}
 
 			//Check for not enough args
 			if (context.getArgs().size() < minArgs){
-				context.send(plugin.getFormatter().format(ChatColor.RED + "Incorrect usage!"));
+				context.send(plugin.getFormatter().format(ChatColor.RED + "Incorrect usage! Not enough arguments!"));
 				return;
 			}
 
