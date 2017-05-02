@@ -1,16 +1,15 @@
 package com.coalesce.command;
 
+import com.coalesce.command.tabcomplete.TabContext;
 import com.coalesce.plugin.CoPlugin;
+import com.google.common.collect.Lists;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class CommandRegister extends Command implements PluginIdentifiableCommand {
 	
@@ -35,13 +34,16 @@ public class CommandRegister extends Command implements PluginIdentifiableComman
 	
 	@Override
 	public boolean execute(CommandSender sender, String commandLabel, String[] args) {
-		for (CoCommand command : plugin.getCommands()){
-			if (command.matchesCommand(commandLabel)) {
-				command.execute(new CommandContext(sender, args, plugin));
-				return true;
-			}
+		if (command.matchesCommand(commandLabel)) {
+			command.execute(new CommandContext(sender, args, plugin));
+			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
+		return command.completer(new TabContext(plugin, command, new CommandContext(sender, args, plugin)));
 	}
 	
 	@Override

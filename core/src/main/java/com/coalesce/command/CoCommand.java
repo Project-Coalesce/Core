@@ -1,10 +1,14 @@
 package com.coalesce.command;
 
+import com.coalesce.command.tabcomplete.TabContext;
+import com.coalesce.command.tabcomplete.TabExecutor;
 import com.coalesce.plugin.CoPlugin;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -14,6 +18,7 @@ public final class CoCommand {
 
 	private CoPlugin plugin;
 	private CommandExecutor commandExecutor;
+	private TabExecutor tabExecutor;
 	private String name;
 	private Set<String> aliases;
 	private String description;
@@ -86,6 +91,30 @@ public final class CoCommand {
 			//Everything seems okay, so lets execute the command
 			commandExecutor.execute(context);
 		}
+	}
+	
+	/**
+	 * To execute the TabCompleter
+	 *
+	 *
+	 * <p>Just a note, if the command has child commands and a custom tab completer exists, you will need to write in the implementation for the completion <p/>
+	 *
+	 * @param tabContext The CompleteContext
+	 */
+	public List<String> completer(TabContext tabContext) {
+		if (tabExecutor == null) { //If no executor exists for this command it defaults into looking for the command children
+			if (tabContext.getCommandChildren().isEmpty()) { //If no children exist then there will be no tab complete.
+				return null;
+			}
+			if (tabContext.getLength() == 0) {
+				List<String> children = new ArrayList<>();
+				tabContext.getCommandChildren().forEach(child -> children.add(child.getName()));
+				return children; //List of children commands.
+			}
+			return null; //Dont want the child commands going past argument 1
+		}
+		tabExecutor.complete(tabContext);
+		return tabContext.currentPossibleCompletion(); //Custom completer.
 	}
 
 	/**
@@ -315,5 +344,21 @@ public final class CoCommand {
 	 */
 	public void setChildren(Set<CoCommand> children) {
 		this.children = children;
+	}
+	
+	/**
+	 * The tab executor for this command.
+	 * @return The command tab Completer.
+	 */
+	public TabExecutor getTabExecutor() {
+		return tabExecutor;
+	}
+	
+	/**
+	 * Sets the tab executor method for this command.
+	 * @param tabExecutor The tab executor.
+	 */
+	public void setTabExecutor(TabExecutor tabExecutor) {
+		this.tabExecutor = tabExecutor;
 	}
 }

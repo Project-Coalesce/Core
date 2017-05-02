@@ -1,5 +1,6 @@
 package com.coalesce.command;
 
+import com.coalesce.command.tabcomplete.TabExecutor;
 import com.coalesce.plugin.CoPlugin;
 import org.bukkit.command.CommandSender;
 
@@ -27,6 +28,15 @@ public final class CommandBuilder {
 	 */
 	public CommandBuilder executor(CommandExecutor executor){
 		command.setCommandExecutor(executor);
+		return this;
+	}
+	
+	/**
+	 * The method the command needs to create a tab completion.
+	 * @param executor The method of this command's tab completer
+	 */
+	public CommandBuilder completer(TabExecutor executor) {
+		command.setTabExecutor(executor);
 		return this;
 	}
 	
