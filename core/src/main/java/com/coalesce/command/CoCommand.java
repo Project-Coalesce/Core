@@ -75,7 +75,7 @@ public final class CoCommand {
 			}
 			
 			//Check for not enough args
-			if (context.getArgs().size() < minArgs){
+			if (context.getArgs().size() < minArgs && minArgs > -1){
 				context.pluginMessage(ChatColor.RED + "Not enough arguments!" +
 						" Input: " + ChatColor.GRAY + context.getArgs().size() + ChatColor.RED +
 						" Min: " + ChatColor.GRAY + minArgs);
