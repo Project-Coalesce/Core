@@ -43,36 +43,43 @@ public final class CoCommand {
 
 		//If there were no child commands that matched the context
 		if (!checkChildren(context)){
+			
+			//Check if console is trying to use a player only command
+			if (context.isConsole() && playerOnly){
+				context.pluginMessage(ChatColor.RED + "This command can only be used by players!");
 
-			//Check for too many args
-			if (maxArgs > -1 && context.getArgs().size() > maxArgs){
-				context.send(plugin.getFormatter().format(ChatColor.RED + "Incorrect usage!"));
-				return;
-			}
-
-			//Check for not enough args
-			if (minArgs > -1 && context.getArgs().size() < minArgs){
-				context.send(plugin.getFormatter().format(ChatColor.RED + "Incorrect usage!"));
 				return;
 			}
 
 			//Check if the sender has perms
 			if (permission != null && !context.getSender().hasPermission(permission)){
-				context.send(plugin.getFormatter().format(ChatColor.RED + "You do not have permission for this command!"));
+				context.pluginMessage(ChatColor.RED + "You do not have permission for this command! Required Permission: " + ChatColor.GRAY + permission);
 				return;
 			}
             if (requiresOperator && !context.getSender().isOp()) {
-                context.send(plugin.getFormatter().format(ChatColor.RED + "You do not have permission for this command!"));
+				context.pluginMessage(ChatColor.RED + "You do not have permission for this command! Required Permission: " + ChatColor.GRAY + "OPERATOR");
                 return;
             }
             if (permissionCheck != null && !permissionCheck.test(context.getSender())) {
-                context.send(plugin.getFormatter().format(ChatColor.RED + "You do not have permission for this command!"));
+				context.pluginMessage(ChatColor.RED + "You do not have permission for this command!");
                 return;
             }
-
-			//Check if console is trying to use a player only command
-			if (context.isConsole() && playerOnly){
-				context.send(plugin.getFormatter().format(ChatColor.RED + "This command can only be used by players!"));
+			
+			//Check for too many args
+			if (context.getArgs().size() > maxArgs && maxArgs > -1){
+				context.pluginMessage(ChatColor.RED + "Too many arguments!" +
+						" Input: " + ChatColor.GRAY + context.getArgs().size() + ChatColor.RED +
+						" Max: " + ChatColor.GRAY + maxArgs);
+				if (usage != null) context.pluginMessage(ChatColor.GRAY + "Correct Usage: " + usage);
+				return;
+			}
+			
+			//Check for not enough args
+			if (context.getArgs().size() < minArgs && minArgs > -1){
+				context.pluginMessage(ChatColor.RED + "Not enough arguments!" +
+						" Input: " + ChatColor.GRAY + context.getArgs().size() + ChatColor.RED +
+						" Min: " + ChatColor.GRAY + minArgs);
+				if (usage != null) context.pluginMessage(ChatColor.GRAY + "Correct Usage: " + usage);
 				return;
 			}
 
