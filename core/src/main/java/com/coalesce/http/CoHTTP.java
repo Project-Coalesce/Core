@@ -20,7 +20,7 @@ public class CoHTTP {
 	private static ListeningExecutorService executor;
 
     // HTTP GET request
-    public static ListenableFuture<String> sendGet(String url, String userAgent) throws Exception {
+    public static ListenableFuture<String> sendGet(String url, String userAgent) {
 
 		ListenableFuture<String> future = getExecutor().submit(() -> {
 
@@ -60,7 +60,7 @@ public class CoHTTP {
     }
 
     // HTTP POST request
-    public static ListenableFuture<String> sendPost(String url, HashMap<String, String> arguments, String userAgent) throws Exception {
+    public static ListenableFuture<String> sendPost(String url, HashMap<String, String> arguments, String userAgent) {
 
 		ListenableFuture<String> future = getExecutor().submit(() -> {
 
