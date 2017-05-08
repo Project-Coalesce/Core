@@ -1,84 +1,116 @@
 package com.coalesce.http;
 
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.concurrent.Executors;
 
 public class CoHTTP {
 
-    private final String userAgent;
-
-    public CoHTTP(String agent) {
-        userAgent = agent;
-    }
+	private static ListeningExecutorService executor;
 
     // HTTP GET request
-    public String sendGet(String url) throws Exception {
+    public static ListenableFuture<String> sendGet(String url, String userAgent) throws Exception {
 
-        URL obj = new URL(url);
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+		ListenableFuture<String> future = getExecutor().submit(() -> {
 
-        // optional default is GET
-        con.setRequestMethod("GET");
+			StringBuffer response = new StringBuffer();
 
-        // add request header
-        con.setRequestProperty("User-Agent", userAgent);
+			try {
+				URL obj = new URL(url);
+				HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuffer response = new StringBuffer();
+				// optional default is GET
+				con.setRequestMethod("GET");
 
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
+				// add request header
+				con.setRequestProperty("User-Agent", userAgent);
 
-        // return result
-        return response.toString();
+				BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				String inputLine;
+				response = new StringBuffer();
 
+				while ((inputLine = in.readLine()) != null) {
+					response.append(inputLine);
+				}
+				in.close();
+
+			} catch (ProtocolException e) {
+				e.printStackTrace();
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			return response.toString();
+		});
+
+		return future;
     }
 
     // HTTP POST request
-    public String sendPost(String url, HashMap<String, String> arguments) throws Exception {
+    public static ListenableFuture<String> sendPost(String url, HashMap<String, String> arguments, String userAgent) throws Exception {
 
-        URL obj = new URL(url);
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+		ListenableFuture<String> future = getExecutor().submit(() -> {
 
-        // add reuqest header
-        con.setRequestMethod("POST");
-        con.setRequestProperty("User-Agent", userAgent);
-        con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+			URL obj = new URL(url);
+			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-        String urlParameters = "";
-        StringBuilder sb = new StringBuilder();
-        for (String str : arguments.keySet()) {
-            if (sb.length() != 0)
-                sb.append("&");
-            sb.append(str + "=" + arguments.get(str));
-        }
-        urlParameters = sb.toString();
+			// add reuqest header
+			con.setRequestMethod("POST");
+			con.setRequestProperty("User-Agent", userAgent);
+			con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
-        // Send post request
-        con.setDoOutput(true);
-        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        wr.writeBytes(urlParameters);
-        wr.flush();
-        wr.close();
+			String urlParameters = "";
+			StringBuilder sb = new StringBuilder();
+			for (String str : arguments.keySet()) {
+				if (sb.length() != 0)
+					sb.append("&");
+				sb.append(str + "=" + arguments.get(str));
+			}
+			urlParameters = sb.toString();
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuffer response = new StringBuffer();
+			// Send post request
+			con.setDoOutput(true);
+			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+			wr.writeBytes(urlParameters);
+			wr.flush();
+			wr.close();
 
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
 
-        // return result
-        return response.toString();
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
 
+			// return result
+			return response.toString();
+
+		});
+
+        return future;
     }
+
+	private static ListeningExecutorService getExecutor(){
+		if (executor == null){
+			executor = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool());
+		}
+
+		return executor;
+	}
+
 }
