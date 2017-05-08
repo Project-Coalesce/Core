@@ -67,11 +67,12 @@ public abstract class SinglePlayerGui implements Listener, Gui<Function<Player, 
 		this(plugin, size, p -> title, player);
 	}
 
-	public void open() {
+	@Override
+	public void open(Player player) {
 		player.openInventory(inventory);
 	}
 
-	public void update() {
+	public final void update() {
 		for (int i = 0; i < items.length; i++) {
 			Function<Player, ItemStack> function = items[i];
 			if (function != null) {
@@ -80,6 +81,11 @@ public abstract class SinglePlayerGui implements Listener, Gui<Function<Player, 
 			}
 		}
 		player.updateInventory();
+	}
+
+	@Override
+	public final void clear(){
+		inventory.clear();
 	}
 
 	@Override
