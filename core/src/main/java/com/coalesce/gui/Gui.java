@@ -35,6 +35,15 @@ public interface Gui<F, T>
      */
     T setItem(int index, F item, Consumer<InventoryClickEvent> onClick);
 
+	/**
+	 * Removes an item from the provided slot
+	 *
+	 * @param index the slot to remove the item from
+	 *
+	 * @return this, for chaining
+	 */
+	T removeItem(int index);
+
     /**
      * Open the inventory
      * 
