@@ -67,8 +67,9 @@ public class PlayerGui implements Gui<Function<Player, ItemStack>, PlayerGui>, L
     {
         this(plugin, size, p -> title);
     }
- 
-    public PlayerGui addItem(int size, Function<Player, ItemStack> item, Consumer<InventoryClickEvent> onClick) {
+
+	@Override
+    public PlayerGui addItem(Function<Player, ItemStack> item, Consumer<InventoryClickEvent> onClick) {
         for (int i = 0; i < items.length; i++) {
             if (items[i] == null) {
                 this.items[i] = item;
@@ -78,22 +79,33 @@ public class PlayerGui implements Gui<Function<Player, ItemStack>, PlayerGui>, L
         }
         return this;
     }
-    
-    @Override
-    public PlayerGui addItem(Function<Player, ItemStack> item, Consumer<InventoryClickEvent> onClick) {
-        return addItem(1, item, onClick);
-    }
 
-    public PlayerGui setItem(int index, int size, Function<Player, ItemStack> item, Consumer<InventoryClickEvent> onClick) {
+	@Override
+    public PlayerGui setItem(int index, Function<Player, ItemStack> item, Consumer<InventoryClickEvent> onClick) {
         this.items[index] = item;
         this.listeners[index] = onClick;
         return this;
     }
-    
-    @Override
-    public PlayerGui setItem(int index, Function<Player, ItemStack> item, Consumer<InventoryClickEvent> onClick) {
-        return setItem(index, 1, item, onClick);
-    }
+
+	public PlayerGui removeItem(int index){
+
+		this.items[index] = null;
+		this.listeners[index] = null;
+		return this;
+	}
+
+	public PlayerGui removeItems(int startIndex, int countToRemove){
+
+		for (int i = startIndex;i < startIndex + countToRemove;i++){
+			if (i >= size){
+				break;
+			}
+
+			this.items[i] = null;
+			this.listeners[i] = null;
+		}
+		return this;
+	}
     
     public void update(Player player) {
         Inventory inventory = inventories.computeIfAbsent(player.getUniqueId(), uuid -> this.getNewInventory(player));
