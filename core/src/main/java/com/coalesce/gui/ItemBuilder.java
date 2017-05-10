@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Simple Builder class for the {@link ItemStack} class.
+ */
 public class ItemBuilder {
 
 	private ItemStack itemStack;
