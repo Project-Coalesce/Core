@@ -11,8 +11,7 @@ import java.util.function.Consumer;
  * @param <F> The type of clickable icons.
  * @param <T> The type of this gui (used to allow chaining method calls).
  */
-public interface Gui<F, T>
-{
+public interface Gui<F, T> {
 
     /**
      * Add an item to the first available slot, and set the method to run when the item is clicked
