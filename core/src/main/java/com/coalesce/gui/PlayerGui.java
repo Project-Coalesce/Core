@@ -153,6 +153,7 @@ public class PlayerGui implements Gui<Function<Player, ItemStack>, PlayerGui>, L
         InventoryDragEvent  .getHandlerList().unregister(this);
         InventoryCloseEvent .getHandlerList().unregister(this);
 
+        inventories.clear();
     }
     
     @EventHandler

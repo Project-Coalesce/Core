@@ -3,17 +3,19 @@ package com.coalesce.scoreboard;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class PlayerScoreboard implements CoScoreboard<Function<Player, String>>{
 
-    private final Scoreboard scoreboard;
     private Function<Player, String> title;
     private final Map<Function<Player, String>, Integer> entries;
 
@@ -22,8 +24,6 @@ public class PlayerScoreboard implements CoScoreboard<Function<Player, String>>{
 
     private PlayerScoreboard(Builder builder){
 
-        scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-
         title = builder.title;
         entries = builder.entries;
     }
@@ -31,12 +31,32 @@ public class PlayerScoreboard implements CoScoreboard<Function<Player, String>>{
     @Override
     public void send(Player player){
 
+        Scoreboard scoreboard = generateScoreboard(player);
         player.setScoreboard(scoreboard);
     }
 
     @Override
     public void send(Collection<Player> players) {
         players.forEach(this::send);
+    }
+
+    private Scoreboard generateScoreboard(Player player){
+
+        Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+        String titleString = title.apply(player);
+
+        Objective scoreboardObjective = scoreboard.registerNewObjective(titleString, "dummy");
+        scoreboardObjective.setDisplayName(titleString);
+        scoreboardObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
+
+        entries.forEach((playerStringFunction, score) -> {
+
+            String entryString = playerStringFunction.apply(player);
+            scoreboardObjective.getScore(entryString).setScore(score);
+
+        });
+
+        return scoreboard;
     }
 
     @Override
