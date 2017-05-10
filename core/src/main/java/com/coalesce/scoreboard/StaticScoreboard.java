@@ -101,10 +101,17 @@ public class StaticScoreboard implements CoScoreboard<String>{
         private String title;
         private Map<String, Integer> entries;
 
-        public Builder(String title){
+        public Builder(){
+
+            this.title = "";
+            entries = new HashMap<>(MAX_ENTRIES);
+        }
+
+        public Builder title(String title){
+
             this.title = title;
 
-            entries = new HashMap<>(MAX_ENTRIES);
+            return this;
         }
 
         public Builder addEntry(String message){

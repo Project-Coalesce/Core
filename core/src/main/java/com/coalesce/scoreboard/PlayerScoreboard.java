@@ -75,16 +75,22 @@ public class PlayerScoreboard implements CoScoreboard<Function<Player, String>>{
         private Function<Player, String> title;
         private Map<Function<Player, String>, Integer> entries;
 
-        public Builder(Function<Player, String> title){
-            this.title = title;
+        public Builder(){
+            this.title = (player -> "");
 
             entries = new HashMap<>(MAX_ENTRIES);
         }
 
-        public Builder(String title){
+        public Builder title(Function<Player, String> title){
+            this.title = title;
+
+            return this;
+        }
+
+        public Builder title(String title){
             this.title = (player -> title);
 
-            entries = new HashMap<>(MAX_ENTRIES);
+            return this;
         }
 
         public Builder addEntry(Function<Player, String> entry){
