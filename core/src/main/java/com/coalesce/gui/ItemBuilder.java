@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Simple Builder class for the {@link ItemStack} class.
+ */
 public class ItemBuilder {
 
 	private ItemStack itemStack;
@@ -59,6 +62,13 @@ public class ItemBuilder {
 
 	public ItemBuilder enchant(Enchantment enchantment, int level){
 		itemStack.addUnsafeEnchantment(enchantment, level);
+		return this;
+	}
+
+	public ItemBuilder unbreakable(){
+		ItemMeta meta = itemStack.getItemMeta();
+		meta.setUnbreakable(true);
+		itemStack.setItemMeta(meta);
 		return this;
 	}
 
