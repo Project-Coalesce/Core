@@ -87,6 +87,7 @@ public class PlayerGui implements Gui<Function<Player, ItemStack>, PlayerGui>, L
         return this;
     }
 
+    @Override
 	public PlayerGui removeItem(int index){
 
 		this.items[index] = null;
@@ -141,6 +142,17 @@ public class PlayerGui implements Gui<Function<Player, ItemStack>, PlayerGui>, L
     public void clear() {
         Bukkit.getOnlinePlayers().stream().filter(p -> inventories.containsKey(p.getUniqueId())).forEach(p -> p.closeInventory());
         inventories.clear();
+    }
+
+    /**
+     * Unregisters all listeners of the GUI. This is done to get rid of useless {@link Listener}s that are no longer used
+     */
+    public void destroy(){
+
+	    InventoryCloseEvent .getHandlerList().unregister(this);
+        InventoryDragEvent  .getHandlerList().unregister(this);
+        InventoryCloseEvent .getHandlerList().unregister(this);
+
     }
     
     @EventHandler
