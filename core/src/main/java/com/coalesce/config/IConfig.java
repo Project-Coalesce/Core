@@ -4,6 +4,7 @@ import com.coalesce.plugin.CoPlugin;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.List;
 
 public interface IConfig {
 	/**
@@ -12,6 +13,55 @@ public interface IConfig {
 	 * @return The entry that is at that path.
 	 */
 	IEntry getEntry(String path);
+	
+	/**
+	 * Gets a value from a config entry.
+	 * @param path The path in the configuration.
+	 * @return A string from the specified path.
+	 */
+	String getString(String path);
+	
+	/**
+	 * Gets a value from a config entry.
+	 * @param path The path in the configuration.
+	 * @return A double from the specified path.
+	 */
+	double getDouble(String path);
+	
+	/**
+	 * Gets a value from a config entry.
+	 * @param path The path in the configuration.
+	 * @return An integer from the specified path.
+	 */
+	int getInt(String path);
+	
+	/**
+	 * Gets a value from a config entry.
+	 * @param path The path in the configuration.
+	 * @return A long from the specified path.
+	 */
+	long getLong(String path);
+	
+	/**
+	 * Gets a value from a config entry.
+	 * @param path The path in the configuration.
+	 * @return A boolean from the specified path.
+	 */
+	boolean getBoolean(String path);
+	
+	/**
+	 * Gets a value from a config entry.
+	 * @param path The path in the configuration.
+	 * @return A list from the specified path.
+	 */
+	List<?> getList(String path);
+	
+	/**
+	 * Gets a value from a config entry.
+	 * @param path The path in the configuration.
+	 * @return An object from the specified path.
+	 */
+	Object getValue(String path);
 	
 	/**
 	 * Gets an entry based on its value instead of path.
