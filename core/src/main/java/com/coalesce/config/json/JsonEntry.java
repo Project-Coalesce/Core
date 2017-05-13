@@ -5,7 +5,7 @@ import com.coalesce.config.IEntry;
 
 import java.util.List;
 
-public class JsonEntry implements IEntry {
+public final class JsonEntry implements IEntry {
 
     private String key;
     private Object value;

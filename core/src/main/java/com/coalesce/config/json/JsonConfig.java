@@ -16,7 +16,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class JsonConfig implements IConfig {
+public abstract class JsonConfig implements IConfig {
 
 	private Collection<IEntry> entries = new ArrayList<>();
 	private final ConfigFormat format;
