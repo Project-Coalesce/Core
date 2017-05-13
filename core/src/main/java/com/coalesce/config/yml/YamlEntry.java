@@ -15,6 +15,7 @@ public final class YamlEntry implements IEntry {
 	public YamlEntry(IConfig config, String key) {
 		this.config = config;
 		this.key = key;
+		this.value = getConfig().getValue(key);
 	}
 	
 	public YamlEntry(IConfig config, String key, Object value) {

@@ -81,15 +81,22 @@ public interface IConfig {
 	
 	/**
 	 * Adds a new entry to the current config.
-	 * @param entry The entry being added.
+	 * @param path The path in the config.
+	 * @param value The value to set this entry to.
 	 */
-	void addEntry(IEntry entry);
+	void addEntry(String path, Object value);
 	
 	/**
-	 * Removes an entry from the config.
+	 * Removes an entry from the config via the Entry Object.
 	 * @param entry The entry to remove.
 	 */
 	void removeEntry(IEntry entry);
+	
+	/**
+	 * Removes an entry from the config via the entry path.
+	 * @param path The path to this entry.
+	 */
+	void removeEntry(String path);
 	
 	/**
 	 * Returns this config.

@@ -19,11 +19,11 @@ import java.util.List;
 public abstract class YamlConfig implements IConfig {
 	
 	private Collection<IEntry> entries = new ArrayList<>();
+	private final ConfigFormat format;
 	private YamlConfiguration config;
+	private final CoPlugin plugin;
 	private final File dir, file;
 	private final String name;
-	private final ConfigFormat format;
-	private final CoPlugin plugin;
 	
 	protected YamlConfig(String name, CoPlugin plugin) {
 		this.name = name;
@@ -127,7 +127,8 @@ public abstract class YamlConfig implements IConfig {
 	}
 	
 	@Override
-	public void addEntry(IEntry entry) {
+	public void addEntry(String path, Object value) {
+		IEntry entry = new YamlEntry(this, path, value);
 		if (getBase().get(entry.getPath()) == null) {
 			setValue(entry.getPath(), entry.getValue());
 		}
@@ -137,6 +138,11 @@ public abstract class YamlConfig implements IConfig {
 	@Override
 	public void removeEntry(IEntry entry) {
 		entry.remove();
+	}
+	
+	@Override
+	public void removeEntry(String path) {
+		getEntry(path).remove();
 	}
 	
 	@Override
