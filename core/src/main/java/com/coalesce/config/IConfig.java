@@ -4,6 +4,7 @@ import com.coalesce.plugin.CoPlugin;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.List;
 
 public interface IConfig {
 	/**
@@ -12,6 +13,55 @@ public interface IConfig {
 	 * @return The entry that is at that path.
 	 */
 	IEntry getEntry(String path);
+	
+	/**
+	 * Gets a value from a config entry.
+	 * @param path The path in the configuration.
+	 * @return A string from the specified path.
+	 */
+	String getString(String path);
+	
+	/**
+	 * Gets a value from a config entry.
+	 * @param path The path in the configuration.
+	 * @return A double from the specified path.
+	 */
+	double getDouble(String path);
+	
+	/**
+	 * Gets a value from a config entry.
+	 * @param path The path in the configuration.
+	 * @return An integer from the specified path.
+	 */
+	int getInt(String path);
+	
+	/**
+	 * Gets a value from a config entry.
+	 * @param path The path in the configuration.
+	 * @return A long from the specified path.
+	 */
+	long getLong(String path);
+	
+	/**
+	 * Gets a value from a config entry.
+	 * @param path The path in the configuration.
+	 * @return A boolean from the specified path.
+	 */
+	boolean getBoolean(String path);
+	
+	/**
+	 * Gets a value from a config entry.
+	 * @param path The path in the configuration.
+	 * @return A list from the specified path.
+	 */
+	List<?> getList(String path);
+	
+	/**
+	 * Gets a value from a config entry.
+	 * @param path The path in the configuration.
+	 * @return An object from the specified path.
+	 */
+	Object getValue(String path);
 	
 	/**
 	 * Gets an entry based on its value instead of path.
@@ -31,15 +81,22 @@ public interface IConfig {
 	
 	/**
 	 * Adds a new entry to the current config.
-	 * @param entry The entry being added.
+	 * @param path The path in the config.
+	 * @param value The value to set this entry to.
 	 */
-	void addEntry(IEntry entry);
+	void addEntry(String path, Object value);
 	
 	/**
-	 * Removes an entry from the config.
+	 * Removes an entry from the config via the Entry Object.
 	 * @param entry The entry to remove.
 	 */
 	void removeEntry(IEntry entry);
+	
+	/**
+	 * Removes an entry from the config via the entry path.
+	 * @param path The path to this entry.
+	 */
+	void removeEntry(String path);
 	
 	/**
 	 * Returns this config.
