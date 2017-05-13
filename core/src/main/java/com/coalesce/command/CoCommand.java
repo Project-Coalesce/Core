@@ -21,8 +21,8 @@ public final class CoCommand {
 	private TabExecutor tabExecutor;
 	private String name;
 	private Set<String> aliases;
-	private String description = "";
-	private String usage = "";
+	private String description;
+	private String usage;
 	private String permission;
 	private Predicate<CommandSender> permissionCheck;
 	private boolean requiresOperator = false;
