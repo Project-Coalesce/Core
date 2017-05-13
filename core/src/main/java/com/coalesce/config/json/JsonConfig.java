@@ -18,11 +18,11 @@ import java.util.*;
 
 public abstract class JsonConfig implements IConfig {
 
-	private Collection<IEntry> entries = new ArrayList<>();
-	private final ConfigFormat format;
-	private final CoPlugin plugin;
+	private Collection<IEntry> entries;
 	private final File dir, file;
 	private final String name;
+	private final ConfigFormat format;
+	private final CoPlugin plugin;
 	@Getter
     private JSONObject json;
 
@@ -75,41 +75,6 @@ public abstract class JsonConfig implements IConfig {
 	}
 	
 	@Override
-	public String getString(String path) {
-		return getEntry(path).getString();
-	}
-	
-	@Override
-	public double getDouble(String path) {
-		return getEntry(path).getDouble();
-	}
-	
-	@Override
-	public int getInt(String path) {
-		return getEntry(path).getInt();
-	}
-	
-	@Override
-	public long getLong(String path) {
-		return getEntry(path).getLong();
-	}
-	
-	@Override
-	public boolean getBoolean(String path) {
-		return getEntry(path).getBoolean();
-	}
-	
-	@Override
-	public List<?> getList(String path) {
-		return getEntry(path).getList();
-	}
-	
-	@Override
-	public Object getValue(String path) {
-		return getEntry(path).getValue();
-	}
-	
-	@Override
 	public Collection<IEntry> getEntryFromValue(Object value) {
 		Collection<IEntry> found = new ArrayList<>();
 		entries.forEach(entry -> {
@@ -127,9 +92,10 @@ public abstract class JsonConfig implements IConfig {
 	}
 	
 	@Override
-	public void addEntry(String path, Object value) {
-		IEntry entry = new JsonEntry(this, path, value);
-		json.putIfAbsent(path, value);
+	public void addEntry(IEntry entry) {
+		if (json.get(entry.getPath()) == null) {
+			json.put(entry.getPath(), entry.getValue());
+		}
 		entries.add(entry);
 	}
 	
@@ -139,18 +105,12 @@ public abstract class JsonConfig implements IConfig {
 	}
 	
 	@Override
-	public void removeEntry(String path) {
-		getEntry(path).remove();
-	}
-	
-	@Override
 	public IConfig getConfig() {
 		return this;
 	}
 	
 	@Override
 	public void clear() {
-		entries.forEach(e -> e.remove());
 	    json.clear();
 	}
 	
