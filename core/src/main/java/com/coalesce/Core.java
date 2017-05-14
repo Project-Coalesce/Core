@@ -1,7 +1,6 @@
 package com.coalesce;
 
 import com.coalesce.plugin.CoPlugin;
-import org.jetbrains.annotations.Nullable;
 
 import static org.bukkit.plugin.ServicePriority.Normal;
 
@@ -16,7 +15,6 @@ public class Core extends CoPlugin {
 	@Override
 	public void onPluginEnable() {
 		getServer().getServicesManager().register(Core.class, this, this, Normal);
-		this.displayName = "CoalesceCore";
 		
 		//addModules(userModule = new UserModule(this), commandModule = new CommandModule(this));
 	}
@@ -42,7 +40,7 @@ public class Core extends CoPlugin {
 	 *
 	 * @return The core instance.
 	 */
-	public static @Nullable Core getInstance() {
+	public static Core getInstance() {
 		return instance;
 	}
 	
