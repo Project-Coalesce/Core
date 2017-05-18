@@ -127,9 +127,20 @@ public abstract class JsonConfig implements IConfig {
 	}
 	
 	@Override
-	public void addEntry(String path, Object value) {
+	public void addReplace(String path, Object value) {
 		IEntry entry = new JsonEntry(this, path, value);
-		json.putIfAbsent(path, value);
+		json.put(entry.getPath(), entry.getValue());
+		entries.add(entry);
+	}
+	
+	@Override
+	public void addEntry(String path, Object value) { //This needs to be updated to match Yaml's functionality.
+		IEntry entry;
+		if (!json.containsKey(path)) {
+			entry = new JsonEntry(this, path, value);
+			json.put(entry.getPath(), entry.getValue());
+		}
+		else entry = new JsonEntry(this, path, json.get(path));
 		entries.add(entry);
 	}
 	
