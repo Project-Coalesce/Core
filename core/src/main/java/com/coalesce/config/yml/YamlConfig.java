@@ -131,9 +131,15 @@ public abstract class YamlConfig implements IConfig {
 	}
 	
 	@Override
-	public void addReplace(String path, Object value) {
+	public void setEntry(String path, Object value) {
 		IEntry entry = new YamlEntry(this, path, value);
-		setValue(entry.getPath(), entry.getValue());
+		if (getEntry(path) == null) {
+			setValue(entry.getPath(), entry.getValue());
+			entries.add(entry);
+			return;
+		}
+		entries.remove(entry);
+		entry = getEntry(path).setValue(value);
 		entries.add(entry);
 	}
 	

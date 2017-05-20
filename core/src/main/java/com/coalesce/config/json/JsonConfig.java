@@ -128,9 +128,15 @@ public abstract class JsonConfig implements IConfig {
 	}
 	
 	@Override
-	public void addReplace(String path, Object value) {
+	public void setEntry(String path, Object value) {
 		IEntry entry = new JsonEntry(this, path, value);
-		json.put(entry.getPath(), entry.getValue());
+		if (getEntry(path) == null) {
+			json.put(entry.getPath(), entry.getValue());
+			entries.add(entry);
+			return;
+		}
+		entries.remove(entry);
+		entry = entry.setValue(value);
 		entries.add(entry);
 	}
 	

@@ -95,7 +95,7 @@ public interface IConfig {
 	 * @param path The path in the config.
 	 * @param value The value to set the path to.
 	 */
-	void addReplace(String path, Object value);
+	void setEntry(String path, Object value);
 	
 	/**
 	 * Removes an entry from the config via the Entry Object.
