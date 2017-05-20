@@ -7,9 +7,31 @@
         <artifactId>parent</artifactId>
         <groupId>com.coalesce</groupId>
         <version>1.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
+
+    <dependencies>
+        <!--Annotations-->
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>${versionAnnotations}</version>
+        </dependency>
+
+        <!--Lombok-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.14</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+=======
+
+
     <artifactId>core</artifactId>
+    <groupId>com.coalesce</groupId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
