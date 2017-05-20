@@ -1,7 +1,6 @@
 package com.coalesce.scoreboard;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -10,7 +9,6 @@ import org.bukkit.scoreboard.Scoreboard;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -18,9 +16,6 @@ public class PlayerScoreboard implements CoScoreboard<Function<Player, String>>{
 
     private Function<Player, String> title;
     private final Map<Function<Player, String>, Integer> entries;
-
-    //Constants
-    private static final int MAX_ENTRIES = 16;
 
     private PlayerScoreboard(Builder builder){
 

@@ -19,9 +19,6 @@ public class StaticScoreboard implements CoScoreboard<String>{
     private String title;
     private final Map<String, Integer> entries;
 
-    //Constants
-    private static final int MAX_ENTRIES = 16;
-
     private StaticScoreboard(Builder builder){
 
         scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();

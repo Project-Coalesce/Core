@@ -3,9 +3,7 @@ package com.coalesce.config.json;
 import com.coalesce.config.IConfig;
 import com.coalesce.config.IEntry;
 
-import java.util.List;
-
-public final class JsonEntry implements IEntry {
+public class JsonEntry implements IEntry {
 
     private String key;
     private Object value;
@@ -14,7 +12,6 @@ public final class JsonEntry implements IEntry {
     public JsonEntry(IConfig config, String key) {
         this.config = config;
         this.key = key;
-        this.value = getConfig().getValue(key);
     }
 
     public JsonEntry(IConfig config, String key, Object value) {
@@ -22,38 +19,8 @@ public final class JsonEntry implements IEntry {
         this.key = key;
         this.value = value;
     }
-	
-	@Override
-	public String getString() {
-		return (String) value;
-	}
-	
-	@Override
-	public double getDouble() {
-		return (Double) value;
-	}
-	
-	@Override
-	public int getInt() {
-		return (Integer) value;
-	}
-	
-	@Override
-	public long getLong() {
-		return (Long) value;
-	}
-	
-	@Override
-	public boolean getBoolean() {
-		return (Boolean) value;
-	}
-	
-	@Override
-	public List<?> getList() {
-		return (List<?>) value;
-	}
-	
-	@Override
+
+    @Override
     public String getPath() {
         return key;
     }
@@ -80,14 +47,8 @@ public final class JsonEntry implements IEntry {
     public IConfig getConfig() {
         return config;
     }
-	
-	@Override
-	public
-	IEntry setConfig(IConfig config) {
-		return null;
-	}
-	
-	@Override
+
+    @Override
     public void remove() {
         setValue(key, null);
     }
