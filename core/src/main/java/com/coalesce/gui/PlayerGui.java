@@ -21,7 +21,7 @@ import java.util.function.Function;
 /**
  * Represents an inventory that can change between players.
  */
-public class PlayerGui implements Gui<Function<Player, ItemStack>, PlayerGui>, Listener {
+public abstract class PlayerGui implements Gui<Function<Player, ItemStack>, PlayerGui>, Listener {
     
     /**
      * The plugin

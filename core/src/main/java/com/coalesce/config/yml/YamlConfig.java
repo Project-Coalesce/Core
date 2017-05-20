@@ -26,27 +26,31 @@ public abstract class YamlConfig implements IConfig {
 	
 	protected YamlConfig(String name, CoPlugin plugin) {
 		this.name = name;
-		this.dir = plugin.getDataFolder();
-		this.file = new File(dir.getAbsolutePath() + File.separator + name + ".yml");
-		this.format = ConfigFormat.YAML;
 		this.plugin = plugin;
+		this.format = ConfigFormat.YAML;
+		
+		//Creating the correct directory and generating the file.
+		if (!name.contains(File.separator)) {
+			this.dir = plugin.getDataFolder();
+			this.file = new File(dir.getAbsolutePath() + File.separator + name + ".yml");
+		} else {
+			int last = name.lastIndexOf(File.separator);
+			String fileName = name.substring(last + 1);
+			String path = name.substring(0, last);
+			this.dir = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + path);
+			this.file = new File(dir + File.separator + fileName + ".yml");
+		}
 		if (!dir.exists()) {
-			dir.mkdir();
-			try {
-				file.createNewFile();
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
+			dir.mkdirs();
 		}
-		if (!file.exists()) {
-			try {
-				file.createNewFile();
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
+		try {
+			file.createNewFile();
 		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		//Loading the configuration.
 		this.config = YamlConfiguration.loadConfiguration(file);
 		if (!plugin.getConfigurations().contains(this)) {
 			plugin.getConfigurations().add(this);
@@ -85,10 +89,20 @@ public abstract class YamlConfig implements IConfig {
 	}
 	
 	@Override
-	public void addEntry(IEntry entry) {
-		if (getBase().get(entry.getPath()) == null) {
+	public void addReplace(String path, Object value) {
+		IEntry entry = new YamlEntry(this, path, value);
+		setValue(entry.getPath(), entry.getValue());
+		entries.add(entry);
+	}
+	
+	@Override
+	public void addEntry(String path, Object value) {
+		IEntry entry;
+		if (getBase().get(path) == null) {
+			entry = new YamlEntry(this, path, value);
 			setValue(entry.getPath(), entry.getValue());
 		}
+		else entry = new YamlEntry(this, path, getBase().get(path));
 		entries.add(entry);
 	}
 	

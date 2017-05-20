@@ -28,33 +28,31 @@ public abstract class JsonConfig implements IConfig {
 
 	protected JsonConfig(String name, CoPlugin plugin) {
 		this.name = name;
-		this.dir = plugin.getDataFolder();
-		this.file = new File(dir + File.separator + name + ".json");
 		this.format = ConfigFormat.JSON;
 		this.plugin = plugin;
-
+		
+		//Creating the correct directory and generating the file.
+		if (!name.contains(File.separator)) {
+			this.dir = plugin.getDataFolder();
+			this.file = new File(dir.getAbsolutePath() + File.separator + name + ".json");
+		} else {
+			int last = name.lastIndexOf(File.separator);
+			String fileName = name.substring(last + 1);
+			String path = name.substring(0, last);
+			this.dir = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + path);
+			this.file = new File(dir + File.separator + fileName + ".json");
+		}
 		if (!dir.exists()) {
-			dir.mkdir();
-			try {
-				file.createNewFile();
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
+			dir.mkdirs();
 		}
-		if (!file.exists()) {
-			try {
-				file.createNewFile();
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
+		try {
+			file.createNewFile();
 		}
-
-		if (!plugin.getConfigurations().contains(this)) {
-			plugin.getConfigurations().add(this);
+		catch (IOException e) {
+			e.printStackTrace();
 		}
-
+		
+		//Loading the configuration.
         try{
             FileReader reader = new FileReader(file);
             json = (JSONObject) new JSONParser().parse(reader);
@@ -62,6 +60,9 @@ public abstract class JsonConfig implements IConfig {
         } catch (Exception e) {
             e.printStackTrace();
         }
+		if (!plugin.getConfigurations().contains(this)) {
+			plugin.getConfigurations().add(this);
+		}
 	}
 	
 	@Override
@@ -92,10 +93,20 @@ public abstract class JsonConfig implements IConfig {
 	}
 	
 	@Override
-	public void addEntry(IEntry entry) {
-		if (json.get(entry.getPath()) == null) {
+	public void addReplace(String path, Object value) {
+		IEntry entry = new JsonEntry(this, path, value);
+		json.put(entry.getPath(), entry.getValue());
+		entries.add(entry);
+	}
+	
+	@Override
+	public void addEntry(String path, Object value) { //This needs to be updated to match Yaml's functionality.
+		IEntry entry;
+		if (!json.containsKey(path)) {
+			entry = new JsonEntry(this, path, value);
 			json.put(entry.getPath(), entry.getValue());
 		}
+		else entry = new JsonEntry(this, path, json.get(path));
 		entries.add(entry);
 	}
 	

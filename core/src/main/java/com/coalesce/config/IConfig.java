@@ -36,7 +36,18 @@ public interface IConfig {
 	void addEntry(IEntry entry);
 	
 	/**
-	 * Removes an entry from the config.
+	 * Adds a new entry to the current config. If the
+	 * config already has a value at the path location
+	 * it will be updated with the new value supplied
+	 * from this method.
+	 *
+	 * @param path The path in the config.
+	 * @param value The value to set the path to.
+	 */
+	void addReplace(String path, Object value);
+	
+	/**
+	 * Removes an entry from the config via the Entry Object.
 	 * @param entry The entry to remove.
 	 */
 	void removeEntry(IEntry entry);
