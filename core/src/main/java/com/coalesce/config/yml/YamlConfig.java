@@ -27,27 +27,31 @@ public abstract class YamlConfig implements IConfig {
 	
 	protected YamlConfig(String name, CoPlugin plugin) {
 		this.name = name;
-		this.dir = plugin.getDataFolder();
-		this.file = new File(dir.getAbsolutePath() + File.separator + name + ".yml");
-		this.format = ConfigFormat.YAML;
 		this.plugin = plugin;
+		this.format = ConfigFormat.YAML;
+		
+		//Creating the correct directory and generating the file.
+		if (!name.contains(File.separator)) {
+			this.dir = plugin.getDataFolder();
+			this.file = new File(dir.getAbsolutePath() + File.separator + name + ".yml");
+		} else {
+			int last = name.lastIndexOf(File.separator);
+			String fileName = name.substring(last + 1);
+			String path = name.substring(0, last);
+			this.dir = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + path);
+			this.file = new File(dir + File.separator + fileName + ".yml");
+		}
 		if (!dir.exists()) {
-			dir.mkdir();
-			try {
-				file.createNewFile();
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
+			dir.mkdirs();
 		}
-		if (!file.exists()) {
-			try {
-				file.createNewFile();
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
+		try {
+			file.createNewFile();
 		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		//Loading the configuration.
 		this.config = YamlConfiguration.loadConfiguration(file);
 		if (!plugin.getConfigurations().contains(this)) { //Registers this configuration
 			plugin.getConfigurations().add(this);
