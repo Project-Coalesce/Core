@@ -1,6 +1,7 @@
 package com.coalesce.command;
 
-import com.coalesce.command.tabcomplete.TabContext;
+import com.coalesce.command.base.AbstractCommandContext;
+import com.coalesce.command.base.AbstractTabContext;
 import com.coalesce.command.tabcomplete.TabExecutor;
 import com.coalesce.plugin.CoPlugin;
 import org.bukkit.ChatColor;
@@ -44,7 +45,7 @@ public final class CoCommand {
 	 * The main execute method for a CoCommand.
 	 * @param context The command context.
 	 */
-	public void execute(CommandContext context){
+	public void execute(AbstractCommandContext context){
 
 		//If there were no child commands that matched the context
 		if (!checkChildren(context)){
@@ -101,7 +102,7 @@ public final class CoCommand {
 	 *
 	 * @param tabContext The CompleteContext
 	 */
-	public List<String> completer(TabContext tabContext) {
+	public List<String> completer(AbstractTabContext tabContext) {
 		if (tabExecutor == null) { //If no executor exists for this command it defaults into looking for the command children
 			if (tabContext.getCommandChildren().isEmpty()) { //If no children exist then there will be no tab complete.
 				return null;
@@ -124,7 +125,7 @@ public final class CoCommand {
 	 * @param context The command context
 	 * @return True if a child was found, false otherwise
 	 */
-	private boolean checkChildren(CommandContext context){
+	private boolean checkChildren(AbstractCommandContext context){
 		if (children.isEmpty()) return false;
 		if (!context.hasArgs()) return false;
 		for (CoCommand childCommand : children){

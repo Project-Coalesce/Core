@@ -3,6 +3,7 @@ package com.coalesce.plugin;
 import com.coalesce.chat.CoFormatter;
 import com.coalesce.command.CoCommand;
 import com.coalesce.command.CommandRegister;
+import com.coalesce.command.base.AbstractCommandContext;
 import com.coalesce.config.IConfig;
 import com.google.common.collect.ImmutableList;
 import org.bukkit.Bukkit;
@@ -17,14 +18,14 @@ import java.util.*;
 import static org.bukkit.ChatColor.DARK_RED;
 
 public abstract class CoPlugin extends JavaPlugin implements Listener {
-
-	public String displayName;
+	
 	private final List<CoModule> modules = new LinkedList<>();
 	private Collection<IConfig> configs = new ArrayList<>();
 	private Set<CoCommand> commands = new HashSet<>();
-	
-	private CoLogger logger;
+	private AbstractCommandContext customContext;
 	private CoFormatter formatter;
+	private String displayName;
+	private CoLogger logger;
 	
 	@Override
 	public final void onEnable() {
