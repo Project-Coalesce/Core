@@ -31,9 +31,11 @@ public interface IConfig {
 	
 	/**
 	 * Adds a new entry to the current config.
-	 * @param entry The entry being added.
+	 *
+	 * @param path The path in the config.
+	 * @param value The value to set the path to.
 	 */
-	void addEntry(IEntry entry);
+	void addEntry(String path, Object value);
 	
 	/**
 	 * Adds a new entry to the current config. If the
