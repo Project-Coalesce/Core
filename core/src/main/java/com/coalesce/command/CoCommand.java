@@ -2,6 +2,7 @@ package com.coalesce.command;
 
 import com.coalesce.command.base.AbstractCommandContext;
 import com.coalesce.command.base.AbstractTabContext;
+import com.coalesce.command.tabcomplete.TabContext;
 import com.coalesce.command.tabcomplete.TabExecutor;
 import com.coalesce.plugin.CoPlugin;
 import org.bukkit.ChatColor;
@@ -16,21 +17,23 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class CoCommand {
-
-	private CoPlugin plugin;
-	private CommandExecutor commandExecutor;
-	private TabExecutor tabExecutor;
-	private String name;
-	private Set<String> aliases;
-	private String description;
-	private String usage;
-	private String permission;
+	
+	private Class<? extends AbstractCommandContext> commandContext = CommandContext.class;
+	private Class<? extends AbstractTabContext> tabContext = TabContext.class;
 	private Predicate<CommandSender> permissionCheck;
 	private boolean requiresOperator = false;
-	private int minArgs = -1;
-	private int maxArgs = -1;
+	private CommandExecutor commandExecutor;
 	private boolean playerOnly = false;
 	private Set<CoCommand> children;
+	private TabExecutor tabExecutor;
+	private final CoPlugin plugin;
+	private Set<String> aliases;
+	private String description;
+	private String permission;
+	private int minArgs = -1;
+	private int maxArgs = -1;
+	private String usage;
+	private String name;
 
 	public CoCommand(CoPlugin plugin, String name){
 		this.plugin = plugin;
@@ -361,5 +364,37 @@ public final class CoCommand {
 	 */
 	public void setTabExecutor(TabExecutor tabExecutor) {
 		this.tabExecutor = tabExecutor;
+	}
+	
+	/**
+	 * Gets the custom tab context.
+	 * @return The custom tab context.
+	 */
+	public Class<? extends AbstractTabContext> getTabContext() {
+		return tabContext;
+	}
+	
+	/**
+	 * Sets the tab executor method for this command along with the custom tab completion context.
+	 * @param customContext The custom tab context class.
+	 */
+	public void setTabContext(Class<? extends AbstractTabContext> customContext) {
+		this.tabContext = customContext;
+	}
+	
+	/**
+	 * Gets the custom command context.
+	 * @return The custom command context.
+	 */
+	public Class<? extends AbstractCommandContext> getCommandContext() {
+		return commandContext;
+	}
+	
+	/**
+	 * Sets the custom command context.
+	 * @param customContext The custom command context class.
+	 */
+	public void setCommandContext(Class<? extends AbstractCommandContext> customContext) {
+		this.commandContext = customContext;
 	}
 }

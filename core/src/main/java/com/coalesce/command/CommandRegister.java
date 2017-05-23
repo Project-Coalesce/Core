@@ -1,17 +1,19 @@
 package com.coalesce.command;
 
+import com.coalesce.command.base.AbstractCommandContext;
+import com.coalesce.command.base.AbstractTabContext;
 import com.coalesce.command.tabcomplete.TabContext;
 import com.coalesce.plugin.CoPlugin;
-import com.google.common.collect.Lists;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
 import org.bukkit.plugin.Plugin;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommandRegister extends Command implements PluginIdentifiableCommand {
+public final class CommandRegister extends Command implements PluginIdentifiableCommand {
 	
 	private final CoCommand command;
 	private final CoPlugin plugin;
@@ -35,7 +37,12 @@ public class CommandRegister extends Command implements PluginIdentifiableComman
 	@Override
 	public boolean execute(CommandSender sender, String commandLabel, String[] args) {
 		if (command.matchesCommand(commandLabel)) {
-			command.execute(new CommandContext(sender, args, plugin));
+			try {
+				command.execute(command.getCommandContext().getConstructor(CommandSender.class, String[].class, CoPlugin.class).newInstance(sender, args, plugin));
+			}
+			catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+				e.printStackTrace();
+			}
 			return true;
 		}
 		return false;
