@@ -15,7 +15,7 @@ public abstract class AbstractCommandContext {
 	private List<String> args;
 	private CoPlugin plugin;
 	
-	public AbstractCommandContext(CommandSender sender, String[] args, CoPlugin plugin){
+	protected AbstractCommandContext(CommandSender sender, String[] args, CoPlugin plugin){
 		this.sender = sender;
 		this.plugin = plugin;
 		List<String> list = new ArrayList<>();

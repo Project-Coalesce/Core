@@ -1,7 +1,6 @@
 package com.coalesce.command.base;
 
 import com.coalesce.command.CoCommand;
-import com.coalesce.command.CommandContext;
 import com.coalesce.plugin.CoPlugin;
 import org.bukkit.command.CommandSender;
 

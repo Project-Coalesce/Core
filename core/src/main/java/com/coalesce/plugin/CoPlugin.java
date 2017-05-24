@@ -2,11 +2,7 @@ package com.coalesce.plugin;
 
 import com.coalesce.chat.CoFormatter;
 import com.coalesce.command.CoCommand;
-import com.coalesce.command.CommandContext;
 import com.coalesce.command.CommandRegister;
-import com.coalesce.command.base.AbstractCommandContext;
-import com.coalesce.command.base.AbstractTabContext;
-import com.coalesce.command.tabcomplete.TabContext;
 import com.coalesce.config.IConfig;
 import com.google.common.collect.ImmutableList;
 import org.bukkit.Bukkit;
@@ -242,7 +238,6 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 		}
 		if (map.getCommand(command.getName()) == null) {
 			this.commands.add(command);
-			System.out.println(getDisplayName());
 			map.register(getDisplayName(), new CommandRegister(command, this));
 		}
 	}

@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
 import org.bukkit.plugin.Plugin;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +51,19 @@ public final class CommandRegister extends Command implements PluginIdentifiable
 	
 	@Override
 	public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
-		return command.completer(new TabContext(plugin, command, new CommandContext(sender, args, plugin)));
+		try {
+			
+			//The Default or custom tab context
+			Constructor<? extends AbstractTabContext> tabContext = command.getTabContext().getDeclaredConstructor(CoPlugin.class, CoCommand.class, AbstractCommandContext.class);
+			//The default or custom command context
+			Constructor<? extends AbstractCommandContext> commandContext = command.getCommandContext().getDeclaredConstructor(CommandSender.class, String[].class, CoPlugin.class);
+			
+			return command.completer(tabContext.newInstance(plugin, command, commandContext.newInstance(sender, args, plugin)));
+		}
+		catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	@Override

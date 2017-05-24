@@ -24,15 +24,15 @@ public final class CoCommand {
 	private boolean requiresOperator = false;
 	private CommandExecutor commandExecutor;
 	private boolean playerOnly = false;
+	private String description = "";
 	private Set<CoCommand> children;
 	private TabExecutor tabExecutor;
 	private final CoPlugin plugin;
 	private Set<String> aliases;
-	private String description;
+	private String usage = "";
 	private String permission;
 	private int minArgs = -1;
 	private int maxArgs = -1;
-	private String usage;
 	private String name;
 
 	public CoCommand(CoPlugin plugin, String name){
@@ -56,7 +56,6 @@ public final class CoCommand {
 			//Check if console is trying to use a player only command
 			if (context.isConsole() && playerOnly){
 				context.pluginMessage(ChatColor.RED + "This command can only be used by players!");
-
 				return;
 			}
 

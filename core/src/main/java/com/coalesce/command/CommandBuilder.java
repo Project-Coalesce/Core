@@ -4,7 +4,6 @@ import com.coalesce.command.base.AbstractCommandContext;
 import com.coalesce.command.base.AbstractTabContext;
 import com.coalesce.command.tabcomplete.TabExecutor;
 import com.coalesce.plugin.CoPlugin;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.Set;
