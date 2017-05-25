@@ -14,15 +14,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 public abstract class YamlConfig implements IConfig {
 	
 	private Collection<IEntry> entries = new ArrayList<>();
+	private final ConfigFormat format;
 	private YamlConfiguration config;
+	private final CoPlugin plugin;
 	private final File dir, file;
 	private final String name;
-	private final ConfigFormat format;
-	private final CoPlugin plugin;
 	
 	protected YamlConfig(String name, CoPlugin plugin) {
 		this.name = name;
@@ -52,9 +53,14 @@ public abstract class YamlConfig implements IConfig {
 		
 		//Loading the configuration.
 		this.config = YamlConfiguration.loadConfiguration(file);
-		if (!plugin.getConfigurations().contains(this)) {
+		if (!plugin.getConfigurations().contains(this)) { //Registers this configuration
 			plugin.getConfigurations().add(this);
 		}
+		getBase().getKeys(true).forEach(entry -> { //Adds entries to the entries collection.
+			if (getEntry(entry) == null) {
+				entries.add(new YamlEntry(this, entry, getBase().get(entry)));
+			}
+		});
 	}
 	
 	@Override
@@ -65,6 +71,42 @@ public abstract class YamlConfig implements IConfig {
 			}
 		}
 		return null;
+	}
+	
+	@Override
+	public String getString(String path) {
+		return getEntry(path).getString();
+	}
+	
+	@Override
+	public
+	double getDouble(String path) {
+		return getEntry(path).getDouble();
+	}
+	
+	@Override
+	public int getInt(String path) {
+		return getEntry(path).getInt();
+	}
+	
+	@Override
+	public long getLong(String path) {
+		return getEntry(path).getLong();
+	}
+	
+	@Override
+	public boolean getBoolean(String path) {
+		return getEntry(path).getBoolean();
+	}
+	
+	@Override
+	public List<?> getList(String path) {
+		return getEntry(path).getList();
+	}
+	
+	@Override
+	public Object getValue(String path) {
+		return getEntry(path).getValue();
 	}
 	
 	@Override
@@ -115,6 +157,11 @@ public abstract class YamlConfig implements IConfig {
 	@Override
 	public void removeEntry(IEntry entry) {
 		entry.remove();
+	}
+	
+	@Override
+	public void removeEntry(String path) {
+		getEntry(path).remove();
 	}
 	
 	@Override

@@ -17,15 +17,15 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public abstract class JsonConfig implements IConfig {
-
-	private Collection<IEntry> entries;
-	private final File dir, file;
-	private final String name;
+	
+	private Collection<IEntry> entries = new ArrayList<>();
 	private final ConfigFormat format;
 	private final CoPlugin plugin;
+	private final File dir, file;
+	private final String name;
 	@Getter
-    private JSONObject json;
-
+	private JSONObject json;
+	
 	protected JsonConfig(String name, CoPlugin plugin) {
 		this.name = name;
 		this.format = ConfigFormat.JSON;
@@ -53,13 +53,13 @@ public abstract class JsonConfig implements IConfig {
 		}
 		
 		//Loading the configuration.
-        try{
-            FileReader reader = new FileReader(file);
-            json = (JSONObject) new JSONParser().parse(reader);
-            reader.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+		try{
+			FileReader reader = new FileReader(file);
+			json = (JSONObject) new JSONParser().parse(reader);
+			reader.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		if (!plugin.getConfigurations().contains(this)) {
 			plugin.getConfigurations().add(this);
 		}
@@ -72,7 +72,42 @@ public abstract class JsonConfig implements IConfig {
 				return entry;
 			}
 		}
-	    return null;
+		return null;
+	}
+	
+	@Override
+	public String getString(String path) {
+		return getEntry(path).getString();
+	}
+	
+	@Override
+	public double getDouble(String path) {
+		return getEntry(path).getDouble();
+	}
+	
+	@Override
+	public int getInt(String path) {
+		return getEntry(path).getInt();
+	}
+	
+	@Override
+	public long getLong(String path) {
+		return getEntry(path).getLong();
+	}
+	
+	@Override
+	public boolean getBoolean(String path) {
+		return getEntry(path).getBoolean();
+	}
+	
+	@Override
+	public List<?> getList(String path) {
+		return getEntry(path).getList();
+	}
+	
+	@Override
+	public Object getValue(String path) {
+		return getEntry(path).getValue();
 	}
 	
 	@Override
@@ -83,12 +118,12 @@ public abstract class JsonConfig implements IConfig {
 				found.add(entry);
 			}
 		});
-	    return found;
+		return found;
 	}
 	
 	@Override
 	public Collection<IEntry> getEntries() {
-	    json.forEach((k, v) -> entries.add(new JsonEntry(this, (String) k, v)));
+		json.forEach((k, v) -> entries.add(new JsonEntry(this, (String) k, v)));
 		return entries;
 	}
 	
@@ -118,7 +153,12 @@ public abstract class JsonConfig implements IConfig {
 	
 	@Override
 	public void removeEntry(IEntry entry) {
-	    entry.remove();
+		entry.remove();
+	}
+	
+	@Override
+	public void removeEntry(String path) {
+		getEntry(path).remove();
 	}
 	
 	@Override
@@ -128,7 +168,8 @@ public abstract class JsonConfig implements IConfig {
 	
 	@Override
 	public void clear() {
-	    json.clear();
+		entries.forEach(e -> e.remove());
+		json.clear();
 	}
 	
 	@Override
@@ -173,5 +214,5 @@ public abstract class JsonConfig implements IConfig {
 	public <E extends CoPlugin> E getPlugin() {
 		return (E) plugin;
 	}
-
+	
 }
