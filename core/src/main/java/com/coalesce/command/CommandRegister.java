@@ -39,7 +39,7 @@ public final class CommandRegister extends Command implements PluginIdentifiable
 	public boolean execute(CommandSender sender, String commandLabel, String[] args) {
 		if (command.matchesCommand(commandLabel)) {
 			try {
-				command.execute(command.getCommandContext().getConstructor(CommandSender.class, String[].class, CoPlugin.class).newInstance(sender, args, plugin));
+				command.execute(command.getCommandContext().getDeclaredConstructor(CommandSender.class, String[].class, CoPlugin.class).newInstance(sender, args, plugin));
 			}
 			catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 				e.printStackTrace();
@@ -55,8 +55,10 @@ public final class CommandRegister extends Command implements PluginIdentifiable
 			
 			//The Default or custom tab context
 			Constructor<? extends AbstractTabContext> tabContext = command.getTabContext().getDeclaredConstructor(CoPlugin.class, CoCommand.class, AbstractCommandContext.class);
+			System.out.println(tabContext.getName());
 			//The default or custom command context
 			Constructor<? extends AbstractCommandContext> commandContext = command.getCommandContext().getDeclaredConstructor(CommandSender.class, String[].class, CoPlugin.class);
+			System.out.println(commandContext.getName());
 			
 			return command.completer(tabContext.newInstance(plugin, command, commandContext.newInstance(sender, args, plugin)));
 		}

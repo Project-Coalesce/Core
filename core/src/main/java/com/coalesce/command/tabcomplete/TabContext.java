@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public final class TabContext extends AbstractTabContext {
+public class TabContext extends AbstractTabContext {
 	
 	/**
 	 * A new tab completer context.

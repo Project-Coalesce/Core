@@ -2,6 +2,8 @@ package com.coalesce.command;
 
 import com.coalesce.command.base.AbstractCommandContext;
 import com.coalesce.command.base.AbstractTabContext;
+import com.coalesce.command.base.ICommandContext;
+import com.coalesce.command.base.ITabContext;
 import com.coalesce.command.tabcomplete.TabContext;
 import com.coalesce.command.tabcomplete.TabExecutor;
 import com.coalesce.plugin.CoPlugin;
@@ -104,7 +106,7 @@ public final class CoCommand {
 	 *
 	 * @param tabContext The CompleteContext
 	 */
-	public List<String> completer(AbstractTabContext tabContext) {
+	public List<String> completer(ITabContext tabContext) {
 		if (tabExecutor == null) { //If no executor exists for this command it defaults into looking for the command children
 			if (tabContext.getCommandChildren().isEmpty()) { //If no children exist then there will be no tab complete.
 				return null;
