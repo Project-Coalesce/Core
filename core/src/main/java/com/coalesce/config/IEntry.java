@@ -1,6 +1,50 @@
 package com.coalesce.config;
 
+import java.util.List;
+
 public interface IEntry {
+	
+	/**
+	 * Gets a value from a config entry.
+	 *
+	 * @return A string from the specified path.
+	 */
+	String getString();
+	
+	/**
+	 * Gets a value from a config entry.
+	 *
+	 * @return A double from the specified path.
+	 */
+	double getDouble();
+	
+	/**
+	 * Gets a value from a config entry.
+	 *
+	 * @return An integer from the specified path.
+	 */
+	int getInt();
+	
+	/**
+	 * Gets a value from a config entry.
+	 *
+	 * @return A long from the specified path.
+	 */
+	long getLong();
+	
+	/**
+	 * Gets a value from a config entry.
+	 *
+	 * @return A boolean from the specified path.
+	 */
+	boolean getBoolean();
+	
+	/**
+	 * Gets a value from a config entry.
+	 *
+	 * @return A list from the specified path.
+	 */
+	List<?> getList();
 	
 	/**
 	 * Gets the path of this entry.
@@ -38,6 +82,13 @@ public interface IEntry {
 	 * @return The entry's database.
 	 */
 	IConfig getConfig();
+	
+	/**
+	 * Allows quick removal and moving of an Entry to another configuration file.
+	 * @param config The new configuration file.
+	 * @return The new entry.
+	 */
+	IEntry setConfig(IConfig config);
 	
 	/**
 	 * Removes the entry.
