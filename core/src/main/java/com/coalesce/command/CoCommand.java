@@ -5,6 +5,7 @@ import com.coalesce.command.base.ITabContext;
 import com.coalesce.command.tabcomplete.TabContext;
 import com.coalesce.command.tabcomplete.TabExecutor;
 import com.coalesce.plugin.CoPlugin;
+import com.google.common.collect.Lists;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -103,6 +104,7 @@ public final class CoCommand {
 	 * @param tabContext The CompleteContext
 	 */
 	public List<String> completer(ITabContext tabContext) {
+		List<String> sub = Lists.newArrayList();
 		if (tabExecutor == null) { //If no executor exists for this command it defaults into looking for the command children
 			if (tabContext.getCommandChildren().isEmpty()) { //If no children exist then there will be no tab complete.
 				return null;
@@ -115,7 +117,12 @@ public final class CoCommand {
 			return null; //Dont want the child commands going past argument 1
 		}
 		tabExecutor.complete((TabContext)tabContext);
-		return tabContext.currentPossibleCompletion(); //Custom completer.
+		for (String completion : tabContext.currentPossibleCompletion()) {
+			if (completion.toLowerCase().startsWith(tabContext.getContext().argAt(tabContext.getContext().getArgs().size() - 1))) {
+				sub.add(completion);
+			}
+		}
+		return sub; //Custom completer.
 	}
 
 	/**
