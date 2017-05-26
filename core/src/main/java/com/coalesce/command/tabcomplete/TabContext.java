@@ -4,6 +4,7 @@ import com.coalesce.command.CoCommand;
 import com.coalesce.command.CommandContext;
 import com.coalesce.command.base.AbstractCommandContext;
 import com.coalesce.command.base.AbstractTabContext;
+import com.coalesce.command.base.ICommandContext;
 import com.coalesce.plugin.CoPlugin;
 import org.bukkit.command.CommandSender;
 
@@ -20,7 +21,7 @@ public class TabContext extends AbstractTabContext {
 	 * @param command The command this completer is linked to.
 	 * @param commandContext The command context the command is linked to.
 	 */
-	public TabContext(CoPlugin plugin, CoCommand command, AbstractCommandContext commandContext) {
+	public TabContext(CoPlugin plugin, CoCommand command, ICommandContext commandContext) {
 		super(plugin, command, commandContext);
 	}
 }

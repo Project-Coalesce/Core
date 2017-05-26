@@ -13,7 +13,7 @@ public abstract class AbstractTabContext implements ITabContext {
 	
 	private final CoPlugin plugin;
 	private final CoCommand command;
-	private final AbstractCommandContext commandContext;
+	private final ICommandContext commandContext;
 	private List<String> possible = new ArrayList<>();
 	
 	/**
@@ -22,7 +22,7 @@ public abstract class AbstractTabContext implements ITabContext {
 	 * @param command The command this completer is linked to.
 	 * @param commandContext The command context the command is linked to.
 	 */
-	public AbstractTabContext(CoPlugin plugin, CoCommand command, AbstractCommandContext commandContext) {
+	public AbstractTabContext(CoPlugin plugin, CoCommand command, ICommandContext commandContext) {
 		this.plugin = plugin;
 		this.command = command;
 		this.commandContext = commandContext;

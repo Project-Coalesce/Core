@@ -1,7 +1,5 @@
 package com.coalesce.command;
 
-import com.coalesce.command.base.AbstractCommandContext;
-import com.coalesce.command.base.AbstractTabContext;
 import com.coalesce.command.base.ICommandContext;
 import com.coalesce.command.base.ITabContext;
 import com.coalesce.command.tabcomplete.TabContext;
@@ -20,8 +18,6 @@ import java.util.stream.Stream;
 
 public final class CoCommand {
 	
-	private Class<? extends AbstractCommandContext> commandContext = CommandContext.class;
-	private Class<? extends AbstractTabContext> tabContext = TabContext.class;
 	private Predicate<CommandSender> permissionCheck;
 	private boolean requiresOperator = false;
 	private CommandExecutor commandExecutor;
@@ -50,7 +46,7 @@ public final class CoCommand {
 	 * The main execute method for a CoCommand.
 	 * @param context The command context.
 	 */
-	public void execute(AbstractCommandContext context){
+	public void execute(ICommandContext context){
 
 		//If there were no child commands that matched the context
 		if (!checkChildren(context)){
@@ -94,7 +90,7 @@ public final class CoCommand {
 			}
 
 			//Everything seems okay, so lets execute the command
-			commandExecutor.execute(context);
+			commandExecutor.execute((CommandContext)context);
 		}
 	}
 	
@@ -118,7 +114,7 @@ public final class CoCommand {
 			}
 			return null; //Dont want the child commands going past argument 1
 		}
-		tabExecutor.complete(tabContext);
+		tabExecutor.complete((TabContext)tabContext);
 		return tabContext.currentPossibleCompletion(); //Custom completer.
 	}
 
@@ -129,7 +125,7 @@ public final class CoCommand {
 	 * @param context The command context
 	 * @return True if a child was found, false otherwise
 	 */
-	private boolean checkChildren(AbstractCommandContext context){
+	private boolean checkChildren(ICommandContext context){
 		if (children.isEmpty()) return false;
 		if (!context.hasArgs()) return false;
 		for (CoCommand childCommand : children){
@@ -365,37 +361,5 @@ public final class CoCommand {
 	 */
 	public void setTabExecutor(TabExecutor tabExecutor) {
 		this.tabExecutor = tabExecutor;
-	}
-	
-	/**
-	 * Gets the custom tab context.
-	 * @return The custom tab context.
-	 */
-	public Class<? extends AbstractTabContext> getTabContext() {
-		return tabContext;
-	}
-	
-	/**
-	 * Sets the tab executor method for this command along with the custom tab completion context.
-	 * @param customContext The custom tab context class.
-	 */
-	public void setTabContext(Class<? extends AbstractTabContext> customContext) {
-		this.tabContext = customContext;
-	}
-	
-	/**
-	 * Gets the custom command context.
-	 * @return The custom command context.
-	 */
-	public Class<? extends AbstractCommandContext> getCommandContext() {
-		return commandContext;
-	}
-	
-	/**
-	 * Sets the custom command context.
-	 * @param customContext The custom command context class.
-	 */
-	public void setCommandContext(Class<? extends AbstractCommandContext> customContext) {
-		this.commandContext = customContext;
 	}
 }

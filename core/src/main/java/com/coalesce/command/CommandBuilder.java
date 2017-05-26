@@ -35,33 +35,10 @@ public final class CommandBuilder {
 	}
 	
 	/**
-	 * The method the command needs to run along with its custom command context class.
-	 * @param executor The method of this command. Use method referencing.
-	 * @param customContext The custom command context class.
-	 */
-	public CommandBuilder executor(CommandExecutor executor, Class<? extends AbstractCommandContext> customContext) {
-		command.setCommandContext(customContext);
-		command.setCommandExecutor(executor);
-		return this;
-	}
-	
-	/**
 	 * The method the command needs to create a tab completion.
 	 * @param executor The method of this command's tab completer
 	 */
 	public CommandBuilder completer(TabExecutor executor) {
-		command.setTabExecutor(executor);
-		return this;
-	}
-	
-	/**
-	 * The method the command needs to create a tab completion along with its custom tab context class.
-	 * @param executor The method of this completer. Use method referencing.
-	 * @param customContext The custom tab context class.
-	 * @return
-	 */
-	public CommandBuilder completer(TabExecutor executor, Class<? extends AbstractTabContext> customContext) {
-		command.setTabContext(customContext);
 		command.setTabExecutor(executor);
 		return this;
 	}
