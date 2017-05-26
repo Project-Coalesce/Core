@@ -2,7 +2,6 @@ package com.coalesce.command;
 
 import com.coalesce.command.tabcomplete.TabContext;
 import com.coalesce.plugin.CoPlugin;
-import com.google.common.collect.Lists;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
@@ -11,7 +10,7 @@ import org.bukkit.plugin.Plugin;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommandRegister extends Command implements PluginIdentifiableCommand {
+public final class CommandRegister extends Command implements PluginIdentifiableCommand {
 	
 	private final CoCommand command;
 	private final CoPlugin plugin;

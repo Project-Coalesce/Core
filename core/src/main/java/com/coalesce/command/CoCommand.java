@@ -1,5 +1,7 @@
 package com.coalesce.command;
 
+import com.coalesce.command.base.ICommandContext;
+import com.coalesce.command.base.ITabContext;
 import com.coalesce.command.tabcomplete.TabContext;
 import com.coalesce.command.tabcomplete.TabExecutor;
 import com.coalesce.plugin.CoPlugin;
@@ -15,21 +17,21 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class CoCommand {
-
-	private CoPlugin plugin;
-	private CommandExecutor commandExecutor;
-	private TabExecutor tabExecutor;
-	private String name;
-	private Set<String> aliases;
-	private String description;
-	private String usage;
-	private String permission;
+	
 	private Predicate<CommandSender> permissionCheck;
 	private boolean requiresOperator = false;
+	private CommandExecutor commandExecutor;
+	private boolean playerOnly = false;
+	private String description = "";
+	private Set<CoCommand> children;
+	private TabExecutor tabExecutor;
+	private final CoPlugin plugin;
+	private Set<String> aliases;
+	private String usage = "";
+	private String permission;
 	private int minArgs = -1;
 	private int maxArgs = -1;
-	private boolean playerOnly = false;
-	private Set<CoCommand> children;
+	private String name;
 
 	public CoCommand(CoPlugin plugin, String name){
 		this.plugin = plugin;
@@ -44,7 +46,7 @@ public final class CoCommand {
 	 * The main execute method for a CoCommand.
 	 * @param context The command context.
 	 */
-	public void execute(CommandContext context){
+	public void execute(ICommandContext context){
 
 		//If there were no child commands that matched the context
 		if (!checkChildren(context)){
@@ -52,7 +54,6 @@ public final class CoCommand {
 			//Check if console is trying to use a player only command
 			if (context.isConsole() && playerOnly){
 				context.pluginMessage(ChatColor.RED + "This command can only be used by players!");
-
 				return;
 			}
 
@@ -89,7 +90,7 @@ public final class CoCommand {
 			}
 
 			//Everything seems okay, so lets execute the command
-			commandExecutor.execute(context);
+			commandExecutor.execute((CommandContext)context);
 		}
 	}
 	
@@ -101,7 +102,7 @@ public final class CoCommand {
 	 *
 	 * @param tabContext The CompleteContext
 	 */
-	public List<String> completer(TabContext tabContext) {
+	public List<String> completer(ITabContext tabContext) {
 		if (tabExecutor == null) { //If no executor exists for this command it defaults into looking for the command children
 			if (tabContext.getCommandChildren().isEmpty()) { //If no children exist then there will be no tab complete.
 				return null;
@@ -113,7 +114,7 @@ public final class CoCommand {
 			}
 			return null; //Dont want the child commands going past argument 1
 		}
-		tabExecutor.complete(tabContext);
+		tabExecutor.complete((TabContext)tabContext);
 		return tabContext.currentPossibleCompletion(); //Custom completer.
 	}
 
@@ -124,7 +125,7 @@ public final class CoCommand {
 	 * @param context The command context
 	 * @return True if a child was found, false otherwise
 	 */
-	private boolean checkChildren(CommandContext context){
+	private boolean checkChildren(ICommandContext context){
 		if (children.isEmpty()) return false;
 		if (!context.hasArgs()) return false;
 		for (CoCommand childCommand : children){

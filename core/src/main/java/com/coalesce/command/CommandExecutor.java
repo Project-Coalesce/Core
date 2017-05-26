@@ -1,5 +1,6 @@
 package com.coalesce.command;
 
+@FunctionalInterface
 public interface CommandExecutor {
 	
 	/**

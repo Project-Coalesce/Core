@@ -6,6 +6,7 @@ import com.coalesce.command.CommandRegister;
 import com.coalesce.config.IConfig;
 import com.google.common.collect.ImmutableList;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandMap;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -17,18 +18,20 @@ import java.util.*;
 import static org.bukkit.ChatColor.DARK_RED;
 
 public abstract class CoPlugin extends JavaPlugin implements Listener {
-
-	public String displayName;
+	
 	private final List<CoModule> modules = new LinkedList<>();
 	private Collection<IConfig> configs = new ArrayList<>();
 	private Set<CoCommand> commands = new HashSet<>();
-	
-	private CoLogger logger;
+	private ChatColor pluginColor = ChatColor.WHITE;
 	private CoFormatter formatter;
+	private String displayName;
+	private CoLogger logger;
 	
 	@Override
 	public final void onEnable() {
-
+		
+		this.displayName = pluginColor + getName();
+		
 		//Setup basic things
 		logger = new CoLogger(this);
 		formatter = new CoFormatter(this);
@@ -72,53 +75,104 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 	public void onPluginEnable() throws Exception {}
 	public void onPluginDisable() throws Exception {}
     public void onPluginLoad() throws Exception {}
-
+	
+	/**
+	 * The color of the plugin name in pluginMessages etc.
+	 * @param color The color you want this plugin to show up as in plugin messages.
+	 */
+	public void setPluginColor(ChatColor color) {
+		this.pluginColor = color;
+		this.displayName = pluginColor + getName();
+	}
+	
+	/**
+	 * Gets the displayname of the plugin.
+	 * @return Returns a formatted displayName for this plugin.
+	 */
 	public String getDisplayName(){
 		return displayName;
 	}
-
+	
+	/**
+	 * Adds a module to the plugin.
+	 * @param modules The module to add.
+	 */
 	protected final void addModules(CoModule... modules) {
 		Collections.addAll(this.modules, modules);
 	}
-
+	
+	/**
+	 * Gives a list of all the modules in this plugin.
+	 * @return A list of modules.
+	 */
 	public final List<CoModule> getModules() {
 		return ImmutableList.copyOf(modules);
 	}
-
+	
+	/**
+	 * Gets a module.
+	 * @param clazz The class that extends CoModule.
+	 * @param <M> A module class.
+	 * @return The specified module.
+	 */
 	public final <M extends CoModule> Optional<M> getModule(Class<M> clazz) {
 		Iterator<M> iterator = getModules().stream().filter(coModule -> coModule.getClass().equals(clazz)).map(coModule -> ((M) coModule)).iterator();
 		return Optional.ofNullable(iterator.hasNext() ? iterator.next() : null);
 	}
-
-
+	
+	/**
+	 * Enables all the modules.
+	 */
 	public final void enableModules() {
 		getModules().forEach(CoModule::enable);
 	}
-
+	
+	/**
+	 * Disables all the plugins modules.
+	 */
 	public final void disableModules() {
 		getModules().forEach(CoModule::disable);
 	}
-
+	
+	/**
+	 * Registers one listener.
+	 * @param listener The listener to register.
+	 */
 	public final void registerListener(Listener listener) {
 		getServer().getPluginManager().registerEvents(listener, this);
 	}
-
+	
+	/**
+	 * Registers an array of listeners.
+	 * @param listeners The array of listeners to add.
+	 */
 	public final void registerListeners(Listener... listeners) {
 	    Arrays.asList(listeners).forEach(this::registerListener);
     }
-
+	
+	/**
+	 * Unregisters a Listener from the server.
+	 * @param listener The listener to unregister.
+	 */
 	public final void unregisterListener(Listener listener) {
 		HandlerList.unregisterAll(listener);
 	}
-
+	
+	/**
+	 * Gets the Coalesce Logger.
+	 * @return CoLogger
+	 */
 	public final CoLogger getCoLogger() {
 		return logger;
 	}
-
+	
+	/**
+	 * Gets the Coalesce Formatter.
+	 * @return CoFormatter
+	 */
 	public final CoFormatter getFormatter(){
 		return formatter;
 	}
-
 	
 	/**
 	 * A collection of all the current configurations of a plugin.
@@ -143,8 +197,8 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 	}
 	
 	/**
-	 * Adds a command to the plugin.
-	 * @param commands The list of commands to add.
+	 * Add several commands to the plugin.
+	 * @param commands The command to add.
 	 */
 	public final void addCommand(CoCommand... commands) {
 		CommandMap map = null;
@@ -188,6 +242,10 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 		}
 	}
 	
+	/**
+	 * Gets a set of all the commands in this plugin.
+	 * @return A command set.
+	 */
 	public final Set<CoCommand> getCommands() {
 		return commands;
 	}

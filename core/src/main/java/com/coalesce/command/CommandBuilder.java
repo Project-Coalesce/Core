@@ -1,5 +1,8 @@
 package com.coalesce.command;
 
+import com.coalesce.command.base.AbstractCommandContext;
+import com.coalesce.command.base.AbstractTabContext;
+import com.coalesce.command.base.ICommandContext;
 import com.coalesce.command.tabcomplete.TabExecutor;
 import com.coalesce.plugin.CoPlugin;
 import org.bukkit.command.CommandSender;
