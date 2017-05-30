@@ -5,12 +5,9 @@ import com.coalesce.plugin.CoPlugin;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
-import lombok.Data;
-import lombok.Getter;
 import org.bukkit.Bukkit;
 
 import java.net.URL;
-import java.util.concurrent.ExecutionException;
 
 public final class UpdateCheck {
 
@@ -36,6 +33,7 @@ public final class UpdateCheck {
 
 					if (autoUpdate) {
                         plugin.getCoLogger().info("Preparing download from " + url.toString() + ".");
+                        new AutoUpdateThread(plugin, url).run();
 
                     } else {
 					    plugin.getCoLogger().info("Download it from " + url.toString());

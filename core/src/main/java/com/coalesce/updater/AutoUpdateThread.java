@@ -36,8 +36,8 @@ public class AutoUpdateThread extends Thread {
     public void run() {
 
         try{
-            File file = (File) Core.getInstance().getFileField().get(plugin);
-            file.createNewFile();
+            File file = new File(plugin.getDataFolder().getParentFile() + File.separator + plugin.getName() + " update.jar");
+			file.createNewFile();
             InputStream in = connection.getInputStream();
 
             output = new FileOutputStream(file);

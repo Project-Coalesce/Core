@@ -14,22 +14,10 @@ public class Core extends CoPlugin {
 
 	@Override
 	public void onPluginEnable() {
-	    try{
-            fileField = JavaPlugin.class.getField("file");
-            fileField.setAccessible(true);
-        } catch (Exception ex) {
-	        ex.printStackTrace();
-        }
 
 		getServer().getServicesManager().register(Core.class, this, this, Normal);
-		updateCheck("Project-Coalesce", "Core", true);
+		updateCheck("sk89q", "CommandBook", true); //This is an example, this will be changed back once we get the updater working
 	}
-
-    public Field getFileField() {
-
-	    return fileField;
-
-    }
 
     @Override
 	public void onPluginDisable() {
