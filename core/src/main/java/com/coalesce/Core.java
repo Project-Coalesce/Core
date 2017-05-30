@@ -1,7 +1,6 @@
 package com.coalesce;
 
 import com.coalesce.plugin.CoPlugin;
-import com.coalesce.updater.UpdateCheck;
 
 import static org.bukkit.plugin.ServicePriority.Normal;
 
