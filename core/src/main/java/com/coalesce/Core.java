@@ -1,20 +1,37 @@
 package com.coalesce;
 
 import com.coalesce.plugin.CoPlugin;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.lang.reflect.Field;
 
 import static org.bukkit.plugin.ServicePriority.Normal;
 
 public class Core extends CoPlugin {
 	
 	private static Core instance;
+	private Field fileField;
 
 	@Override
 	public void onPluginEnable() {
+	    try{
+            fileField = JavaPlugin.class.getField("file");
+            fileField.setAccessible(true);
+        } catch (Exception ex) {
+	        ex.printStackTrace();
+        }
+
 		getServer().getServicesManager().register(Core.class, this, this, Normal);
 		updateCheck("Project-Coalesce", "Core", true);
 	}
-	
-	@Override
+
+    public Field getFileField() {
+
+	    return fileField;
+
+    }
+
+    @Override
 	public void onPluginDisable() {
 		instance = null;
 	}

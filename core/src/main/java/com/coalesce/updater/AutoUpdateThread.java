@@ -1,11 +1,13 @@
 package com.coalesce.updater;
 
+import com.coalesce.Core;
 import com.coalesce.plugin.CoPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -34,7 +36,8 @@ public class AutoUpdateThread extends Thread {
     public void run() {
 
         try{
-            File file = File.createTempFile("download_" + plugin.getDisplayName(), "jar");
+            File file = (File) Core.getInstance().getFileField().get(plugin);
+            file.createNewFile();
             InputStream in = connection.getInputStream();
 
             output = new FileOutputStream(file);
@@ -50,10 +53,11 @@ public class AutoUpdateThread extends Thread {
                 downloaded += count;
             }
             logger.cancel();
-            plugin.getCoLogger().info("Finished downloading. Installing...");
 
             output.close();
             in.close();
+
+            plugin.getCoLogger().info("Update succeeded.");
         } catch (Exception e) {
             if (output != null) try { output.close(); } catch (Exception ex) {}
             e.printStackTrace();
