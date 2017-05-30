@@ -7,7 +7,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -36,7 +35,8 @@ public class AutoUpdateThread extends Thread {
     public void run() {
 
         try{
-            File file = new File(plugin.getDataFolder().getParentFile() + File.separator + plugin.getName() + " update.jar");
+            File file = (File) Core.getInstance().getFileMethod().invoke(plugin);
+            file.delete();
 			file.createNewFile();
             InputStream in = connection.getInputStream();
 
