@@ -1,38 +1,24 @@
 package com.coalesce;
 
 import com.coalesce.plugin.CoPlugin;
+import com.coalesce.updater.UpdateCheck;
 
 import static org.bukkit.plugin.ServicePriority.Normal;
 
 public class Core extends CoPlugin {
 	
 	private static Core instance;
-	
-	
-	//private UserModule userModule;
-	//private CommandModule commandModule;
 
 	@Override
 	public void onPluginEnable() {
 		getServer().getServicesManager().register(Core.class, this, this, Normal);
-		
-		//addModules(userModule = new UserModule(this), commandModule = new CommandModule(this));
+		updateCheck("project-coalesce", "core");
 	}
 	
 	@Override
 	public void onPluginDisable() {
 		instance = null;
-		//userModule = null;
-		//commandModule = null;
 	}
-
-
-	/*public @NotNull UserModule getUserModule() {
-		return checkCoreEnabled(userModule);
-	}
-	public @NotNull CommandModule getCommandModule() {
-		return checkCoreEnabled(commandModule);
-	}*/
 	
 	/**
 	 * Grabs the instance of the core.

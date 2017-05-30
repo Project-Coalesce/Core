@@ -4,6 +4,7 @@ import com.coalesce.chat.CoFormatter;
 import com.coalesce.command.CoCommand;
 import com.coalesce.command.CommandRegister;
 import com.coalesce.config.IConfig;
+import com.coalesce.updater.UpdateCheck;
 import com.google.common.collect.ImmutableList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -248,5 +249,14 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 	 */
 	public final Set<CoCommand> getCommands() {
 		return commands;
+	}
+	
+	/**
+	 * Checks if an update exists for this plugin.
+	 * @param repositoryOwner The user or organization that this repository is held in.
+	 * @param repositoryName The name of the repository.
+	 */
+	public final void updateCheck(String repositoryOwner, String repositoryName) {
+		new UpdateCheck(this, repositoryOwner, repositoryName);
 	}
 }

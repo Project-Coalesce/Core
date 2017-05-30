@@ -28,8 +28,9 @@ public class CoHTTP {
 
 			try {
 				URL obj = new URL(url);
+				
 				HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
+				
 				// optional default is GET
 				con.setRequestMethod("GET");
 
@@ -37,6 +38,7 @@ public class CoHTTP {
 				con.setRequestProperty("User-Agent", userAgent);
 
 				BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				
 				String inputLine;
 				response = new StringBuffer();
 
