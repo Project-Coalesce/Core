@@ -22,7 +22,7 @@ public class CoHTTP {
     // HTTP GET request
     public static ListenableFuture<String> sendGet(String url, String userAgent) {
 
-		ListenableFuture<String> future = getExecutor().submit(() -> {
+        return getExecutor().submit(() -> {
 
 			StringBuffer response = new StringBuffer();
 
@@ -30,11 +30,8 @@ public class CoHTTP {
 				URL obj = new URL(url);
 				
 				HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-				
-				// optional default is GET
-				con.setRequestMethod("GET");
 
-				// add request header
+				con.setRequestMethod("GET");
 				con.setRequestProperty("User-Agent", userAgent);
 
 				BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -47,24 +44,19 @@ public class CoHTTP {
 				}
 				in.close();
 
-			} catch (ProtocolException e) {
-				e.printStackTrace();
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
 			return response.toString();
 		});
 
-		return future;
     }
 
     // HTTP POST request
     public static ListenableFuture<String> sendPost(String url, HashMap<String, String> arguments, String userAgent) {
 
-		ListenableFuture<String> future = getExecutor().submit(() -> {
+        return getExecutor().submit(() -> {
 
 			URL obj = new URL(url);
 			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -74,19 +66,17 @@ public class CoHTTP {
 			con.setRequestProperty("User-Agent", userAgent);
 			con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
-			String urlParameters = "";
 			StringBuilder sb = new StringBuilder();
 			for (String str : arguments.keySet()) {
 				if (sb.length() != 0)
 					sb.append("&");
-				sb.append(str + "=" + arguments.get(str));
+				sb.append(str).append("=").append(arguments.get(str));
 			}
-			urlParameters = sb.toString();
 
 			// Send post request
 			con.setDoOutput(true);
 			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-			wr.writeBytes(urlParameters);
+			wr.writeBytes(sb.toString());
 			wr.flush();
 			wr.close();
 
@@ -104,7 +94,6 @@ public class CoHTTP {
 
 		});
 
-        return future;
     }
 
 	private static ListeningExecutorService getExecutor(){

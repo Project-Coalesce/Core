@@ -11,7 +11,7 @@ public class Core extends CoPlugin {
 	@Override
 	public void onPluginEnable() {
 		getServer().getServicesManager().register(Core.class, this, this, Normal);
-		updateCheck("project-coalesce", "core");
+		updateCheck("Project-Coalesce", "Core", true);
 	}
 	
 	@Override

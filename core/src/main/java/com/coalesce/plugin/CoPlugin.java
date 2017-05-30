@@ -255,8 +255,9 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 	 * Checks if an update exists for this plugin.
 	 * @param repositoryOwner The user or organization that this repository is held in.
 	 * @param repositoryName The name of the repository.
+     * @param autoUpdate Whether or not to download a new version if it's out.
 	 */
-	public final void updateCheck(String repositoryOwner, String repositoryName) {
-		new UpdateCheck(this, repositoryOwner, repositoryName);
+	public final void updateCheck(String repositoryOwner, String repositoryName, boolean autoUpdate) {
+		new UpdateCheck(this, repositoryOwner, repositoryName, autoUpdate);
 	}
 }
