@@ -1,6 +1,5 @@
 package com.coalesce.updater;
 
-import com.avaje.ebean.LogLevel;
 import com.coalesce.plugin.CoPlugin;
 import com.coalesce.plugin.PluginUtil;
 import org.bukkit.plugin.Plugin;
@@ -71,6 +70,7 @@ public class AutoUpdateThread extends Thread {
             plugin.getCoLogger().info("Update downloaded!");
 
 			//Unload the plugin
+			//TODO: FIX THIS. This is the only reason why it isnt working rn
 			PluginUtil.unload(plugin);
 
 			//Delete the original jar
