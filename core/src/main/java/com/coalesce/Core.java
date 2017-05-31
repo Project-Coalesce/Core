@@ -1,34 +1,19 @@
 package com.coalesce;
 
 import com.coalesce.plugin.CoPlugin;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.File;
-import java.lang.reflect.Method;
 
 import static org.bukkit.plugin.ServicePriority.Normal;
 
 public class Core extends CoPlugin {
 	
 	private static Core instance;
-	private Method fileMethod;
 
 	@Override
 	public void onPluginEnable() {
-        try{
-            fileMethod = JavaPlugin.class.getDeclaredMethod("getFile");
-            fileMethod.setAccessible(true);
-        } catch (Exception ex){
-            ex.printStackTrace();
-        }
 
 		getServer().getServicesManager().register(Core.class, this, this, Normal);
 		updateCheck("RypoFalem", "ArmorStandEditor", true); //This is an example, this will be changed back once we get the updater working
 	}
-
-    public File getFileMethod() {
-        return getFile();
-    }
 
     @Override
 	public void onPluginDisable() {
