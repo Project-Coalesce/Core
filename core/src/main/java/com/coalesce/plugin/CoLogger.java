@@ -18,7 +18,7 @@ public class CoLogger {
 	 * @param message The message to log.
 	 */
 	public void info(String message){
-		LogLevel.INFO.log(getConsole(), message);
+		LogLevel.INFO.log(getConsole(), plugin, message);
 	}
 
 	/**
@@ -27,7 +27,7 @@ public class CoLogger {
 	 * @param message The message to log.
 	 */
 	public void warn(String message){
-		LogLevel.WARN.log(getConsole(), message);
+		LogLevel.WARN.log(getConsole(), plugin, message);
 	}
 
 	/**
@@ -36,7 +36,7 @@ public class CoLogger {
 	 * @param message The message to log.
 	 */
 	public void error(String message){
-		LogLevel.ERROR.log(getConsole(), message);
+		LogLevel.ERROR.log(getConsole(), plugin, message);
 	}
 
 	/**
@@ -45,7 +45,7 @@ public class CoLogger {
 	 * @param message The message to log.
 	 */
 	public void debug(String message){
-		LogLevel.DEBUG.log(getConsole(), message);
+		LogLevel.DEBUG.log(getConsole(), plugin, message);
 	}
 
 	private ConsoleCommandSender getConsole(){
@@ -56,22 +56,21 @@ public class CoLogger {
 
 		INFO(WHITE + "Info"),
 		DEBUG(BLUE + "Debug"),
-		WARN(GOLD + "Warn"),
+		WARN(YELLOW + "Warn"),
 		ERROR(RED + "Error");
 
 		private final String prefix;
 
 		LogLevel(String prefix){
-			this.prefix = GRAY + "[" + prefix + GRAY + "]" + RESET;
+			this.prefix = GRAY + "[" + AQUA + "%s" + WHITE + prefix + GRAY + "]" + RESET;
 		}
 
 		public String getPrefix(){
 			return prefix;
 		}
 
-		public void log(ConsoleCommandSender console, String message){
-
-			console.sendMessage(prefix + ' ' + message);
+		public void log(ConsoleCommandSender console, CoPlugin plugin, String message){
+			console.sendMessage(String.format(prefix, plugin.getDisplayName()) + ' ' + message);
 		}
 	}
 }
