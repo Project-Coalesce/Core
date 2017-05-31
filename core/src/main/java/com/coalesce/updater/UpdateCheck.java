@@ -35,11 +35,6 @@ public final class UpdateCheck {
 			try {
 				this.data = new Gson().fromJson(future.get(), UpdateData.class);
 				
-				if (data.getVersion() == null) {
-					plugin.getCoLogger().warn("Could not find latest released version from GitHub. (This plugin may not have a public release yet)");
-					return;
-				}
-				
 				if (!plugin.getDescription().getVersion().matches(data.getVersion())) {
 					plugin.getCoLogger().info("A new version of " + plugin.getDisplayName() + " is out! [" + data.getVersion() + "]");
                     List<Asset> javaAssets = data.assets.stream().filter(check -> check.assetName.substring((check.assetName.length()-3)).equalsIgnoreCase("jar")).collect(Collectors.toList());
@@ -67,7 +62,7 @@ public final class UpdateCheck {
 				plugin.getCoLogger().info(plugin.getDisplayName() + " is up to date.");
 			}
 			catch (NullPointerException e) {
-				plugin.getCoLogger().warn("There was an error checking for updates.");
+				plugin.getCoLogger().warn("Could not find latest released version from GitHub. (This plugin may not have a public release yet)");
 			}
 			catch (Exception e) {
 				plugin.getCoLogger().warn("There was an error checking for updates.");
