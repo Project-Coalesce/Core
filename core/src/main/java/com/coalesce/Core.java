@@ -22,7 +22,7 @@ public class Core extends CoPlugin {
         }
 
 		getServer().getServicesManager().register(Core.class, this, this, Normal);
-		updateCheck("NovaMods", "nova-renderer", true); //This is an example, this will be changed back once we get the updater working
+		updateCheck("RypoFalem", "ArmorStandEditor", true); //This is an example, this will be changed back once we get the updater working
 	}
 
     public Method getFileMethod() {

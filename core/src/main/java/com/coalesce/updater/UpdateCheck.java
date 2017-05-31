@@ -30,7 +30,7 @@ public final class UpdateCheck {
 
 				if (!plugin.getDescription().getVersion().matches(data.getVersion())) {
 					plugin.getCoLogger().info("A new version of " + plugin.getDisplayName() + " is out! [" + data.getVersion() + "]");
-                    List<Asset> javaAssets = data.assets.stream().filter(check -> check.assetName.matches("\\.(jar|JAR)$")).collect(Collectors.toList());
+                    List<Asset> javaAssets = data.assets.stream().filter(check -> check.assetName.substring((check.assetName.length()-3)).equalsIgnoreCase("jar")).collect(Collectors.toList());
 
                     if (javaAssets.size() == 0) {
                         plugin.getCoLogger().info("Unable to auto-update due to release not having JAR downloads, download from: " + data.getUrl());
