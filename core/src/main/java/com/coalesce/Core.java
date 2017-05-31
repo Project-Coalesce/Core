@@ -3,6 +3,7 @@ package com.coalesce;
 import com.coalesce.plugin.CoPlugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.lang.reflect.Method;
 
 import static org.bukkit.plugin.ServicePriority.Normal;
@@ -25,8 +26,8 @@ public class Core extends CoPlugin {
 		updateCheck("RypoFalem", "ArmorStandEditor", true); //This is an example, this will be changed back once we get the updater working
 	}
 
-    public Method getFileMethod() {
-        return fileMethod;
+    public File getFileMethod() {
+        return getFile();
     }
 
     @Override

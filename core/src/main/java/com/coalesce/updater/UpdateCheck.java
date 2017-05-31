@@ -7,17 +7,21 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import org.bukkit.Bukkit;
 
+import java.io.File;
 import java.net.URL;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public final class UpdateCheck {
-
+	
 	private final CoPlugin plugin;
 	private UpdateData data;
+	private File jarFile;
 	
-	public UpdateCheck(CoPlugin plugin, String owner, String repo, boolean autoUpdate) {
+	public UpdateCheck(CoPlugin plugin, String owner, String repo, File pluginJarFile, boolean autoUpdate) {
 		this.plugin = plugin;
+		this.jarFile = pluginJarFile;
+		System.out.println(pluginJarFile.getName());
 		
 		plugin.getCoLogger().info("Looking for updates to " + plugin.getDisplayName() + "...");
 
@@ -37,7 +41,7 @@ public final class UpdateCheck {
                         return;
                     } else if (javaAssets.size() == 1) {
                         Asset download = javaAssets.get(0);
-                        new AutoUpdateThread(plugin, new URL(download.downloadURL)).start();
+                        new AutoUpdateThread(plugin, new URL(download.downloadURL), jarFile).start();
                         return;
                     }
 
@@ -48,7 +52,7 @@ public final class UpdateCheck {
                     }
 
                     Asset download = labeledAssets.get(0);
-                    new AutoUpdateThread(plugin, new URL(download.downloadURL)).start();
+                    new AutoUpdateThread(plugin, new URL(download.downloadURL), jarFile).start();
 
 					return;
 				}

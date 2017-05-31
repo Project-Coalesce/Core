@@ -13,6 +13,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -258,6 +259,6 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
      * @param autoUpdate Whether or not to download a new version if it's out.
 	 */
 	public final void updateCheck(String repositoryOwner, String repositoryName, boolean autoUpdate) {
-		new UpdateCheck(this, repositoryOwner, repositoryName, autoUpdate);
+		new UpdateCheck(this, repositoryOwner, repositoryName, getFile(), autoUpdate);
 	}
 }
