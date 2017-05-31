@@ -8,6 +8,8 @@ import com.google.gson.annotations.SerializedName;
 import org.bukkit.Bukkit;
 
 import java.net.URL;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public final class UpdateCheck {
 
@@ -28,16 +30,25 @@ public final class UpdateCheck {
 
 				if (!plugin.getDescription().getVersion().matches(data.getVersion())) {
 					plugin.getCoLogger().info("A new version of " + plugin.getDisplayName() + " is out! [" + data.getVersion() + "]");
+                    List<Asset> javaAssets = data.assets.stream().filter(check -> check.assetName.matches("\\.(jar|JAR)$")).collect(Collectors.toList());
 
-                    URL url = new URL(data.getUrl());
-
-					if (autoUpdate) {
-                        plugin.getCoLogger().info("Preparing download from " + url.toString() + ".");
-                        new AutoUpdateThread(plugin, url).run();
-
-                    } else {
-					    plugin.getCoLogger().info("Download it from " + url.toString());
+                    if (javaAssets.size() == 0) {
+                        plugin.getCoLogger().info("Unable to auto-update due to release not having JAR downloads, download from: " + data.getUrl());
+                        return;
+                    } else if (javaAssets.size() == 1) {
+                        Asset download = javaAssets.get(0);
+                        new AutoUpdateThread(plugin, new URL(download.downloadURL)).start();
+                        return;
                     }
+
+                    List<Asset> labeledAssets = javaAssets.stream().filter(check -> check.label.equals("Auto-Download")).collect(Collectors.toList());;
+                    if (labeledAssets.size() != 0) {
+                        plugin.getCoLogger().info("Unable to auto-update due to release having too many JAR downloads, download from: " + data.getUrl());
+                        return;
+                    }
+
+                    Asset download = labeledAssets.get(0);
+                    new AutoUpdateThread(plugin, new URL(download.downloadURL)).start();
 
 					return;
 				}
@@ -56,23 +67,33 @@ public final class UpdateCheck {
 
 		private String message;
 
-		@SerializedName( "html_url" )
-		private String url;
-		
+		private List<Asset> assets;
+
+        @SerializedName( "html_url" )
+        private String url;
+
 		@SerializedName( "tag_name" )
 		private String version;
-		
-		
-		/**
-		 * Ggets the URL to this release
-		 *
-		 * @return The release page.
-		 */
-		public String getUrl() {
-			return url;
-		}
-		
-		/**
+
+        /**
+         * Gets the assets from the resource post.
+         *
+         * @return The assets.
+         */
+        public List<Asset> getAssets(){
+            return assets;
+        }
+
+        /**
+         * Gets the HTML URL to redirect for the user.
+         *
+         * @return URL in string.
+         */
+        public String getUrl(){
+            return url;
+        }
+
+        /**
 		 * Gets a message to check if the page exists or not.
 		 * <p>
 		 * <p>This is mainly used to check for missing releases.</p>
@@ -94,4 +115,16 @@ public final class UpdateCheck {
 			return version;
 		}
 	}
+
+	private static class Asset {
+
+	    @SerializedName( "browser_download_url" )
+        private String downloadURL;
+
+	    @SerializedName( "name" )
+        private String assetName;
+
+	    private String label;
+
+    }
 }
