@@ -1,6 +1,5 @@
 package com.coalesce.updater;
 
-import com.coalesce.Core;
 import com.coalesce.plugin.CoPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -12,38 +11,41 @@ import java.net.URL;
 
 public class AutoUpdateThread extends Thread {
 
-    private static final byte[] BUFFER = new byte[1024];
-    private FileOutputStream output;
-    private HttpURLConnection connection;
-    private CoPlugin plugin;
-    private long downloaded;
-    private File jar;
+	private final URL url;
+	private final CoPlugin plugin;
 
-    public AutoUpdateThread(CoPlugin plugin, URL url, File pluginJar) throws Exception {
+	private File pluginJar;
+	private HttpURLConnection connection;
+	private FileOutputStream outputStream;
+    private long downloaded;
+
+	private static final byte[] BUFFER = new byte[1024];
+
+    public AutoUpdateThread(CoPlugin plugin, URL url, File pluginJar) {
 
         this.plugin = plugin;
-        this.jar = pluginJar;
+		this.url = url;
+        this.pluginJar = pluginJar;
         downloaded = 0L;
 
         setName("Auto-Update");
         setDaemon(false);
-
-        connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestProperty("User-Agent", plugin.getDisplayName() + " Spigot Plugin");
-
     }
 
     @Override
     public void run() {
 
         try{
+
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestProperty("User-Agent", plugin.getDisplayName() + " Spigot Plugin");
         	
-            File file = jar;
+            File file = pluginJar;
             file.delete();
 			file.createNewFile();
             InputStream in = connection.getInputStream();
 
-            output = new FileOutputStream(file);
+            outputStream = new FileOutputStream(file);
 
             plugin.getCoLogger().info("Downloading update...");
             //UpdateRunnableLogger logger = new UpdateRunnableLogger(this);
@@ -52,20 +54,19 @@ public class AutoUpdateThread extends Thread {
             // I know there are at least a billion better ways to do this, but my intention is to log every second the current progress.
             int count;
             while ((count = in.read(BUFFER, 0, 1024)) != -1) {
-                output.write(BUFFER, 0, count);
+                outputStream.write(BUFFER, 0, count);
                 downloaded += count;
             }
            // logger.cancel();
 
-            output.close();
+            outputStream.close();
             in.close();
 
             plugin.getCoLogger().info("Update succeeded.");
         } catch (Exception e) {
-            if (output != null) try { output.close(); } catch (Exception ex) {}
+            if (outputStream != null) try { outputStream.close(); } catch (Exception ex) {}
             e.printStackTrace();
         }
-
     }
 
     private static class UpdateRunnableLogger extends BukkitRunnable{

@@ -23,6 +23,8 @@ public class Core extends CoPlugin {
         }
 
 		getServer().getServicesManager().register(Core.class, this, this, Normal);
+
+		//TODO: Remove this
 		updateCheck("RypoFalem", "ArmorStandEditor", true); //This is an example, this will be changed back once we get the updater working
 	}
 

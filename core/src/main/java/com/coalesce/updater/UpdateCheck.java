@@ -17,15 +17,21 @@ public final class UpdateCheck {
 	private final CoPlugin plugin;
 	private UpdateData data;
 	private File jarFile;
+
+	//First is owner string, then repo
+	private static final String GITHUB_ADDRESS = "https://api.github.com/repos/%s/%s/releases/latest";
 	
 	public UpdateCheck(CoPlugin plugin, String owner, String repo, File pluginJarFile, boolean autoUpdate) {
+
 		this.plugin = plugin;
 		this.jarFile = pluginJarFile;
+
+		//TODO: Remove debug output
 		System.out.println(pluginJarFile.getName());
 		
 		plugin.getCoLogger().info("Looking for updates to " + plugin.getDisplayName() + "...");
 
-		ListenableFuture<String> future = CoHTTP.sendGet("https://api.github.com/repos/" + owner + "/" + repo + "/releases/latest",
+		ListenableFuture<String> future = CoHTTP.sendGet(String.format(GITHUB_ADDRESS, owner, repo),
                 plugin.getDisplayName() + " Spigot Plugin");
 
 		future.addListener(() -> {
@@ -37,7 +43,7 @@ public final class UpdateCheck {
                     List<Asset> javaAssets = data.assets.stream().filter(check -> check.assetName.substring((check.assetName.length()-3)).equalsIgnoreCase("jar")).collect(Collectors.toList());
 
                     if (javaAssets.size() == 0) {
-                        plugin.getCoLogger().info("Unable to auto-update due to release not having JAR downloads, download from: " + data.getUrl());
+                        plugin.getCoLogger().info(String.format("More than one jar was found at %s. Aborting update download", data.getUrl()));
                         return;
                     } else if (javaAssets.size() == 1) {
                         Asset download = javaAssets.get(0);
@@ -47,7 +53,7 @@ public final class UpdateCheck {
 
                     List<Asset> labeledAssets = javaAssets.stream().filter(check -> check.label.equals("Auto-Download")).collect(Collectors.toList());;
                     if (labeledAssets.size() != 0) {
-                        plugin.getCoLogger().info("Unable to auto-update due to release having too many JAR downloads, download from: " + data.getUrl());
+                        plugin.getCoLogger().info(String.format("More than one jar was found at %s. Aborting update download", data.getUrl()));
                         return;
                     }
 
@@ -59,11 +65,12 @@ public final class UpdateCheck {
 				plugin.getCoLogger().info(plugin.getDisplayName() + " is up to date.");
 			}
 			catch (NullPointerException e) {
-				plugin.getCoLogger().warn("No public releases currently exist for " + plugin.getName());
+				plugin.getCoLogger().warn("There was an error checking for updates.");
 			}
 			catch (Exception e) {
-				e.printStackTrace();
+				plugin.getCoLogger().warn("There was an error checking for updates.");
 			}
+
 		}, task -> Bukkit.getScheduler().runTask(plugin, task));
 	}
 
