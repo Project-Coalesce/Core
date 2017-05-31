@@ -17,12 +17,14 @@ public class AutoUpdateThread extends Thread {
     private HttpURLConnection connection;
     private CoPlugin plugin;
     private long downloaded;
+    private String name;
     private File jar;
 
-    public AutoUpdateThread(CoPlugin plugin, URL url, File pluginJar) throws Exception {
+    public AutoUpdateThread(CoPlugin plugin, URL url, File pluginJar, String name) throws Exception {
 
         this.plugin = plugin;
         this.jar = pluginJar;
+        this.name = name;
         downloaded = 0L;
 
         setName("Auto-Update");
@@ -38,8 +40,8 @@ public class AutoUpdateThread extends Thread {
 
         try{
         	
-            File file = jar;
-            file.delete();
+            File file = new File(jar.getParentFile() + File.separator + name);
+            jar.delete();
 			file.createNewFile();
             InputStream in = connection.getInputStream();
 
@@ -48,7 +50,7 @@ public class AutoUpdateThread extends Thread {
             plugin.getCoLogger().info("Downloading update...");
             //UpdateRunnableLogger logger = new UpdateRunnableLogger(this);
             //logger.runTaskTimerAsynchronously(plugin, 20L, 20L);
-
+			
             // I know there are at least a billion better ways to do this, but my intention is to log every second the current progress.
             int count;
             while ((count = in.read(BUFFER, 0, 1024)) != -1) {

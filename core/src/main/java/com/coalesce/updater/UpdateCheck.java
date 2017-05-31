@@ -41,7 +41,7 @@ public final class UpdateCheck {
                         return;
                     } else if (javaAssets.size() == 1) {
                         Asset download = javaAssets.get(0);
-                        new AutoUpdateThread(plugin, new URL(download.downloadURL), jarFile).start();
+						new AutoUpdateThread(plugin, new URL(download.downloadURL), jarFile, download.assetName).start();
                         return;
                     }
 
@@ -52,7 +52,7 @@ public final class UpdateCheck {
                     }
 
                     Asset download = labeledAssets.get(0);
-                    new AutoUpdateThread(plugin, new URL(download.downloadURL), jarFile).start();
+                    new AutoUpdateThread(plugin, new URL(download.downloadURL), jarFile, download.assetName).start();
 
 					return;
 				}
@@ -122,10 +122,10 @@ public final class UpdateCheck {
 
 	private static class Asset {
 
-	    @SerializedName( "browser_download_url" )
+	    @SerializedName("browser_download_url")
         private String downloadURL;
 
-	    @SerializedName( "name" )
+	    @SerializedName("name")
         private String assetName;
 
 	    private String label;
