@@ -1,7 +1,8 @@
 package com.coalesce.updater;
 
-import com.coalesce.Core;
 import com.coalesce.plugin.CoPlugin;
+import com.coalesce.plugin.PluginUtil;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
@@ -9,43 +10,48 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.logging.Level;
 
 public class AutoUpdateThread extends Thread {
 
-    private static final byte[] BUFFER = new byte[1024];
-    private FileOutputStream output;
-    private HttpURLConnection connection;
-    private CoPlugin plugin;
-    private long downloaded;
-    private String name;
-    private File jar;
+	private final CoPlugin plugin;
+	private final URL downloadUrl;
 
-    public AutoUpdateThread(CoPlugin plugin, URL url, File pluginJar, String name) throws Exception {
+	private File pluginJar;
+	private String name;
+
+	private HttpURLConnection connection;
+	private FileOutputStream outputStream;
+    private long downloaded;
+
+	private static final byte[] BUFFER = new byte[1024];
+
+    public AutoUpdateThread(CoPlugin plugin, URL downloadUrl, File pluginJar, String name) throws Exception {
 
         this.plugin = plugin;
-        this.jar = pluginJar;
+		this.downloadUrl = downloadUrl;
+
+		this.pluginJar = pluginJar;
         this.name = name;
         downloaded = 0L;
 
         setName("Auto-Update");
         setDaemon(false);
-
-        connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestProperty("User-Agent", plugin.getDisplayName() + " Spigot Plugin");
-
     }
 
     @Override
     public void run() {
 
         try{
-        	
-            File file = new File(jar.getParentFile() + File.separator + name);
-            jar.delete();
-			file.createNewFile();
-            InputStream in = connection.getInputStream();
 
-            output = new FileOutputStream(file);
+			connection = (HttpURLConnection) downloadUrl.openConnection();
+			connection.setRequestProperty("User-Agent", plugin.getDisplayName() + " Spigot Plugin");
+
+			//Create a temp file. We dont want to delete the plugin if it is still in use, or if the download fails
+			File tempDownloadFile = new File(pluginJar.getParent(), pluginJar.getName() + "-TEMP-" + System.currentTimeMillis());
+
+            InputStream in = connection.getInputStream();
+            outputStream = new FileOutputStream(tempDownloadFile);
 
             plugin.getCoLogger().info("Downloading update...");
             //UpdateRunnableLogger logger = new UpdateRunnableLogger(this);
@@ -54,20 +60,40 @@ public class AutoUpdateThread extends Thread {
             // I know there are at least a billion better ways to do this, but my intention is to log every second the current progress.
             int count;
             while ((count = in.read(BUFFER, 0, 1024)) != -1) {
-                output.write(BUFFER, 0, count);
+                outputStream.write(BUFFER, 0, count);
                 downloaded += count;
             }
            // logger.cancel();
 
-            output.close();
+            outputStream.close();
             in.close();
+            plugin.getCoLogger().info("Update downloaded!");
 
-            plugin.getCoLogger().info("Update succeeded.");
+			//Unload the plugin
+			//TODO: FIX THIS. This is the only reason why it isnt working rn
+			PluginUtil.unload(plugin);
+
+			//Delete the original jar
+			if (!pluginJar.delete()){
+				//If it failed
+				throw new RuntimeException("Failed to delete the original plugin!");
+			}
+
+			//Rename the temp file
+			tempDownloadFile.renameTo(pluginJar);
+
+			//Enable the new jar
+			Plugin updatedPlugin = PluginUtil.load(tempDownloadFile);
+			if (updatedPlugin == null){
+				throw new RuntimeException("Failed enable update!");
+			}
+
+			updatedPlugin.getLogger().log(Level.INFO, "Successfully updated!");
+
         } catch (Exception e) {
-            if (output != null) try { output.close(); } catch (Exception ex) {}
+            if (outputStream != null) try { outputStream.close(); } catch (Exception ex) {}
             e.printStackTrace();
         }
-
     }
 
     private static class UpdateRunnableLogger extends BukkitRunnable{

@@ -12,6 +12,8 @@ public class Core extends CoPlugin {
 	public void onPluginEnable() {
 
 		getServer().getServicesManager().register(Core.class, this, this, Normal);
+
+		//TODO: Remove this
 		updateCheck("RypoFalem", "ArmorStandEditor", true); //This is an example, this will be changed back once we get the updater working
 	}
 
