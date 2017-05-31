@@ -6,11 +6,9 @@ import com.google.common.util.concurrent.MoreExecutors;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.concurrent.Executors;
@@ -29,21 +27,22 @@ public class CoHTTP {
 			try {
 				URL obj = new URL(url);
 				
-				HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
+				HttpURLConnection con = (HttpURLConnection)obj.openConnection();
+				
 				con.setRequestMethod("GET");
 				con.setRequestProperty("User-Agent", userAgent);
-
+				
 				BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 				
 				String inputLine;
 				response = new StringBuffer();
-
+				
 				while ((inputLine = in.readLine()) != null) {
 					response.append(inputLine);
 				}
 				in.close();
-
+			} catch (FileNotFoundException e) {
+			
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

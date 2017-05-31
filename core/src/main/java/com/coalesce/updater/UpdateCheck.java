@@ -25,9 +25,6 @@ public final class UpdateCheck {
 
 		this.plugin = plugin;
 		this.jarFile = pluginJarFile;
-
-		//TODO: Remove debug output
-		System.out.println(pluginJarFile.getName());
 		
 		plugin.getCoLogger().info("Looking for updates to " + plugin.getDisplayName() + "...");
 
@@ -37,7 +34,12 @@ public final class UpdateCheck {
 		future.addListener(() -> {
 			try {
 				this.data = new Gson().fromJson(future.get(), UpdateData.class);
-
+				
+				if (data.getVersion() == null) {
+					plugin.getCoLogger().warn("Could not find latest released version from GitHub. (This plugin may not have a public release yet)");
+					return;
+				}
+				
 				if (!plugin.getDescription().getVersion().matches(data.getVersion())) {
 					plugin.getCoLogger().info("A new version of " + plugin.getDisplayName() + " is out! [" + data.getVersion() + "]");
                     List<Asset> javaAssets = data.assets.stream().filter(check -> check.assetName.substring((check.assetName.length()-3)).equalsIgnoreCase("jar")).collect(Collectors.toList());
