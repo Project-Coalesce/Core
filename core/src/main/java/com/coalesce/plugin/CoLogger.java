@@ -62,7 +62,7 @@ public class CoLogger {
 		private final String prefix;
 
 		LogLevel(String prefix){
-			this.prefix = GRAY + "[" + AQUA + "%s" + WHITE + prefix + GRAY + "]" + RESET;
+			this.prefix = GRAY + "[" + AQUA + "%s " + prefix + GRAY + "]" + RESET;
 		}
 
 		public String getPrefix(){
