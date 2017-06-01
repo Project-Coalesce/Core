@@ -1,5 +1,5 @@
 name: CoalesceCore
-version: 1.0
+version: 1.0.0
 main: com.coalesce.Core
 author: ProjectCoalesce
 load: STARTUP
