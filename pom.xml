@@ -55,7 +55,18 @@
 
     <build>
         <plugins>
-            <!--Attach Sources and JavaDocs-->
+
+            <!--Jar Generation-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <outputDirectory>jars/</outputDirectory>
+                </configuration>
+            </plugin>
+
+            <!--Source Generation-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -68,7 +79,12 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <outputDirectory>jars/</outputDirectory>
+                </configuration>
             </plugin>
+
+            <!--Javadoc Generation-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -82,6 +98,8 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <outputDirectory>docs/</outputDirectory>
+                    <jarOutputDirectory>jars/</jarOutputDirectory>
                     <additionalparam>-Xdoclint:none</additionalparam>
                 </configuration>
             </plugin>
@@ -99,6 +117,32 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <outputDirectory>jars/</outputDirectory>
+                </configuration>
+            </plugin>
+
+            <!--Clean-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>default-clean</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>docs/</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
             </plugin>
         </plugins>
     </build>
