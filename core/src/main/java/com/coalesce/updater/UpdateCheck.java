@@ -36,26 +36,32 @@ public final class UpdateCheck {
 				this.data = new Gson().fromJson(future.get(), UpdateData.class);
 				
 				if (!plugin.getDescription().getVersion().matches(data.getVersion())) {
-					plugin.getCoLogger().info("A new version of " + plugin.getDisplayName() + " is out! [" + data.getVersion() + "]");
-                    List<Asset> javaAssets = data.assets.stream().filter(check -> check.assetName.substring((check.assetName.length()-3)).equalsIgnoreCase("jar")).collect(Collectors.toList());
+					plugin.getCoLogger().info("New version was found! [" + data.getVersion() + "]");
 
-                    if (javaAssets.size() == 0) {
-                        plugin.getCoLogger().info(String.format("More than one jar was found at %s. Aborting update download", data.getUrl()));
-                        return;
-                    } else if (javaAssets.size() == 1) {
-                        Asset download = javaAssets.get(0);
-						new AutoUpdateThread(plugin, new URL(download.downloadURL), jarFile, download.assetName).start();
-                        return;
+					if (autoUpdate){
+                        List<Asset> javaAssets = data.assets.stream().filter(check -> check.assetName.substring((check.assetName.length() - 3)).equalsIgnoreCase("jar")).collect(Collectors.toList());
+
+                        if(javaAssets.size() == 0){
+                            plugin.getCoLogger().info(String.format("No jars were found in the release \"%s\". Aborting auto-update. You can update manually.", data.getUrl()));
+                            return;
+                        }else if(javaAssets.size() == 1){
+                            Asset download = javaAssets.get(0);
+                            new AutoUpdateThread(plugin, new URL(download.downloadURL), jarFile, download.assetName).start();
+                            return;
+                        }
+
+                        List<Asset> labeledAssets = javaAssets.stream().filter(check -> check.label != null && check.label.equals("Auto-Download")).collect(Collectors.toList());
+
+                        if(labeledAssets.size() != 1){
+                            plugin.getCoLogger().info(String.format("More than one possible jar was found in the release \"%s\". Aborting auto-update. You can update manually.", data.getUrl()));
+                            return;
+                        }
+
+                        Asset download = labeledAssets.get(0);
+                        new AutoUpdateThread(plugin, new URL(download.downloadURL), jarFile, download.assetName).start();
+                    } else {
+					    plugin.getCoLogger().info("Download it at: " + data.getUrl());
                     }
-
-                    List<Asset> labeledAssets = javaAssets.stream().filter(check -> check.label.equals("Auto-Download")).collect(Collectors.toList());;
-                    if (labeledAssets.size() != 0) {
-                        plugin.getCoLogger().info(String.format("More than one jar was found at %s. Aborting update download", data.getUrl()));
-                        return;
-                    }
-
-                    Asset download = labeledAssets.get(0);
-                    new AutoUpdateThread(plugin, new URL(download.downloadURL), jarFile, download.assetName).start();
 
 					return;
 				}
