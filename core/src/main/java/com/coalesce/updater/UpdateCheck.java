@@ -50,7 +50,7 @@ public final class UpdateCheck {
                             return;
                         }
 
-                        List<Asset> labeledAssets = javaAssets.stream().filter(check -> check.label.equals("Auto-Download")).collect(Collectors.toList());
+                        List<Asset> labeledAssets = javaAssets.stream().filter(check -> check.label != null && check.label.equals("Auto-Download")).collect(Collectors.toList());
 
                         if(labeledAssets.size() != 1){
                             plugin.getCoLogger().info(String.format("More than one possible jar was found in the release \"%s\". Aborting auto-update. You can update manually.", data.getUrl()));
@@ -68,9 +68,11 @@ public final class UpdateCheck {
 				plugin.getCoLogger().info(plugin.getDisplayName() + " is up to date.");
 			}
 			catch (NullPointerException e) {
+			    e.printStackTrace();
 				plugin.getCoLogger().warn("Could not find latest released version from GitHub. (This plugin may not have a public release yet)");
 			}
 			catch (Exception e) {
+			    e.printStackTrace();
 				plugin.getCoLogger().warn("There was an error checking for updates.");
 			}
 
