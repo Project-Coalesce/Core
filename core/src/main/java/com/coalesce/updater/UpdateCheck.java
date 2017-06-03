@@ -68,11 +68,9 @@ public final class UpdateCheck {
 				plugin.getCoLogger().info(plugin.getDisplayName() + " is up to date.");
 			}
 			catch (NullPointerException e) {
-			    e.printStackTrace();
 				plugin.getCoLogger().warn("Could not find latest released version from GitHub. (This plugin may not have a public release yet)");
 			}
 			catch (Exception e) {
-			    e.printStackTrace();
 				plugin.getCoLogger().warn("There was an error checking for updates.");
 			}
 
