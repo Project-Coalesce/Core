@@ -1,8 +1,10 @@
 package com.coalesce.updater;
 
+import com.coalesce.Core;
 import com.coalesce.plugin.CoPlugin;
 import com.coalesce.plugin.PluginUtil;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -42,7 +44,6 @@ public class AutoUpdateThread extends Thread {
     public void run() {
 
         try{
-
 			connection = (HttpURLConnection) downloadUrl.openConnection();
 			connection.setRequestProperty("User-Agent", plugin.getDisplayName() + " Spigot Plugin");
 
@@ -52,15 +53,22 @@ public class AutoUpdateThread extends Thread {
 
             InputStream in = connection.getInputStream();
             outputStream = new FileOutputStream(tempDownloadFile);
+	
+            UpdateLogger logger = null;
+			if (Core.getInstance().getCoreConfig().logDLProcess()) {
+				logger = new UpdateLogger(this);
+				logger.runTaskTimerAsynchronously(plugin, 20L, 20L);
+			}
+			int count;
+			while ((count = in.read(BUFFER, 0, 1024)) != -1) {
+				outputStream.write(BUFFER, 0, count);
+				downloaded += count;
+			}
+			if (Core.getInstance().getCoreConfig().logDLProcess()) {
+				logger.cancel();
+			}
 
             plugin.getCoLogger().info("Downloading update...");
-			
-            int count;
-            while ((count = in.read(BUFFER, 0, 1024)) != -1) {
-                outputStream.write(BUFFER, 0, count);
-                downloaded += count;
-            }
-           // logger.cancel();
 
             outputStream.close();
             in.close();
@@ -87,5 +95,41 @@ public class AutoUpdateThread extends Thread {
             if (outputStream != null) try { outputStream.close(); } catch (Exception ex) {}
             e.printStackTrace();
         }
+    }
+
+    public static class UpdateLogger extends BukkitRunnable {
+
+        private AutoUpdateThread updateThread;
+        private String totalSize;
+        private long local;
+
+        private UpdateLogger(AutoUpdateThread autoUpdateThread) {
+
+            this.updateThread = autoUpdateThread;
+            totalSize = bytes(autoUpdateThread.connection.getContentLengthLong());
+
+        }
+
+        @Override
+        public void run(){
+
+            long downloaded = updateThread.downloaded;
+            long downloadedThisSecond = downloaded - local;
+            local = downloaded;
+
+            updateThread.plugin.getCoLogger().info(String.format("Download progress: %s/%s @%s/s", bytes(downloaded), totalSize, bytes(downloadedThisSecond)));
+
+        }
+
+        private String bytes(long n){
+
+            if(n <= 999) return n + "B";
+            else if(n >= 1000 && n <= 999999) return (float) ((int) n / 100) / 10 + "KB";
+            else if(n >= 1000000 && n <= 999999999) return (float) ((int) n / 100000) / 10 + "MB";
+            else if(n >= 10000000 && n <= 999999999999L) return (float) ((int) n / 100000000) / 10 + "GB";
+            else return (float) ((int) n / 100000000000L) / 10 + "TB";
+
+        }
+
     }
 }

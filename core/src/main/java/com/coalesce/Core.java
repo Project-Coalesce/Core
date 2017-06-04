@@ -7,11 +7,14 @@ import static org.bukkit.plugin.ServicePriority.Normal;
 public class Core extends CoPlugin {
 	
 	private static Core instance;
+	private CoreConfig config;
 
 	@Override
 	public void onPluginEnable() {
 
 		getServer().getServicesManager().register(Core.class, this, this, Normal);
+		
+		this.config = new CoreConfig(this);
 
 		//TODO: Remove this
 		updateCheck("Project-Coalesce", "Core", true); //This is an example, this will be changed back once we get the updater working
@@ -30,6 +33,14 @@ public class Core extends CoPlugin {
 	 */
 	public static Core getInstance() {
 		return instance;
+	}
+	
+	/**
+	 * Gets the core configuration.
+	 * @return The core config.
+	 */
+	public CoreConfig getCoreConfig() {
+		return config;
 	}
 	
 	private <M> M checkCoreEnabled(M instance) {
