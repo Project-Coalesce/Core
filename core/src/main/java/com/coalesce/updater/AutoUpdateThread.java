@@ -47,24 +47,25 @@ public class AutoUpdateThread extends Thread {
 			connection = (HttpURLConnection) downloadUrl.openConnection();
 			connection.setRequestProperty("User-Agent", plugin.getDisplayName() + " Spigot Plugin");
 
-            UpdateLogger logger = new UpdateLogger(this);
-
 			//Create a temp file. We dont want to delete the plugin if it is still in use, or if the download fails
 			File tempDownloadFile = new File(pluginJar.getParentFile() + File.separator + name);
 			tempDownloadFile.createNewFile();
 
             InputStream in = connection.getInputStream();
             outputStream = new FileOutputStream(tempDownloadFile);
+	
+			if (Core.getInstance().getCoreConfig().logDLProcess()) {
+				UpdateLogger logger = new UpdateLogger(this);
+				logger.runTaskTimerAsynchronously(plugin, 20L, 20L);
+				int count;
+				while ((count = in.read(BUFFER, 0, 1024)) != -1) {
+					outputStream.write(BUFFER, 0, count);
+					downloaded += count;
+				}
+				logger.cancel();
+			}
 
             plugin.getCoLogger().info("Downloading update...");
-
-            logger.runTaskTimerAsynchronously(plugin, 20L, 20L);
-            int count;
-            while ((count = in.read(BUFFER, 0, 1024)) != -1) {
-                outputStream.write(BUFFER, 0, count);
-                downloaded += count;
-            }
-            logger.cancel();
 
             outputStream.close();
             in.close();
