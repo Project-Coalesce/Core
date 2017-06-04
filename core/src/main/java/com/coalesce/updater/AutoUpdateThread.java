@@ -54,14 +54,17 @@ public class AutoUpdateThread extends Thread {
             InputStream in = connection.getInputStream();
             outputStream = new FileOutputStream(tempDownloadFile);
 	
+            UpdateLogger logger = null;
 			if (Core.getInstance().getCoreConfig().logDLProcess()) {
-				UpdateLogger logger = new UpdateLogger(this);
+				logger = new UpdateLogger(this);
 				logger.runTaskTimerAsynchronously(plugin, 20L, 20L);
-				int count;
-				while ((count = in.read(BUFFER, 0, 1024)) != -1) {
-					outputStream.write(BUFFER, 0, count);
-					downloaded += count;
-				}
+			}
+			int count;
+			while ((count = in.read(BUFFER, 0, 1024)) != -1) {
+				outputStream.write(BUFFER, 0, count);
+				downloaded += count;
+			}
+			if (Core.getInstance().getCoreConfig().logDLProcess()) {
 				logger.cancel();
 			}
 
