@@ -84,7 +84,7 @@ public abstract class CoPlugin extends JavaPlugin implements Listener {
 	 */
 	public void setPluginColor(ChatColor color) {
 		this.pluginColor = color;
-		this.displayName = pluginColor + getName();
+		this.displayName = pluginColor + getName() + ChatColor.RESET;
 	}
 	
 	/**
