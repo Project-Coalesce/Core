@@ -18,6 +18,7 @@ public class Core extends CoPlugin {
 
 		//TODO: Remove this
 		updateCheck("Project-Coalesce", "Core", true); //This is an example, this will be changed back once we get the updater working
+
 	}
 
     @Override
