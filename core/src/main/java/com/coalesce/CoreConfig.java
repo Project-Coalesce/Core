@@ -1,9 +1,9 @@
 package com.coalesce;
 
-import com.coalesce.config.json.JsonConfig;
+import com.coalesce.config.yml.YamlConfig;
 import com.coalesce.plugin.CoPlugin;
 
-public final class CoreConfig extends JsonConfig {
+public final class CoreConfig extends YamlConfig {
 	
 	protected CoreConfig(CoPlugin plugin) {
 		super("config", plugin);
