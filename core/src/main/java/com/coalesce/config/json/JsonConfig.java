@@ -5,6 +5,8 @@ import com.coalesce.config.IConfig;
 import com.coalesce.config.IEntry;
 import com.coalesce.plugin.CoPlugin;
 import com.google.common.io.Files;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.Getter;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -15,7 +17,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public abstract class JsonConfig implements IConfig {
-	
+
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	private Collection<IEntry> entries = new ArrayList<>();
 	private final ConfigFormat format;
 	private final CoPlugin plugin;
@@ -32,40 +35,19 @@ public abstract class JsonConfig implements IConfig {
 		dir = plugin.getDataFolder();
 		file = new File(dir, name.replaceAll("/", String.valueOf(File.separatorChar)) + ".json");
 
-		if (!dir.exists()) {
-			dir.mkdirs();
-		}
-		if (!file.exists()) {
-            try {
-                file.createNewFile();
-                String patth = "/" + name.replaceAll("/", String.valueOf(File.separatorChar)) + ".json";
-                plugin.getCoLogger().debug(patth);
-                Scanner source = new Scanner(plugin.getClass().getResourceAsStream(patth));
-                FileWriter writer = new FileWriter(file);
-
-                try {
-                    while (source.hasNextLine()) writer.write(source.nextLine() + "\n");
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-
-                source.close();
-                writer.close();
-            } catch (IOException e) {
-                plugin.getCoLogger().error("An error occured while attempting to create configuration file at " + file.getAbsolutePath() + ":");
+		if (file.exists()) {
+            try{
+                FileReader reader = new FileReader(file);
+                json = (JSONObject) new JSONParser().parse(reader);
+                reader.close();
+            } catch (Exception e) {
+                plugin.getCoLogger().error("An error occured while attempting to read configuration file at " + file.getAbsolutePath() + ":");
                 e.printStackTrace();
             }
+        } else {
+            json = new JSONObject();
         }
-		
-		//Loading the configuration.
-		try{
-			FileReader reader = new FileReader(file);
-			json = (JSONObject) new JSONParser().parse(reader);
-			reader.close();
-		} catch (Exception e) {
-            plugin.getCoLogger().error("An error occured while attempting to read configuration file at " + file.getAbsolutePath() + ":");
-			e.printStackTrace();
-		}
+
 		if (!plugin.getConfigurations().contains(this)) {
 			plugin.getConfigurations().add(this);
 		}
@@ -144,6 +126,7 @@ public abstract class JsonConfig implements IConfig {
 		entries.remove(entry);
 		entry = entry.setValue(value);
 		entries.add(entry);
+        save();
 	}
 	
 	@Override
@@ -155,16 +138,19 @@ public abstract class JsonConfig implements IConfig {
 		}
 		else entry = new JsonEntry(this, path, json.get(path));
 		entries.add(entry);
+        save();
 	}
 
 	@Override
 	public void removeEntry(IEntry entry) {
 		entry.remove();
+        save();
 	}
 	
 	@Override
 	public void removeEntry(String path) {
 		getEntry(path).remove();
+        save();
 	}
 	
 	@Override
@@ -176,6 +162,7 @@ public abstract class JsonConfig implements IConfig {
 	public void clear() {
 		entries.forEach(e -> e.remove());
 		json.clear();
+		save();
 	}
 	
 	@Override
@@ -199,11 +186,14 @@ public abstract class JsonConfig implements IConfig {
 	private void save() {
         try {
             synchronized (file) {
-                file.delete();
+                if (file.exists()) file.delete();
+                if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
+                file.createNewFile();
+
                 FileWriter writer = new FileWriter(file);
 
                 try {
-                    writer.write(json.toJSONString());
+                    writer.write(GSON.toJson(json));
                 } catch (Exception e) {
                     plugin.getCoLogger().error("An error occured while attempting to write saved data for configuration file at " + file.getAbsolutePath() + ":");
                     e.printStackTrace();

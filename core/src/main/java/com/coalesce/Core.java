@@ -1,6 +1,5 @@
 package com.coalesce;
 
-import com.coalesce.config.json.JsonConfig;
 import com.coalesce.plugin.CoPlugin;
 
 import static org.bukkit.plugin.ServicePriority.Normal;
