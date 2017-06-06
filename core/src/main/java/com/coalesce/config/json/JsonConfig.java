@@ -9,9 +9,7 @@ import lombok.Getter;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -30,27 +28,34 @@ public abstract class JsonConfig implements IConfig {
 		this.name = name;
 		this.format = ConfigFormat.JSON;
 		this.plugin = plugin;
-		
-		//Creating the correct directory and generating the file.
-		if (!name.contains(File.separator)) {
-			this.dir = plugin.getDataFolder();
-			this.file = new File(dir.getAbsolutePath() + File.separator + name + ".json");
-		} else {
-			int last = name.lastIndexOf(File.separator);
-			String fileName = name.substring(last + 1);
-			String path = name.substring(0, last);
-			this.dir = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + path);
-			this.file = new File(dir + File.separator + fileName + ".json");
-		}
+
+		dir = plugin.getDataFolder();
+		file = new File(dir, name.replaceAll("/", String.valueOf(File.separatorChar)) + ".json");
+
 		if (!dir.exists()) {
 			dir.mkdirs();
 		}
-		try {
-			file.createNewFile();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
+		if (!file.exists()) {
+            try {
+                file.createNewFile();
+                String patth = "/" + name.replaceAll("/", String.valueOf(File.separatorChar)) + ".json";
+                plugin.getCoLogger().debug(patth);
+                Scanner source = new Scanner(plugin.getClass().getResourceAsStream(patth));
+                FileWriter writer = new FileWriter(file);
+
+                try {
+                    while (source.hasNextLine()) writer.write(source.nextLine() + "\n");
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                source.close();
+                writer.close();
+            } catch (IOException e) {
+                plugin.getCoLogger().error("An error occured while attempting to create configuration file at " + file.getAbsolutePath() + ":");
+                e.printStackTrace();
+            }
+        }
 		
 		//Loading the configuration.
 		try{
@@ -58,6 +63,7 @@ public abstract class JsonConfig implements IConfig {
 			json = (JSONObject) new JSONParser().parse(reader);
 			reader.close();
 		} catch (Exception e) {
+            plugin.getCoLogger().error("An error occured while attempting to read configuration file at " + file.getAbsolutePath() + ":");
 			e.printStackTrace();
 		}
 		if (!plugin.getConfigurations().contains(this)) {
@@ -150,7 +156,7 @@ public abstract class JsonConfig implements IConfig {
 		else entry = new JsonEntry(this, path, json.get(path));
 		entries.add(entry);
 	}
-	
+
 	@Override
 	public void removeEntry(IEntry entry) {
 		entry.remove();
@@ -189,6 +195,27 @@ public abstract class JsonConfig implements IConfig {
 			e.printStackTrace();
 		}
 	}
+
+	private void save() {
+        try {
+            synchronized (file) {
+                file.delete();
+                FileWriter writer = new FileWriter(file);
+
+                try {
+                    writer.write(json.toJSONString());
+                } catch (Exception e) {
+                    plugin.getCoLogger().error("An error occured while attempting to write saved data for configuration file at " + file.getAbsolutePath() + ":");
+                    e.printStackTrace();
+                }
+
+                writer.close();
+            }
+        } catch (IOException e) {
+            plugin.getCoLogger().error("An error occured while attempting to save configuration file at " + file.getAbsolutePath() + ":");
+            e.printStackTrace();
+        }
+    }
 	
 	@Override
 	public void delete() {

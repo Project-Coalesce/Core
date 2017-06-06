@@ -1,5 +1,6 @@
 package com.coalesce;
 
+import com.coalesce.config.json.JsonConfig;
 import com.coalesce.plugin.CoPlugin;
 
 import static org.bukkit.plugin.ServicePriority.Normal;
@@ -18,6 +19,7 @@ public class Core extends CoPlugin {
 
 		//TODO: Remove this
 		updateCheck("Project-Coalesce", "Core", true); //This is an example, this will be changed back once we get the updater working
+
 	}
 
     @Override
