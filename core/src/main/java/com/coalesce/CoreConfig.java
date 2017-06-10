@@ -7,7 +7,7 @@ public final class CoreConfig extends YamlConfig {
 	
 	protected CoreConfig(CoPlugin plugin) {
 		super("config", plugin);
-		addEntry("log-download-process", true);
+        addEntry("log-download-process", true);
 	}
 	
 	/**
