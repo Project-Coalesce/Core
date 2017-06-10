@@ -24,8 +24,7 @@ public abstract class JsonConfig implements IConfig {
 	private final CoPlugin plugin;
 	private final File dir, file;
 	private final String name;
-	@Getter
-	private JSONObject json;
+	@Getter private JSONObject json;
 	
 	protected JsonConfig(String name, CoPlugin plugin) {
 		this.name = name;
@@ -62,7 +61,56 @@ public abstract class JsonConfig implements IConfig {
 		}
 		return null;
 	}
-	
+
+    @Override
+    public void setEntry(String path, Object value) {
+        IEntry entry = new JsonEntry(this, path, value);
+        if (getEntry(path) == null) {
+            putJSON(entry.getPath(), entry.getValue());
+            entries.add(entry);
+            return;
+        }
+        entries.remove(entry);
+        entry = entry.setValue(value);
+        entries.add(entry);
+        save();
+    }
+
+    @Override
+    public void addEntry(String path, Object value) { //This needs to be updated to match Yaml's functionality.
+        IEntry entry;
+        if (!json.containsKey(path)) {
+            entry = new JsonEntry(this, path, value);
+            putJSON(entry.getPath(), entry.getValue());
+        }
+        else entry = new JsonEntry(this, path, json.get(path));
+        entries.add(entry);
+        save();
+    }
+
+    private void putJSON(String path, Object value) {
+        String[] fullPath = path.split("\\.");
+        if (fullPath.length == 1) {
+            json.put(path, value);
+            return;
+        }
+
+        System.out.println(fullPath.length);
+        resolveSubObjects(json, value, new ArrayList<>(Arrays.asList(fullPath)));
+    }
+
+    private void resolveSubObjects(JSONObject object, Object finalObject, List<String> path) {
+        System.out.println(path.size());
+        if (path.size() == 1) {
+            object.put(path.get(0), finalObject);
+        } else {
+	        JSONObject subObject = object.containsKey(path.get(0)) && object.get(path.get(0)) instanceof JSONObject ? (JSONObject) object.get(path.get(0))
+                    : new JSONObject();
+            resolveSubObjects(subObject, finalObject, path.subList(1, path.size()));
+            object.put(path.get(0), subObject);
+        }
+    }
+
 	@Override
 	public String getString(String path) {
 		return getEntry(path).getString();
@@ -113,32 +161,6 @@ public abstract class JsonConfig implements IConfig {
 	public Collection<IEntry> getEntries() {
 		json.forEach((k, v) -> entries.add(new JsonEntry(this, (String) k, v)));
 		return entries;
-	}
-	
-	@Override
-	public void setEntry(String path, Object value) {
-		IEntry entry = new JsonEntry(this, path, value);
-		if (getEntry(path) == null) {
-			json.put(entry.getPath(), entry.getValue());
-			entries.add(entry);
-			return;
-		}
-		entries.remove(entry);
-		entry = entry.setValue(value);
-		entries.add(entry);
-        save();
-	}
-	
-	@Override
-	public void addEntry(String path, Object value) { //This needs to be updated to match Yaml's functionality.
-		IEntry entry;
-		if (!json.containsKey(path)) {
-			entry = new JsonEntry(this, path, value);
-			json.put(entry.getPath(), entry.getValue());
-		}
-		else entry = new JsonEntry(this, path, json.get(path));
-		entries.add(entry);
-        save();
 	}
 
 	@Override
