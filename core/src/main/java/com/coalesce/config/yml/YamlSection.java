@@ -11,12 +11,12 @@ import java.util.Set;
 public final class YamlSection implements ISection {
 	
 	private final String path;
+	private final IConfig config;
 	private final CoPlugin plugin;
-	private final YamlConfig config;
 	
 	public YamlSection(String path, IConfig config, CoPlugin plugin) {
 		this.path = path;
-		this.config = (YamlConfig)config;
+		this.config = config;
 		this.plugin = plugin;
 	}
 	
@@ -49,7 +49,7 @@ public final class YamlSection implements ISection {
 	
 	@Override
 	public boolean contains(String path) {
-		return config.getBase().contains(path);
+		return config.getEntries().stream().filter(e -> e.getPath().startsWith(this.path + ".")).anyMatch(e -> e.getPath().equalsIgnoreCase(path));
 	}
 	
 	@Override
