@@ -1,4 +1,4 @@
-package com.coalesce.config.yml;
+package com.coalesce.config.json;
 
 import com.coalesce.config.IConfig;
 import com.coalesce.config.IEntry;
@@ -8,15 +8,15 @@ import com.coalesce.plugin.CoPlugin;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class YamlSection implements ISection {
+public final class JsonSection implements ISection {
 	
 	private final String path;
+	private final IConfig config;
 	private final CoPlugin plugin;
-	private final YamlConfig config;
 	
-	public YamlSection(String path, IConfig config, CoPlugin plugin) {
+	public JsonSection(String path, IConfig config, CoPlugin plugin) {
 		this.path = path;
-		this.config = (YamlConfig)config;
+		this.config = config;
 		this.plugin = plugin;
 	}
 	
@@ -44,12 +44,12 @@ public final class YamlSection implements ISection {
 	
 	@Override
 	public ISection getSection(String path) {
-		return new YamlSection(path, config, plugin);
+		return new JsonSection(path, config, plugin);
 	}
 	
 	@Override
 	public boolean contains(String path) {
-		return config.getBase().contains(path);
+		return config.getEntries().stream().filter(e -> e.getPath().startsWith(this.path + ".")).anyMatch(e -> e.getPath().equalsIgnoreCase(path));
 	}
 	
 	@Override

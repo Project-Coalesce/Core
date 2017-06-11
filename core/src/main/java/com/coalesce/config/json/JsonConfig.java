@@ -3,6 +3,7 @@ package com.coalesce.config.json;
 import com.coalesce.config.ConfigFormat;
 import com.coalesce.config.IConfig;
 import com.coalesce.config.IEntry;
+import com.coalesce.config.ISection;
 import com.coalesce.plugin.CoPlugin;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
@@ -94,13 +95,10 @@ public abstract class JsonConfig implements IConfig {
             json.put(path, value);
             return;
         }
-
-        System.out.println(fullPath.length);
         resolveSubObjects(json, value, new ArrayList<>(Arrays.asList(fullPath)));
     }
 
     private void resolveSubObjects(JSONObject object, Object finalObject, List<String> path) {
-        System.out.println(path.size());
         if (path.size() == 1) {
             object.put(path.get(0), finalObject);
         } else {
@@ -181,8 +179,29 @@ public abstract class JsonConfig implements IConfig {
 	}
 	
 	@Override
+	public ISection getSection(String path) {
+		return new JsonSection(path, this, plugin);
+	}
+	
+	@Override
+	public List<String> getStringList(String path) {
+		return (List<String>) getList(path);
+	}
+	
+	@Override
+	public boolean contains(String path, boolean exact) {
+		if (exact) {
+			return getEntry(path) == null;
+		}
+		for (IEntry entry : entries) {
+			if (entry.getPath().startsWith(path)) return true;
+		}
+		return false;
+	}
+	
+	@Override
 	public void clear() {
-		entries.forEach(e -> e.remove());
+		entries.forEach(IEntry::remove);
 		json.clear();
 		save();
 	}
@@ -250,8 +269,8 @@ public abstract class JsonConfig implements IConfig {
 	}
 	
 	@Override
-	public <E extends CoPlugin> E getPlugin() {
-		return (E) plugin;
+	public CoPlugin getPlugin() {
+		return plugin;
 	}
 	
 }

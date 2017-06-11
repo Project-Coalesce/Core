@@ -1,5 +1,7 @@
 package com.coalesce.config;
 
+import com.coalesce.plugin.CoPlugin;
+
 import java.util.Set;
 
 public interface ISection {
@@ -14,11 +16,11 @@ public interface ISection {
 	
 	/**
 	 * Gets all the entries that exist in this configuration section.
-	 * @param deep Whether to get all the entries in this section.
 	 *
-	 * @return
+	 * @return A set of entries in this section.
+	 *
 	 */
-	Set<IEntry> getEntries(boolean deep);
+	Set<IEntry> getEntries();
 	
 	/**
 	 * Gets a section of a configuration.
@@ -52,5 +54,11 @@ public interface ISection {
 	 * @return The current configuration
 	 */
 	IConfig getConfig();
+	
+	/**
+	 * Gets the host plugin.
+	 * @return The host plugin.
+	 */
+	CoPlugin getPlugin();
 
 }
