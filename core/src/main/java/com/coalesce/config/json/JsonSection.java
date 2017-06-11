@@ -71,4 +71,9 @@ public final class JsonSection implements ISection {
 	public CoPlugin getPlugin() {
 		return plugin;
 	}
+	
+	@Override
+	public IEntry getEntry(String path) {
+		return config.getEntry(this.path + "." + path);
+	}
 }
