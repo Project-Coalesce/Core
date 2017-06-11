@@ -60,5 +60,14 @@ public interface ISection {
 	 * @return The host plugin.
 	 */
 	CoPlugin getPlugin();
+	
+	/**
+	 * Gets an entry from a section
+	 * @param path The path to the entry. <p>Note: dont use the string provided originally to get this entry</p> //TODO: elaborate more and create getEntry Implementations in Json and yml config.
+	 * @return
+	 */
+	IEntry getEntry(String path);
+	
+	
 
 }
