@@ -4,6 +4,7 @@ import com.coalesce.config.ConfigFormat;
 import com.coalesce.config.IConfig;
 import com.coalesce.config.IEntry;
 import com.coalesce.config.ISection;
+import com.coalesce.config.common.Section;
 import com.coalesce.plugin.CoPlugin;
 import com.google.common.io.Files;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -231,7 +232,7 @@ public abstract class YamlConfig implements IConfig {
 	
 	@Override
 	public ISection getSection(String path) {
-		return new YamlSection(path, this, plugin);
+		return new Section(path, this, plugin);
 	}
 	
 	@Override

@@ -1,4 +1,4 @@
-package com.coalesce.config.yml;
+package com.coalesce.config.common;
 
 import com.coalesce.config.IConfig;
 import com.coalesce.config.IEntry;
@@ -8,13 +8,13 @@ import com.coalesce.plugin.CoPlugin;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class YamlSection implements ISection {
+public final class Section implements ISection {
 	
 	private final String path;
 	private final IConfig config;
 	private final CoPlugin plugin;
 	
-	public YamlSection(String path, IConfig config, CoPlugin plugin) {
+	public Section(String path, IConfig config, CoPlugin plugin) {
 		this.path = path;
 		this.config = config;
 		this.plugin = plugin;
@@ -44,7 +44,7 @@ public final class YamlSection implements ISection {
 	
 	@Override
 	public ISection getSection(String path) {
-		return new YamlSection(path, config, plugin);
+		return new Section(path, config, plugin);
 	}
 	
 	@Override
