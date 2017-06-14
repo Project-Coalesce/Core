@@ -44,12 +44,12 @@ public final class Section implements ISection {
 	
 	@Override
 	public ISection getSection(String path) {
-		return new Section(path, config, plugin);
+		return new Section(this.path + "." + path, config, plugin);
 	}
 	
 	@Override
 	public boolean contains(String path) {
-		return config.getEntries().stream().filter(e -> e.getPath().startsWith(this.path + ".")).anyMatch(e -> e.getPath().equalsIgnoreCase(path));
+		return getKeys(false).contains(path);
 	}
 	
 	@Override
@@ -75,5 +75,11 @@ public final class Section implements ISection {
 	@Override
 	public IEntry getEntry(String path) {
 		return config.getEntry(this.path + "." + path);
+	}
+	
+	@Override
+	public ISection getParent() {
+		if (!path.contains(".")) return null;
+		return new Section(path.substring(0, path.lastIndexOf(".")), config, plugin);
 	}
 }

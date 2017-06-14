@@ -55,6 +55,17 @@ public final class YamlEntry implements IEntry {
 	}
 	
 	@Override
+	public List<String> getStringList() {
+		return (List<String>) getList();
+	}
+	
+	@Override
+	public String getName() {
+		if (getPath().contains(".")) return getPath().substring(getPath().lastIndexOf(".") + 1);
+		return getPath();
+	}
+	
+	@Override
 	public String getPath() {
 		return key;
 	}

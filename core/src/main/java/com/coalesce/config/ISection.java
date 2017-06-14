@@ -23,8 +23,8 @@ public interface ISection {
 	Set<IEntry> getEntries();
 	
 	/**
-	 * Gets a section of a configuration.
-	 * @param path The path to start getting the section from.
+	 * Gets a section from within this section.
+	 * @param path The path from the start of this section. <p>Note: dont use the string provided originally to get this current section</p>
 	 *
 	 * @return A section of the configuration.
 	 */
@@ -67,6 +67,12 @@ public interface ISection {
 	 * @return
 	 */
 	IEntry getEntry(String path);
+	
+	/**
+	 * Gets the parent section to the current section.
+	 * @return THe previous section, returns null if no previous section exists.
+	 */
+	ISection getParent();
 	
 	
 

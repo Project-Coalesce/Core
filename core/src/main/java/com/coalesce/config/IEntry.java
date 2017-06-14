@@ -47,6 +47,12 @@ public interface IEntry {
 	List<?> getList();
 	
 	/**
+	 * Gets a string list from an entry.
+	 * @return The String list.
+	 */
+	List<String> getStringList();
+	
+	/**
 	 * Gets the path of this entry.
 	 *
 	 * @return The path in the config.
@@ -82,6 +88,12 @@ public interface IEntry {
 	 * @return The entry's database.
 	 */
 	IConfig getConfig();
+	
+	/**
+	 * Gets the name of this entry.
+	 * @return The entry name.
+	 */
+	String getName();
 	
 	/**
 	 * Allows quick removal and moving of an Entry to another configuration file.
