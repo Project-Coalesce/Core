@@ -3,6 +3,8 @@ package com.coalesce.config.json;
 import com.coalesce.config.ConfigFormat;
 import com.coalesce.config.IConfig;
 import com.coalesce.config.IEntry;
+import com.coalesce.config.ISection;
+import com.coalesce.config.common.Section;
 import com.coalesce.plugin.CoPlugin;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
@@ -24,8 +26,7 @@ public abstract class JsonConfig implements IConfig {
 	private final CoPlugin plugin;
 	private final File dir, file;
 	private final String name;
-	@Getter
-	private JSONObject json;
+	@Getter private JSONObject json;
 	
 	protected JsonConfig(String name, CoPlugin plugin) {
 		this.name = name;
@@ -62,7 +63,53 @@ public abstract class JsonConfig implements IConfig {
 		}
 		return null;
 	}
-	
+
+    @Override
+    public void setEntry(String path, Object value) {
+        IEntry entry = new JsonEntry(this, path, value);
+        if (getEntry(path) == null) {
+            putJSON(entry.getPath(), entry.getValue());
+            entries.add(entry);
+            return;
+        }
+        entries.remove(entry);
+        entry = entry.setValue(value);
+        entries.add(entry);
+        save();
+    }
+
+    @Override
+    public void addEntry(String path, Object value) { //This needs to be updated to match Yaml's functionality.
+        IEntry entry;
+        if (!json.containsKey(path)) {
+            entry = new JsonEntry(this, path, value);
+            putJSON(entry.getPath(), entry.getValue());
+        }
+        else entry = new JsonEntry(this, path, json.get(path));
+        entries.add(entry);
+        save();
+    }
+
+    private void putJSON(String path, Object value) {
+        String[] fullPath = path.split("\\.");
+        if (fullPath.length == 1) {
+            json.put(path, value);
+            return;
+        }
+        resolveSubObjects(json, value, new ArrayList<>(Arrays.asList(fullPath)));
+    }
+
+    private void resolveSubObjects(JSONObject object, Object finalObject, List<String> path) {
+        if (path.size() == 1) {
+            object.put(path.get(0), finalObject);
+        } else {
+	        JSONObject subObject = object.containsKey(path.get(0)) && object.get(path.get(0)) instanceof JSONObject ? (JSONObject) object.get(path.get(0))
+                    : new JSONObject();
+            resolveSubObjects(subObject, finalObject, path.subList(1, path.size()));
+            object.put(path.get(0), subObject);
+        }
+    }
+
 	@Override
 	public String getString(String path) {
 		return getEntry(path).getString();
@@ -114,32 +161,6 @@ public abstract class JsonConfig implements IConfig {
 		json.forEach((k, v) -> entries.add(new JsonEntry(this, (String) k, v)));
 		return entries;
 	}
-	
-	@Override
-	public void setEntry(String path, Object value) {
-		IEntry entry = new JsonEntry(this, path, value);
-		if (getEntry(path) == null) {
-			json.put(entry.getPath(), entry.getValue());
-			entries.add(entry);
-			return;
-		}
-		entries.remove(entry);
-		entry = entry.setValue(value);
-		entries.add(entry);
-        save();
-	}
-	
-	@Override
-	public void addEntry(String path, Object value) { //This needs to be updated to match Yaml's functionality.
-		IEntry entry;
-		if (!json.containsKey(path)) {
-			entry = new JsonEntry(this, path, value);
-			json.put(entry.getPath(), entry.getValue());
-		}
-		else entry = new JsonEntry(this, path, json.get(path));
-		entries.add(entry);
-        save();
-	}
 
 	@Override
 	public void removeEntry(IEntry entry) {
@@ -159,8 +180,29 @@ public abstract class JsonConfig implements IConfig {
 	}
 	
 	@Override
+	public ISection getSection(String path) {
+		return new Section(path, this, plugin);
+	}
+	
+	@Override
+	public List<String> getStringList(String path) {
+		return (List<String>) getList(path);
+	}
+	
+	@Override
+	public boolean contains(String path, boolean exact) {
+		if (exact) {
+			return getEntry(path) == null;
+		}
+		for (IEntry entry : entries) {
+			if (entry.getPath().startsWith(path)) return true;
+		}
+		return false;
+	}
+	
+	@Override
 	public void clear() {
-		entries.forEach(e -> e.remove());
+		entries.forEach(IEntry::remove);
 		json.clear();
 		save();
 	}
@@ -228,8 +270,8 @@ public abstract class JsonConfig implements IConfig {
 	}
 	
 	@Override
-	public <E extends CoPlugin> E getPlugin() {
-		return (E) plugin;
+	public CoPlugin getPlugin() {
+		return plugin;
 	}
 	
 }

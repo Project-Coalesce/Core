@@ -3,6 +3,8 @@ package com.coalesce.config.yml;
 import com.coalesce.config.ConfigFormat;
 import com.coalesce.config.IConfig;
 import com.coalesce.config.IEntry;
+import com.coalesce.config.ISection;
+import com.coalesce.config.common.Section;
 import com.coalesce.plugin.CoPlugin;
 import com.google.common.io.Files;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -110,6 +112,17 @@ public abstract class YamlConfig implements IConfig {
 	}
 	
 	@Override
+	public boolean contains(String path, boolean exact) {
+		if (exact) {
+			return getEntry(path) == null;
+		}
+		for (IEntry entry : entries) {
+			if (entry.getPath().startsWith(path)) return true;
+		}
+		return false;
+	}
+	
+	@Override
 	public Collection<IEntry> getEntryFromValue(Object value) {
 		Collection<IEntry> found = new ArrayList<>();
 		entries.forEach(entry -> {
@@ -171,7 +184,7 @@ public abstract class YamlConfig implements IConfig {
 	
 	@Override
 	public void clear() {
-		entries.forEach(e -> e.remove());
+		entries.forEach(IEntry::remove);
 	}
 	
 	@Override
@@ -213,8 +226,18 @@ public abstract class YamlConfig implements IConfig {
 	}
 	
 	@Override
-	public <E extends CoPlugin> E getPlugin() {
-		return (E) plugin;
+	public CoPlugin getPlugin() {
+		return plugin;
+	}
+	
+	@Override
+	public ISection getSection(String path) {
+		return new Section(path, this, plugin);
+	}
+	
+	@Override
+	public List<String> getStringList(String path) {
+		return (List<String>) getList(path);
 	}
 	
 	/**

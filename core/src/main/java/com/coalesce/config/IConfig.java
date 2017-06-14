@@ -57,6 +57,13 @@ public interface IConfig {
 	List<?> getList(String path);
 	
 	/**
+	 * Gets a List of Strings from a path in this config.
+	 * @param path The path to get the strings from.
+	 * @return A list from the specified path.
+	 */
+	List<String> getStringList(String path);
+	
+	/**
 	 * Gets a value from a config entry.
 	 * @param path The path in the configuration.
 	 * @return An object from the specified path.
@@ -147,6 +154,32 @@ public interface IConfig {
 	 * @return YAML or GSON
 	 */
 	ConfigFormat getFormat();
+	
+	/**
+	 * Gets a section of a configuration from a path.
+	 * @param path The path to start getting the section from.
+	 * @return A Section of the config.
+	 */
+	ISection getSection(String path);
+	
+	/**
+	 * Checks whether the configuration contains a path.
+	 * @param path The path to look for.
+	 * @param exact True to look for the exact path, false to find a path that starts with the path provided.
+	 *
+	 *           <p>
+	 *              Ex. contains("groups", false);<p>
+	 *
+	 *              ==Configuration== <br>
+	 *              groups.test<br>
+	 *              groups.test.another-test<p>
+	 *
+	 *              ==Results== <br>
+	 *              contains would return true because one or more of those paths contains the groups section.
+	 *           </p>
+	 * @return
+	 */
+	boolean contains(String path, boolean exact);
 	
 	/**
 	 * Returns the plugin this configuration is for.

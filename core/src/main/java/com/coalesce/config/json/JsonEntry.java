@@ -64,6 +64,11 @@ public final class JsonEntry implements IEntry {
 	}
 	
 	@Override
+	public List<String> getStringList() {
+		return (List<String>) getList();
+	}
+	
+	@Override
 	public IEntry setPath(String newpath) {
 		remove();
 		setValue(newpath, value);
@@ -79,6 +84,12 @@ public final class JsonEntry implements IEntry {
 	@Override
 	public IConfig getConfig() {
 		return config;
+	}
+	
+	@Override
+	public String getName() {
+		if (getPath().contains(".")) return getPath().substring(getPath().lastIndexOf(".") + 1);
+		return getPath();
 	}
 	
 	@Override
