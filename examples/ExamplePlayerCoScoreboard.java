@@ -22,7 +22,7 @@ public class ExamplePlayerCoScoreboard implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                PlayerScoreboard scoreboard = new PlayerScoreboard.Builder()
+                final PlayerScoreboard scoreboard = new PlayerScoreboard.Builder()
                         .title(ChatColor.YELLOW + "" + ChatColor.STRIKETHROUGH + "--" +
                                 ChatColor.YELLOW + " Server Craft " +
                                 ChatColor.YELLOW + "" + ChatColor.STRIKETHROUGH + "--")
@@ -34,11 +34,12 @@ public class ExamplePlayerCoScoreboard implements Listener {
                                 player -> "",
                                 player -> ChatColor.AQUA + "Players Online:",
                                 player -> ChatColor.GRAY + "" + Bukkit.getOnlinePlayers().size(),
+                                player -> "",
                                 player -> ChatColor.AQUA + "World Time:",
                                 player -> ChatColor.GRAY + "" + event.getPlayer().getWorld().getTime(),
                                 player -> ChatColor.YELLOW + "" + ChatColor.STRIKETHROUGH + "------------------")
-                        .build()
-                        .send(event.getPlayer());
+                        .build();
+                scoreboard.send(event.getPlayer());
             }
         }.runTaskTimer(coPlugin, 0L, 3L);
     }
