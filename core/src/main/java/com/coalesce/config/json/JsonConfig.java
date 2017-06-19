@@ -86,7 +86,7 @@ public abstract class JsonConfig implements IConfig {
             putJSON(entry.getPath(), entry.getValue());
         }
         else entry = new JsonEntry(this, path, json.get(path));
-        entries.add(entry);
+		entries.add(entry);
         save();
     }
 
@@ -186,7 +186,7 @@ public abstract class JsonConfig implements IConfig {
 	
 	@Override
 	public List<String> getStringList(String path) {
-		return (List<String>) getList(path);
+		return (List<String>)getList(path);
 	}
 	
 	@Override
