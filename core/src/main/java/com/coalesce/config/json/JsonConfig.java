@@ -19,8 +19,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public abstract class JsonConfig implements IConfig {
-
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+	
+	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	private Collection<IEntry> entries = new ArrayList<>();
 	private final ConfigFormat format;
 	private final CoPlugin plugin;
@@ -32,23 +32,23 @@ public abstract class JsonConfig implements IConfig {
 		this.name = name;
 		this.format = ConfigFormat.JSON;
 		this.plugin = plugin;
-
+		
 		dir = plugin.getDataFolder();
 		file = new File(dir, name.replaceAll("/", String.valueOf(File.separatorChar)) + ".json");
-
+		
 		if (file.exists()) {
-            try{
-                FileReader reader = new FileReader(file);
-                json = (JSONObject) new JSONParser().parse(reader);
-                reader.close();
-            } catch (Exception e) {
-                plugin.getCoLogger().error("An error occured while attempting to read configuration file at " + file.getAbsolutePath() + ":");
-                e.printStackTrace();
-            }
-        } else {
-            json = new JSONObject();
-        }
-
+			try{
+				FileReader reader = new FileReader(file);
+				json = (JSONObject) new JSONParser().parse(reader);
+				reader.close();
+			} catch (Exception e) {
+				plugin.getCoLogger().error("An error occured while attempting to read configuration file at " + file.getAbsolutePath() + ":");
+				e.printStackTrace();
+			}
+		} else {
+			json = new JSONObject();
+		}
+		
 		if (!plugin.getConfigurations().contains(this)) {
 			plugin.getConfigurations().add(this);
 		}
@@ -63,53 +63,53 @@ public abstract class JsonConfig implements IConfig {
 		}
 		return null;
 	}
-
-    @Override
-    public void setEntry(String path, Object value) {
-        IEntry entry = new JsonEntry(this, path, value);
-        if (getEntry(path) == null) {
-            putJSON(entry.getPath(), entry.getValue());
-            entries.add(entry);
-            return;
-        }
-        entries.remove(entry);
-        entry = entry.setValue(value);
-        entries.add(entry);
-        save();
-    }
-
-    @Override
-    public void addEntry(String path, Object value) { //This needs to be updated to match Yaml's functionality.
-        IEntry entry;
-        if (!json.containsKey(path)) {
-            entry = new JsonEntry(this, path, value);
-            putJSON(entry.getPath(), entry.getValue());
-        }
-        else entry = new JsonEntry(this, path, json.get(path));
+	
+	@Override
+	public void setEntry(String path, Object value) {
+		IEntry entry = new JsonEntry(this, path, value);
+		if (getEntry(path) == null) {
+			putJSON(entry.getPath(), entry.getValue());
+			entries.add(entry);
+			return;
+		}
+		entries.remove(entry);
+		entry = entry.setValue(value);
 		entries.add(entry);
-        save();
-    }
-
-    private void putJSON(String path, Object value) {
-        String[] fullPath = path.split("\\.");
-        if (fullPath.length == 1) {
-            json.put(path, value);
-            return;
-        }
-        resolveSubObjects(json, value, new ArrayList<>(Arrays.asList(fullPath)));
-    }
-
-    private void resolveSubObjects(JSONObject object, Object finalObject, List<String> path) {
-        if (path.size() == 1) {
-            object.put(path.get(0), finalObject);
-        } else {
-	        JSONObject subObject = object.containsKey(path.get(0)) && object.get(path.get(0)) instanceof JSONObject ? (JSONObject) object.get(path.get(0))
-                    : new JSONObject();
-            resolveSubObjects(subObject, finalObject, path.subList(1, path.size()));
-            object.put(path.get(0), subObject);
-        }
-    }
-
+		save();
+	}
+	
+	@Override
+	public void addEntry(String path, Object value) { //This needs to be updated to match Yaml's functionality.
+		IEntry entry;
+		if (!json.containsKey(path)) {
+			entry = new JsonEntry(this, path, value);
+			putJSON(entry.getPath(), entry.getValue());
+		}
+		else entry = new JsonEntry(this, path, json.get(path));
+		entries.add(entry);
+		save();
+	}
+	
+	private void putJSON(String path, Object value) {
+		String[] fullPath = path.split("\\.");
+		if (fullPath.length == 1) {
+			json.put(path, value);
+			return;
+		}
+		resolveSubObjects(json, value, new ArrayList<>(Arrays.asList(fullPath)));
+	}
+	
+	private void resolveSubObjects(JSONObject object, Object finalObject, List<String> path) {
+		if (path.size() == 1) {
+			object.put(path.get(0), finalObject);
+		} else {
+			JSONObject subObject = object.containsKey(path.get(0)) && object.get(path.get(0)) instanceof JSONObject ? (JSONObject) object.get(path.get(0))
+					: new JSONObject();
+			resolveSubObjects(subObject, finalObject, path.subList(1, path.size()));
+			object.put(path.get(0), subObject);
+		}
+	}
+	
 	@Override
 	public String getString(String path) {
 		return getEntry(path).getString();
@@ -161,17 +161,17 @@ public abstract class JsonConfig implements IConfig {
 		json.forEach((k, v) -> entries.add(new JsonEntry(this, (String) k, v)));
 		return entries;
 	}
-
+	
 	@Override
 	public void removeEntry(IEntry entry) {
 		entry.remove();
-        save();
+		save();
 	}
 	
 	@Override
 	public void removeEntry(String path) {
 		getEntry(path).remove();
-        save();
+		save();
 	}
 	
 	@Override
@@ -186,7 +186,7 @@ public abstract class JsonConfig implements IConfig {
 	
 	@Override
 	public List<String> getStringList(String path) {
-		return (List<String>)getList(path);
+		return (List<String>) getList(path);
 	}
 	
 	@Override
@@ -224,30 +224,30 @@ public abstract class JsonConfig implements IConfig {
 			e.printStackTrace();
 		}
 	}
-
+	
 	private void save() {
-        try {
-            synchronized (file) {
-                if (file.exists()) file.delete();
-                if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
-                file.createNewFile();
-
-                FileWriter writer = new FileWriter(file);
-
-                try {
-                    writer.write(GSON.toJson(json));
-                } catch (Exception e) {
-                    plugin.getCoLogger().error("An error occured while attempting to write saved data for configuration file at " + file.getAbsolutePath() + ":");
-                    e.printStackTrace();
-                }
-
-                writer.close();
-            }
-        } catch (IOException e) {
-            plugin.getCoLogger().error("An error occured while attempting to save configuration file at " + file.getAbsolutePath() + ":");
-            e.printStackTrace();
-        }
-    }
+		try {
+			synchronized (file) {
+				if (file.exists()) file.delete();
+				if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
+				file.createNewFile();
+				
+				FileWriter writer = new FileWriter(file);
+				
+				try {
+					writer.write(GSON.toJson(json));
+				} catch (Exception e) {
+					plugin.getCoLogger().error("An error occured while attempting to write saved data for configuration file at " + file.getAbsolutePath() + ":");
+					e.printStackTrace();
+				}
+				
+				writer.close();
+			}
+		} catch (IOException e) {
+			plugin.getCoLogger().error("An error occured while attempting to save configuration file at " + file.getAbsolutePath() + ":");
+			e.printStackTrace();
+		}
+	}
 	
 	@Override
 	public void delete() {
