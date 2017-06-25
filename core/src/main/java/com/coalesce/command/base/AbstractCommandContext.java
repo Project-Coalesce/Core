@@ -70,6 +70,7 @@ public abstract class AbstractCommandContext implements ICommandContext {
 	
 	@Override
 	public String argAt(int index) {
+		if (args.size() >= index || index < 0) return null;
 		return args.get(index);
 	}
 	
