@@ -6,6 +6,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -19,7 +20,7 @@ public abstract class AbstractCommandContext implements ICommandContext {
 		this.sender = sender;
 		this.plugin = plugin;
 		List<String> list = new ArrayList<>();
-		Stream.of(args).forEach(arg -> list.add(arg));
+		list.addAll(Arrays.asList(args));
 		this.args = list;
 	}
 	
@@ -70,7 +71,7 @@ public abstract class AbstractCommandContext implements ICommandContext {
 	
 	@Override
 	public String argAt(int index) {
-		if (args.size() >= index || index < 0) return null;
+		if (index < 0 || index >= args.size()) return null;
 		return args.get(index);
 	}
 	
