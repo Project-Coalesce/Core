@@ -3,9 +3,11 @@ package com.coalesce.command.base;
 import com.coalesce.command.CoCommand;
 import com.coalesce.plugin.CoPlugin;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public interface ITabContext {
 	
@@ -40,6 +42,18 @@ public interface ITabContext {
 	Set<CoCommand> getCommandChildren();
 	
 	/**
+	 * Autocompletes a list of players online. This has a filter for quickly and easily filtering layers out
+	 * @param index The index for these completions to run
+	 */
+	void playerCompletion(int index, Predicate<? super Player> predicate);
+	
+	/**
+	 * Autocompletes a list of players online.
+	 * @param index The index for these completions to run.
+	 */
+	void playerCompletion(int index);
+	
+	/**
 	 * Gets the length of the arguments.
 	 * @return The argument length.
 	 */
@@ -68,7 +82,6 @@ public interface ITabContext {
 	/**
 	 * A list of completions
 	 * @param completions The completions to add.
-	 * @return A list of completions.
 	 */
 	void completion(String... completions);
 	
@@ -76,7 +89,6 @@ public interface ITabContext {
 	 * Have specific completions at a certain index.
 	 * @param index The index for these completions to run.
 	 * @param completions The completions to add.
-	 * @return A list of completions if the index matches the command index, null otherwise.
 	 */
 	void completionAt(int index, String... completions);
 	
@@ -84,7 +96,6 @@ public interface ITabContext {
 	 * Have specific completions after a certain word.
 	 * @param previousText The word these completions show up after.
 	 * @param completions The completions to add.
-	 * @return A list of completions.
 	 */
 	void completionAfter(String previousText, String... completions);
 	
