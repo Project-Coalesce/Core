@@ -2,12 +2,15 @@ package com.coalesce.command.base;
 
 import com.coalesce.command.CoCommand;
 import com.coalesce.plugin.CoPlugin;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Stream;
+import java.util.function.Predicate;
 
 public abstract class AbstractTabContext implements ITabContext {
 	
@@ -74,28 +77,41 @@ public abstract class AbstractTabContext implements ITabContext {
 	}
 	
 	@Override
+	public void playerCompletion(int index, Predicate<? super Player> predicate) {
+		if (length(index)) {
+			possible.clear();
+			Bukkit.getOnlinePlayers().stream().filter(predicate).forEach(p -> possible.add(p.getName()));
+		}
+	}
+	
+	@Override
+	public void playerCompletion(int index) {
+		if (length(index)) {
+			possible.clear();
+			Bukkit.getOnlinePlayers().forEach(p -> possible.add(p.getName()));
+		}
+	}
+	
+	@Override
 	public void completion(String... completions) {
 		possible.clear();
-		Stream.of(completions).forEach(c -> possible.add(c));
-		return;
+		possible.addAll(Arrays.asList(completions));
 	}
 	
 	@Override
 	public void completionAt(int index, String... completions) {
 		if (length(index)) {
 			possible.clear();
-			Stream.of(completions).forEach(c -> possible.add(c));
+			possible.addAll(Arrays.asList(completions));
 		}
-		return;
 	}
 	
 	@Override
 	public void completionAfter(String previousText, String... completions) {
 		if (previous(previousText)) {
 			possible.clear();
-			Stream.of(completions).forEach(c -> possible.add(c));
+			possible.addAll(Arrays.asList(completions));
 		}
-		return;
 	}
 
 	@Override
