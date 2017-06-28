@@ -60,7 +60,7 @@ public final class YamlEntry implements IEntry {
 	
 	@Override
 	public List<String> getStringList() {
-		return (List<String>) getList();
+		return (List<String>) value;
 	}
 	
 	@Override
