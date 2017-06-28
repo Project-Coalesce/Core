@@ -4,6 +4,10 @@ import com.coalesce.config.IConfig;
 import com.coalesce.config.IEntry;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public final class YamlEntry implements IEntry {
@@ -56,7 +60,7 @@ public final class YamlEntry implements IEntry {
 	
 	@Override
 	public List<String> getStringList() {
-		return (List<String>) getList();
+		return (List<String>) value;
 	}
 	
 	@Override
