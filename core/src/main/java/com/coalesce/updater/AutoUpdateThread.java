@@ -1,6 +1,5 @@
 package com.coalesce.updater;
 
-import com.coalesce.Core;
 import com.coalesce.plugin.CoPlugin;
 import com.coalesce.plugin.PluginUtil;
 import org.bukkit.plugin.Plugin;
@@ -54,19 +53,15 @@ public class AutoUpdateThread extends Thread {
             InputStream in = connection.getInputStream();
             outputStream = new FileOutputStream(tempDownloadFile);
 	
-            UpdateLogger logger = null;
-			if (Core.getInstance().getCoreConfig().logDLProcess()) {
-				logger = new UpdateLogger(this);
-				logger.runTaskTimerAsynchronously(plugin, 20L, 20L);
-			}
+            UpdateLogger logger;
+			logger = new UpdateLogger(this);
+			logger.runTaskTimerAsynchronously(plugin, 20L, 20L);
 			int count;
 			while ((count = in.read(BUFFER, 0, 1024)) != -1) {
 				outputStream.write(BUFFER, 0, count);
 				downloaded += count;
 			}
-			if (Core.getInstance().getCoreConfig().logDLProcess()) {
-				logger.cancel();
-			}
+			logger.cancel();
 
             plugin.getCoLogger().info("Downloading update...");
 
@@ -92,7 +87,7 @@ public class AutoUpdateThread extends Thread {
 			updatedPlugin.getLogger().log(Level.INFO, "Successfully updated!");
 
         } catch (Exception e) {
-            if (outputStream != null) try { outputStream.close(); } catch (Exception ex) {}
+            if (outputStream != null) try { outputStream.close(); } catch (Exception ignored) {}
             e.printStackTrace();
         }
     }
