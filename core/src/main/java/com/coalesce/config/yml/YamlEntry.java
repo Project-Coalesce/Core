@@ -4,10 +4,7 @@ import com.coalesce.config.IConfig;
 import com.coalesce.config.IEntry;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public final class YamlEntry implements IEntry {
@@ -55,12 +52,26 @@ public final class YamlEntry implements IEntry {
 	
 	@Override
 	public List<?> getList() {
-		return (List<?>) value;
+		//From Bukkit MemorySection#getList
+		return (value instanceof List) ? (List<?>) value : null;
 	}
 	
 	@Override
 	public List<String> getStringList() {
-		return (List<String>) value;
+		//From Bukkit MemorySection#getStringList
+		if (getList() == null) {
+			return new ArrayList<>(0);
+		}
+		
+		List<String> result = new ArrayList<>();
+		
+		for (Object object : getList()) {
+			if (object instanceof String) {
+				result.add(String.valueOf(object));
+			}
+		}
+		
+		return result;
 	}
 	
 	@Override
