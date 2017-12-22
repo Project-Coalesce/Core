@@ -14,14 +14,15 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 public class TabContext extends AbstractTabContext {
-	
-	/**
-	 * A new tab completer context.
-	 * @param plugin The plugin this completer belongs to.
-	 * @param command The command this completer is linked to.
-	 * @param commandContext The command context the command is linked to.
-	 */
-	public TabContext(CoPlugin plugin, CoCommand command, ICommandContext commandContext) {
-		super(plugin, command, commandContext);
-	}
+
+    /**
+     * A new tab completer context.
+     *
+     * @param plugin         The plugin this completer belongs to.
+     * @param command        The command this completer is linked to.
+     * @param commandContext The command context the command is linked to.
+     */
+    public TabContext(CoPlugin plugin, CoCommand command, ICommandContext commandContext) {
+        super(plugin, command, commandContext);
+    }
 }

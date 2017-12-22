@@ -22,14 +22,17 @@ public final class CoFormatter {
     public String format(String message) {
         return prefix + " " + message;
     }
-	
-	/**
-	 * Centers a string for chat.
-	 * @param message The message to center in chat.
-	 * @return A centered string.
-	 */
-	public String centerString(String message) {
-        if (message == null || message.equals("")) return "";
+
+    /**
+     * Centers a string for chat.
+     *
+     * @param message The message to center in chat.
+     * @return A centered string.
+     */
+    public String centerString(String message) {
+        if (message == null || message.equals("")) {
+            return "";
+        }
         message = ChatColor.translateAlternateColorCodes('&', message);
 
         int messagePxSize = getWidth(message);
@@ -45,13 +48,14 @@ public final class CoFormatter {
         }
         return sb.toString() + message;
     }
-	
-	/**
-	 * Gets the width of the string message.
-	 * @param message The message to get the width of.
-	 * @return The width (in pixels) of the string in minecraft.
-	 */
-	public int getWidth(String message) {
+
+    /**
+     * Gets the width of the string message.
+     *
+     * @param message The message to get the width of.
+     * @return The width (in pixels) of the string in minecraft.
+     */
+    public int getWidth(String message) {
         int messagePxSize = 0;
         boolean previousCode = false;
         boolean isBold = false;
@@ -65,7 +69,9 @@ public final class CoFormatter {
                 if (c == 'l' || c == 'L') {
                     isBold = true;
                     continue;
-                } else isBold = false;
+                } else {
+                    isBold = false;
+                }
             } else {
                 messagePxSize += FontInfo.getCharSize(c, isBold);
             }
@@ -83,7 +89,9 @@ public final class CoFormatter {
      */
     public String rainbowifyString(String str, char... chars) {
         str = ChatColor.stripColor(str);
-        if (chars == null || chars.length == 0) chars = new char[]{'c', '6', 'e', 'a', 'b', '3', 'd'};
+        if (chars == null || chars.length == 0) {
+            chars = new char[]{'c', '6', 'e', 'a', 'b', '3', 'd'};
+        }
         
         int index = 0;
         String returnValue = "";

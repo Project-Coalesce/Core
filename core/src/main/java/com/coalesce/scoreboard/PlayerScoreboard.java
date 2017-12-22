@@ -12,19 +12,19 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public class PlayerScoreboard implements CoScoreboard<Function<Player, String>>{
+public class PlayerScoreboard implements CoScoreboard<Function<Player, String>> {
 
     private Function<Player, String> title;
     private final Map<Function<Player, String>, Integer> entries;
 
-    private PlayerScoreboard(Builder builder){
+    private PlayerScoreboard(Builder builder) {
 
         title = builder.title;
         entries = builder.entries;
     }
 
     @Override
-    public void send(Player player){
+    public void send(Player player) {
 
         Scoreboard scoreboard = generateScoreboard(player);
         player.setScoreboard(scoreboard);
@@ -35,7 +35,7 @@ public class PlayerScoreboard implements CoScoreboard<Function<Player, String>>{
         players.forEach(this::send);
     }
 
-    private Scoreboard generateScoreboard(Player player){
+    private Scoreboard generateScoreboard(Player player) {
 
         Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         String titleString = title.apply(player);
@@ -60,17 +60,17 @@ public class PlayerScoreboard implements CoScoreboard<Function<Player, String>>{
     }
 
     @Override
-    public void addEntry(Function<Player, String> entry, int score){
+    public void addEntry(Function<Player, String> entry, int score) {
 
         entries.put(entry, score);
     }
 
-    public void addEntry(Function<Player, String> entry){
+    public void addEntry(Function<Player, String> entry) {
 
-        addEntry(entry,MAX_ENTRIES - entries.size());
+        addEntry(entry, MAX_ENTRIES - entries.size());
     }
 
-    public void addEntries(Collection<Function<Player, String>> entries){
+    public void addEntries(Collection<Function<Player, String>> entries) {
 
         entries.forEach(this::addEntry);
     }
@@ -81,7 +81,7 @@ public class PlayerScoreboard implements CoScoreboard<Function<Player, String>>{
     }
 
     @Override
-    public void clearEntries(){
+    public void clearEntries() {
         entries.clear();
     }
 
@@ -90,44 +90,44 @@ public class PlayerScoreboard implements CoScoreboard<Function<Player, String>>{
         private Function<Player, String> title;
         private Map<Function<Player, String>, Integer> entries;
 
-        public Builder(){
+        public Builder() {
             this.title = (player -> "");
 
             entries = new HashMap<>(MAX_ENTRIES);
         }
 
-        public Builder title(Function<Player, String> title){
+        public Builder title(Function<Player, String> title) {
             this.title = title;
 
             return this;
         }
 
-        public Builder title(String title){
+        public Builder title(String title) {
             this.title = (player -> title);
 
             return this;
         }
 
-        public Builder addEntry(Function<Player, String> entry){
+        public Builder addEntry(Function<Player, String> entry) {
 
             entries.put(entry, MAX_ENTRIES - entries.size());
             return this;
         }
 
-        public Builder addEntries(Function<Player, String>... entries){
+        public Builder addEntries(Function<Player, String>... entries) {
 
             Stream.of(entries).forEach(this::addEntry);
 
             return this;
         }
 
-        public Builder addEntry(Function<Player, String> entry, int score){
+        public Builder addEntry(Function<Player, String> entry, int score) {
 
             entries.put(entry, score);
             return this;
         }
 
-        public PlayerScoreboard build(){
+        public PlayerScoreboard build() {
             return new PlayerScoreboard(this);
         }
     }

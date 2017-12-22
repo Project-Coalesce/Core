@@ -17,57 +17,39 @@ import org.bukkit.ChatColor;
  */
 public final class TTBCommands extends CoModule {
 
-	public TTBCommands(CoPlugin plugin) {
-		super(plugin, "Commands Module"); //Creates a module with the name of "Commands Module"
-		
-		CoCommand hiCommand = new CommandBuilder(plugin, "hi") //This is the CoCommand Builder. You will use this generated CoCommand (hiCommand) to register it in the server.
-				.executor(this::hi) //Refrences the hi command method
-				.usage("/hi")
-				.description("Hello!")
-				.permission("core.hi")
-				.playerOnly()
-				.build();
-		
-		CoCommand helloCommand = new CommandBuilder(plugin, "hello")
-				.executor(this::hello)
-				.maxArgs(0)
-				.permission("core.hello")
-				.usage("/hello")
-				.description("Hi!")
-				.playerOnly()
-				.build();
-		
-		CoCommand leaveCommand = new CommandBuilder(plugin, "leave")
-				.executor(this::leave)
-				.maxArgs(0)
-				.permission("core.leave")
-				.usage("/leave")
-				.description("Cya round!")
-				.consoleOnly()
-				.build();
-		
-		plugin.addCommand(hiCommand, helloCommand, leaveCommand);
-	}
-	
-	@Override
-	protected void onEnable() throws Exception {
-		//You only need the onEnable and onDisable if this is a module.
-	}
-	
-	@Override
-	protected void onDisable() throws Exception {
-		
-	}
-	
-	public void hi(CommandContext context) {
-		context.send("Hi there");
-	}
-	
-	public void hello(CommandContext context) {
-		context.send("Hello " + context.asPlayer().getName() + "!");
-	}
-	
-	public void leave(CommandContext context) {
-		context.send("You gotta go... Cya!");
-	}
+    public TTBCommands(CoPlugin plugin) {
+        super(plugin, "Commands Module"); //Creates a module with the name of "Commands Module"
+
+        CoCommand hiCommand = new CommandBuilder(plugin, "hi") //This is the CoCommand Builder. You will use this generated CoCommand (hiCommand) to register it in the server.
+                .executor(this::hi) //Refrences the hi command method
+                .usage("/hi").description("Hello!").permission("core.hi").playerOnly().build();
+
+        CoCommand helloCommand = new CommandBuilder(plugin, "hello").executor(this::hello).maxArgs(0).permission("core.hello").usage("/hello").description("Hi!").playerOnly().build();
+
+        CoCommand leaveCommand = new CommandBuilder(plugin, "leave").executor(this::leave).maxArgs(0).permission("core.leave").usage("/leave").description("Cya round!").consoleOnly().build();
+
+        plugin.addCommand(hiCommand, helloCommand, leaveCommand);
+    }
+
+    @Override
+    protected void onEnable() throws Exception {
+        //You only need the onEnable and onDisable if this is a module.
+    }
+
+    @Override
+    protected void onDisable() throws Exception {
+
+    }
+
+    public void hi(CommandContext context) {
+        context.send("Hi there");
+    }
+
+    public void hello(CommandContext context) {
+        context.send("Hello " + context.asPlayer().getName() + "!");
+    }
+
+    public void leave(CommandContext context) {
+        context.send("You gotta go... Cya!");
+    }
 }

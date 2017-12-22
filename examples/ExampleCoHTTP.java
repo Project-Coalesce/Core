@@ -17,7 +17,8 @@ public class ExampleCoHTTP {
         responce.addListener(() -> {
             try {
                 System.out.println(responce.get());
-            } catch (InterruptedException | ExecutionException e) {
+            }
+            catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
         }, command -> command.run());
@@ -40,7 +41,8 @@ public class ExampleCoHTTP {
                 String response = out.get();
                 // Do what you want with response
                 // In this case the response is JSON and you can go from here
-            } catch (InterruptedException | ExecutionException e) {
+            }
+            catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
         }, command -> command.run());

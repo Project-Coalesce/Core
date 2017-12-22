@@ -12,8 +12,8 @@ import java.util.Collection;
  */
 public interface CoScoreboard<T> {
 
-	//Max number of entries that are allowed in a CoScoreboard
-	int MAX_ENTRIES = 16;
+    //Max number of entries that are allowed in a CoScoreboard
+    int MAX_ENTRIES = 16;
 
     /**
      * Sends the {@link Scoreboard} representation of the CoScoreboard to the player

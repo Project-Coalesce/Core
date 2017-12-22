@@ -15,37 +15,34 @@ public interface Gui<F, T> {
 
     /**
      * Add an item to the first available slot, and set the method to run when the item is clicked
-     * 
-     * @param item the item
+     *
+     * @param item    the item
      * @param onClick the Consumer to run on click
-     * 
      * @return this, for chaining
      */
     T addItem(F item, Consumer<InventoryClickEvent> onClick);
 
     /**
      * Set an item in the given slot, and set the method to run when the item is clicked
-     * 
-     * @param index the index in the inventory
-     * @param item the item
+     *
+     * @param index   the index in the inventory
+     * @param item    the item
      * @param onClick the Consumer to run on click
-     * 
      * @return this, for chaining
      */
     T setItem(int index, F item, Consumer<InventoryClickEvent> onClick);
 
-	/**
-	 * Removes an item from the provided slot
-	 *
-	 * @param index the slot to remove the item from
-	 *
-	 * @return this, for chaining
-	 */
-	T removeItem(int index);
+    /**
+     * Removes an item from the provided slot
+     *
+     * @param index the slot to remove the item from
+     * @return this, for chaining
+     */
+    T removeItem(int index);
 
     /**
      * Open the inventory
-     * 
+     *
      * @param player the player
      */
     void open(Player player);

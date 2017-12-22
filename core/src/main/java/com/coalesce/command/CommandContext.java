@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
 
 public class CommandContext extends AbstractCommandContext {
 
-	public CommandContext(CommandSender sender, String[] args, CoPlugin plugin){
-		super(sender, args, plugin);
-	}
+    public CommandContext(CommandSender sender, String[] args, CoPlugin plugin) {
+        super(sender, args, plugin);
+    }
 }

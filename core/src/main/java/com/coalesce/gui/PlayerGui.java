@@ -35,11 +35,11 @@ public abstract class PlayerGui implements Gui<Function<Player, ItemStack>, Play
     /**
      * The function to apply to get the title
      */
-    protected final Function<Player, String> title; 
+    protected final Function<Player, String> title;
     /**
      * The functions to apply to get each item
      */
-    private final Function<Player, ItemStack>[] items; 
+    private final Function<Player, ItemStack>[] items;
     
     /**
      * The consumers to run when each item is clicked
@@ -51,7 +51,7 @@ public abstract class PlayerGui implements Gui<Function<Player, ItemStack>, Play
      */
     protected final Map<UUID, Inventory> inventories;
     
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public PlayerGui(CoPlugin plugin, int size, Function<Player, String> title) {
         this.plugin = plugin;
         this.size = size;
@@ -63,12 +63,11 @@ public abstract class PlayerGui implements Gui<Function<Player, ItemStack>, Play
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
     
-    public PlayerGui(CoPlugin plugin, int size, String title)
-    {
+    public PlayerGui(CoPlugin plugin, int size, String title) {
         this(plugin, size, p -> title);
     }
 
-	@Override
+    @Override
     public PlayerGui addItem(Function<Player, ItemStack> item, Consumer<InventoryClickEvent> onClick) {
         for (int i = 0; i < items.length; i++) {
             if (items[i] == null) {
@@ -80,7 +79,7 @@ public abstract class PlayerGui implements Gui<Function<Player, ItemStack>, Play
         return this;
     }
 
-	@Override
+    @Override
     public PlayerGui setItem(int index, Function<Player, ItemStack> item, Consumer<InventoryClickEvent> onClick) {
         this.items[index] = item;
         this.listeners[index] = onClick;
@@ -88,25 +87,25 @@ public abstract class PlayerGui implements Gui<Function<Player, ItemStack>, Play
     }
 
     @Override
-	public PlayerGui removeItem(int index){
+    public PlayerGui removeItem(int index) {
 
-		this.items[index] = null;
-		this.listeners[index] = null;
-		return this;
-	}
+        this.items[index] = null;
+        this.listeners[index] = null;
+        return this;
+    }
 
-	public PlayerGui removeItems(int startIndex, int countToRemove){
+    public PlayerGui removeItems(int startIndex, int countToRemove) {
 
-		for (int i = startIndex;i < startIndex + countToRemove;i++){
-			if (i >= size){
-				break;
-			}
+        for (int i = startIndex; i < startIndex + countToRemove; i++) {
+            if (i >= size) {
+                break;
+            }
 
-			this.items[i] = null;
-			this.listeners[i] = null;
-		}
-		return this;
-	}
+            this.items[i] = null;
+            this.listeners[i] = null;
+        }
+        return this;
+    }
     
     public void update(Player player) {
         Inventory inventory = inventories.computeIfAbsent(player.getUniqueId(), uuid -> this.getNewInventory(player));
@@ -115,7 +114,7 @@ public abstract class PlayerGui implements Gui<Function<Player, ItemStack>, Play
     }
 
     @Override
-    public void open(Player player) {        
+    public void open(Player player) {
         Inventory inventory = inventories.computeIfAbsent(player.getUniqueId(), uuid -> this.getNewInventory(player));
         player.openInventory(inventory);
     }
@@ -147,11 +146,11 @@ public abstract class PlayerGui implements Gui<Function<Player, ItemStack>, Play
     /**
      * Unregisters all listeners of the GUI. This is done to get rid of useless {@link Listener}s that are no longer used
      */
-    public void destroy(){
+    public void destroy() {
 
-	    InventoryCloseEvent .getHandlerList().unregister(this);
-        InventoryDragEvent  .getHandlerList().unregister(this);
-        InventoryCloseEvent .getHandlerList().unregister(this);
+        InventoryCloseEvent.getHandlerList().unregister(this);
+        InventoryDragEvent.getHandlerList().unregister(this);
+        InventoryCloseEvent.getHandlerList().unregister(this);
 
         inventories.clear();
     }
@@ -161,7 +160,7 @@ public abstract class PlayerGui implements Gui<Function<Player, ItemStack>, Play
         if (!(event.getWhoClicked() instanceof Player) || event.getClickedInventory() == null) {
             return;
         }
-        Player player = (Player) event.getWhoClicked();
+        Player player = (Player)event.getWhoClicked();
         Inventory inventory = inventories.get(player.getUniqueId());
         if (inventory == null) {
             return;
@@ -169,11 +168,12 @@ public abstract class PlayerGui implements Gui<Function<Player, ItemStack>, Play
         
         if (inventory.equals(event.getClickedInventory())) {
             event.setCancelled(true);
-			Consumer<InventoryClickEvent> onClick = listeners[event.getSlot()];
+            Consumer<InventoryClickEvent> onClick = listeners[event.getSlot()];
             if (onClick != null) {
-                try { 
+                try {
                     onClick.accept(event);
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     throw new RuntimeException("Failed to handle inventory click event", e);
                 }
             }
@@ -188,7 +188,7 @@ public abstract class PlayerGui implements Gui<Function<Player, ItemStack>, Play
         if (inventories.containsValue(event.getInventory()) && event.getWhoClicked() instanceof Player) {
             event.setResult(Result.DENY);
             event.setCancelled(true);
-            ((Player) event.getWhoClicked()).updateInventory();
+            ((Player)event.getWhoClicked()).updateInventory();
         }
     }
 
